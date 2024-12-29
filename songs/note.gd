@@ -7,3 +7,10 @@ class_name Note
 @export_range(0,1) var subbeat: float
 
 @export var priority: int
+
+
+func _init(track: int, beat: int, subbeat := 1.0, priority := 0):
+	self.track = track
+	self.beat = beat
+	self.subbeat = subbeat
+	self.priority = priority

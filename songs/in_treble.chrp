@@ -7,9 +7,10 @@ bpb: 4
 
 
 [vocals]
-name: Vocals
 0   0+      0   
 -       1   
 10      a   
 
+[drums]
+10      0
 
