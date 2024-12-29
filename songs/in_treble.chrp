@@ -1,0 +1,15 @@
+title: In treble
+artist: Erik lagerstedt
+bpm: 60
+# Beats per bar
+bpb: 4
+
+
+
+[vocals]
+name: Vocals
+0   0+      0   
+-       1   
+10      a   
+
+
