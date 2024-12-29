@@ -7,3 +7,6 @@ class_name Song
 @export var bpb: int
 
 @export var instruments: Array[Instrument]
+
+func _to_string() -> String:
+	return "Song(%s, %s, %d/4 @ %d bpm)" % [title, artist, bpb, bpm] 

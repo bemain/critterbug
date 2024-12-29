@@ -14,3 +14,6 @@ func _init(track: int, beat: int, subbeat := 1.0, priority := 0):
 	self.beat = beat
 	self.subbeat = subbeat
 	self.priority = priority
+
+func _to_string() -> String:
+	return "Note(priority: %d, track: %d, beat: %d [%d])" % [priority, track, beat, subbeat] 

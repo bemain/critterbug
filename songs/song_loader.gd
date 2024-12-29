@@ -33,14 +33,15 @@ func load_song(path: String) -> Song:
 			# Comment or empty line
 			if line.begins_with("#") or line.is_empty(): continue
 			
-			beat += 1
 			for i in range(ceil(line.length() / 4.0)):
 				var notes = line.substr(i*4, 4).strip_edges()
 				for offset in range(notes.length()):
 					# . or other strange note. TODO: Handle strange notes
 					if not notes[offset].is_valid_int(): continue
 					# Add note
-					instrument.notes.append(Note.new(i, beat, float(offset) / notes.length(), int(notes[offset])))
+					var note := Note.new(i, beat, float(offset) / notes.length(), int(notes[offset]))
+					instrument.notes.append(note)
+			beat += 1
 		
 		song.instruments.append(instrument)
 	

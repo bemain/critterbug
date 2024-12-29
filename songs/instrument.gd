@@ -7,4 +7,7 @@ class_name Instrument
 
 
 func notes_in_beat(beat: int) -> Array[Note]:
-	return notes.filter(func (note): note.beat==beat)
+	return notes.filter(func (note): return note.beat==beat)
+
+func _to_string() -> String:
+	return "Instrument(" + name + ")"
