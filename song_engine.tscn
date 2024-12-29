@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://cr1rtnsd7tpad"]
+
+[ext_resource type="Script" path="res://note_handler.gd" id="1_2yrgo"]
+
+[node name="InstrumentTrack" type="Node2D"]
+position = Vector2(583, 42)
+script = ExtResource("1_2yrgo")
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="Line2D" type="Line2D" parent="Background"]
+position = Vector2(-96, 0)
+points = PackedVector2Array(0, 0, 0, 500)
+width = 3.0
+
+[node name="Line2D2" type="Line2D" parent="Background"]
+position = Vector2(-32, 0)
+points = PackedVector2Array(0, 0, 0, 500)
+width = 3.0
+
+[node name="Line2D3" type="Line2D" parent="Background"]
+position = Vector2(32, 0)
+points = PackedVector2Array(0, 0, 0, 500)
+width = 3.0
+
+[node name="Line2D4" type="Line2D" parent="Background"]
+position = Vector2(96, 0)
+points = PackedVector2Array(0, 0, 0, 500)
+width = 3.0
+
+[node name="Notes" type="Node2D" parent="."]
