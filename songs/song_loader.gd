@@ -24,23 +24,23 @@ func load_song(path: String) -> Song:
 	
 	# Instruments
 	var r = RegEx.new()
-	r.compile(r"\[(?<name>.*?)\]\n(?<data>(.*\n)*?(?=\[|$))")
+	r.compile(r"\[(?<name>.*?)\]\n(?<data>(.*(\n|$))*?(?=\[|$))")
 	for m in r.search_all(content):
 		var instrument = Instrument.new()
 		instrument.name = m.get_string("name")
 		var beat := 0
+		print(m.get_string("data"))
 		for line in m.get_string("data").split("\n"):
 			# Comment or empty line
 			if line.begins_with("#") or line.is_empty(): continue
 			
 			beat += 1
-			
 			for i in range(ceil(line.length() / 4.0)):
 				var notes = line.substr(i*4, 4).strip_edges()
 				for offset in range(notes.length()):
 					# . or other strange note. TODO: Handle strange notes
 					if not notes[offset].is_valid_int(): continue
-					
+					# Add note
 					instrument.notes.append(Note.new(i, beat, float(offset) / notes.length(), int(notes[offset])))
 		
 		song.instruments.append(instrument)
