@@ -3,6 +3,8 @@ class_name Instrument
 
 @export var name: String
 
+@export var audio_path: String
+
 @export var notes: Array[Note]
 
 
