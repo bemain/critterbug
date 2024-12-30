@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://c8utxktu23qms"]
+
+[ext_resource type="Script" path="res://songs/song.gd" id="1_bpuqq"]
+
+[resource]
+script = ExtResource("1_bpuqq")
+title = ""
+artist = ""
+bpm = 0
+bpb = 0
