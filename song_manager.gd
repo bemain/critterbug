@@ -24,7 +24,7 @@ func _play_track(path: String, delay: float) -> void:
 
 func play_song(title: String) -> Node:
 	# Get song somehow
-	var song = SongLoader.load_song("res://songs/jazz_swing/jazz_swing.chrp")
+	var song = Songs.load_song("res://songs/jazz_swing/jazz_swing.chrp")
 	
 	_play_track("res://JazzSwing.mp3", 60/song.bpm*song.bpb)
 	

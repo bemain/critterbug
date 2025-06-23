@@ -17,4 +17,4 @@ config/icon="res://icon.png"
 
 [autoload]
 
-SongLoader="*res://songs/song_loader.gd"
+Songs="*res://src/song/songs.gd"
