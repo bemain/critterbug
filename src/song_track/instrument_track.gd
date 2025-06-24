@@ -39,18 +39,14 @@ var current_beat: int = 0
 @onready var path: Path2D = $Path2D
 
 
-## Begin playing audio and creating notes for the given [instrument]. 
+## Begin creating notes for the given [instrument]. 
+##
+## Note that the SongManager handles starting audio playback, so that all tracks play simultaneously.
 ## 
 ## [actual_initial_delay] is the actual number of seconds we have to wait between beginning note 
 ## creation and starting audio playback, so that all the tracks are in sync with the audio.
 ## This is the maximum of [initial_delay] among all the instrument tracks for this song.
-func start(initial_delay: float) -> void:
-	# Wait for the first note to hit the bottom, so that the audio is in sync with the visuals	
-	get_tree().create_timer(initial_delay, false).timeout.connect(func(): 
-		# Start audio
-		$AudioStreamPlayer.play()
-	)
-	
+func start(initial_delay: float) -> void:	
 	# Give the other tracks enough time to sync audio and visuals.
 	await get_tree().create_timer(initial_delay - self.initial_delay, false).timeout
 	
