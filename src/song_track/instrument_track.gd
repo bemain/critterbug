@@ -7,7 +7,7 @@ var instrument: Instrument
 @export var beats: int = 4
 
 var beat_length: float:
-	get: return length / beats
+	get: return float(length) / beats
 var beat_duration: float:
 	get: return 60.0/song.bpm
 

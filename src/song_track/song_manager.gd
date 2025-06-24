@@ -23,11 +23,11 @@ func _play_track(path: String, delay: float) -> void:
 	timer.start()
 
 func play_song(song: Song) -> Node:
-	_play_track("res://songs/jazz_swing/JazzSwing.mp3", song.bpb*60/song.bpm)
+	_play_track("res://songs/jazz_swing/JazzSwing.mp3", song.bpb*60.0/song.bpm)
 	
 	for i in song.instruments:
 		var instrument_track = instrument_track.instantiate()
 		add_child(instrument_track)
-		instrument_track.init(song, i, 60/song.bpm*song.bpb)
+		instrument_track.init(song, i, song.bpb*60.0/song.bpm)
 	
 	return self
