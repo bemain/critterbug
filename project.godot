@@ -11,10 +11,10 @@ config_version=5
 [application]
 
 config/name="critterbug"
-run/main_scene="res://song_engine.tscn"
-config/features=PackedStringArray("4.3")
+run/main_scene="res://src/song_track/song_manager.tscn"
+config/features=PackedStringArray("4.4")
 config/icon="res://icon.png"
 
 [autoload]
 
-SongLoader="*res://songs/song_loader.gd"
+Songs="*res://src/song/songs.gd"

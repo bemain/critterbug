@@ -5,11 +5,15 @@ class_name Instrument
 
 @export var audio_path: String
 
-@export var notes: Array[Note]
+@export var notes: Array[Note] = []
 
 
 func notes_in_beat(beat: int) -> Array[Note]:
 	return notes.filter(func (note): return note.beat==beat)
+
+
+func _init(name: String):
+	self.name = name
 
 func _to_string() -> String:
 	return "Instrument(" + name + ")"
