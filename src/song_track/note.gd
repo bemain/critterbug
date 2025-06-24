@@ -14,6 +14,7 @@ static func instantiate(path, time_until_hit, track, track_width, spawn_time, of
 	note.track_offset = (1.5*track_width) - (track * track_width)
 	return note
 
+
 var path: Path2D
 
 var time_until_hit: float

@@ -32,6 +32,7 @@ func _get_resource_type(path: String) -> String:
 # It should return the loaded Resource object or null if loading fails.
 func _load(path: String, original_path: String, use_sub_threads: bool, cache_mode: int) -> Song:
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	var dir_path = path.get_base_dir() + "/"
 
 	# Error handling: Check if the file could be opened.
 	if file == null:
@@ -62,11 +63,11 @@ func _load(path: String, original_path: String, use_sub_threads: bool, cache_mod
 				while lines[line_n+1].begins_with("    "):
 					line_n += 1
 					match Array(lines[line_n].split(":")).map(func (s): return s.strip_edges()):
-						["_", var audio]: song.audio_path = audio
-						[var instr, var audio]: audio_paths[instr] = audio
+						["_", var audio]: song.audio_path = dir_path + audio
+						[var instr, var audio]: audio_paths[instr] = dir_path +  audio
 	
 	# Instruments
-	var instrument: Instrument
+	var instrument: Instrument = null
 	var beat := 0
 	for line in lines.slice(line_n): # Continue after the header
 		if line.begins_with("#"): continue # Comment

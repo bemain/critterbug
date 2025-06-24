@@ -6,26 +6,23 @@ extends Node
 func _ready():
 	play_song(Songs.songs[0])
 
-func _play_track(path: String, delay: float) -> void:
-	var stream = load(path)
-	var stream_player = AudioStreamPlayer.new()
-	add_child(stream_player)
-	stream_player.set_stream(stream)
-	
-	var timer = Timer.new()
-	add_child(timer)
-	timer.one_shot = true
-	timer.wait_time = delay
-	
-	timer.connect("timeout", stream_player.play)
-	timer.start()
-
 func play_song(song: Song) -> Node:
-	_play_track("res://songs/jazz_swing/JazzSwing.mp3", song.bpb*60.0/song.bpm)
+	$AudioStreamPlayer.set_stream(load(song.audio_path))
 	
+	var tracks = []
 	for i in song.instruments.size():
-		var instrument_track = InstrumentTrack.instantiate(song, song.instruments[i], song.bpb*60.0/song.bpm)
-		instrument_track.position = Vector2(i*500, 0)
-		add_child(instrument_track)
+		var track = InstrumentTrack.instantiate(song, song.instruments[i])
+		track.position = Vector2(i*500, 0)
+		#track.beats = 4 + 4*i# FIXME: Just testing
+		tracks.append(track)
+		add_child(track)
+	
+	# The number of beats we have to wait before starting audio playback, so that the audio is in sync with the visuals.
+	var initial_delay: float = tracks.map(func(track): return track.initial_delay).max()
+	get_tree().create_timer(initial_delay, false).timeout.connect(func(): 
+		$AudioStreamPlayer.play()
+	)
+	for track in tracks:
+		track.start(initial_delay)
 	
 	return self
