@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cr1rtnsd7tpad"]
 
-[ext_resource type="Script" path="res://instrument_track.gd" id="1_pd2th"]
-[ext_resource type="Script" path="res://track_drawer.gd" id="2_vtt3f"]
+[ext_resource type="Script" uid="uid://drjno63q102cb" path="res://src/song_track/instrument_track.gd" id="1_pd2th"]
+[ext_resource type="Script" uid="uid://ceojiltv1m375" path="res://src/song_track/track_drawer.gd" id="2_vtt3f"]
 
 [sub_resource type="Curve2D" id="Curve2D_nrapc"]
 _data = {

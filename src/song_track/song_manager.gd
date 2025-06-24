@@ -1,12 +1,12 @@
 extends Node
 
-var instrument_track = load("res://instrument_track.tscn")
+var instrument_track = load("res://src/song_track/instrument_track.tscn")
 
-# This script should also handle syncing between players when implementing multiplayer
+# TODO: This script should also handle syncing between players when implementing multiplayer
 
-# Temporary test function
+# FIXME: Temporary test function
 func _ready():
-	play_song("a")
+	play_song(Songs.songs[0])
 
 func _play_track(path: String, delay: float) -> void:
 	var stream = load(path)
@@ -22,11 +22,8 @@ func _play_track(path: String, delay: float) -> void:
 	timer.connect("timeout", stream_player.play)
 	timer.start()
 
-func play_song(title: String) -> Node:
-	# Get song somehow
-	var song = Songs.load_song("res://songs/jazz_swing/jazz_swing.chrp")
-	
-	_play_track("res://JazzSwing.mp3", 60/song.bpm*song.bpb)
+func play_song(song: Song) -> Node:
+	_play_track("res://songs/jazz_swing/JazzSwing.mp3", song.bpb*60/song.bpm)
 	
 	for i in song.instruments:
 		var instrument_track = instrument_track.instantiate()

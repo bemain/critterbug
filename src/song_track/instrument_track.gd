@@ -13,7 +13,7 @@ var beat_duration: float:
 
 var current_beat: int = 0
 
-var note = load("res://note.tscn")
+var note = load("res://src/song_track/note.tscn")
 
 var path: Path2D
 

@@ -21,7 +21,7 @@ var path: Path2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	song = SongLoader.load_song("res://songs/jazz_swing/jazz_swing.chrp")
+	song = Songs.load_song("res://songs/jazz_swing/jazz_swing.chrp")
 	print("Playing: ", song.title)
 	instrument = song.instruments[0]
 	

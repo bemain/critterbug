@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cmxj6673inu4p"]
 
-[ext_resource type="Script" path="res://note.gd" id="1_tyvxt"]
+[ext_resource type="Script" uid="uid://bnsyue4ip5ao4" path="res://src/song_track/note.gd" id="1_tyvxt"]
 [ext_resource type="Texture2D" uid="uid://i52pjm7gort8" path="res://icon.png" id="2_4m8l7"]
 
 [node name="note" type="Node2D"]

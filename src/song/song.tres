@@ -1,6 +1,7 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://c8utxktu23qms"]
+[gd_resource type="Resource" script_class="Song" load_steps=3 format=3 uid="uid://c8utxktu23qms"]
 
-[ext_resource type="Script" path="res://src/song/song.gd" id="1_bpuqq"]
+[ext_resource type="Script" uid="uid://cog88vilx714s" path="res://src/song/song.gd" id="1_bpuqq"]
+[ext_resource type="Script" uid="uid://lecsj3j2em7r" path="res://src/song/instrument.gd" id="1_tnvn0"]
 
 [resource]
 script = ExtResource("1_bpuqq")
@@ -8,3 +9,5 @@ title = ""
 artist = ""
 bpm = 0
 bpb = 0
+audio_path = ""
+instruments = Array[ExtResource("1_tnvn0")]([])
