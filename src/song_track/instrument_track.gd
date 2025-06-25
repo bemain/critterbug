@@ -1,19 +1,6 @@
 class_name InstrumentTrack
 extends Node2D
 
-# The scene that uses this script. Used for the [instantiate] method.
-const _scene: PackedScene = preload("res://src/song_track/instrument_track.tscn")
-
-# Create an instance of this scene, with the given parameters.
-static func instantiate(song: Song, instrument: Instrument) -> InstrumentTrack:
-	var track: InstrumentTrack = _scene.instantiate()
-	track.song = song
-	track.instrument = instrument
-	
-	if not instrument.audio_path.is_empty():
-		track.get_node("AudioStreamPlayer").stream = load(instrument.audio_path)
-	return track
-
 
 var song: Song
 var instrument: Instrument
@@ -36,22 +23,20 @@ var beat_duration: float:
 
 var current_beat: int = 0
 
+var beat_timer: Timer = Timer.new()
+
 @onready var path: Path2D = $Path2D
 
 
 ## Begin creating notes for the given [instrument]. 
 ##
 ## Note that the SongManager handles starting audio playback, so that all tracks play simultaneously.
-## 
-## [actual_initial_delay] is the actual number of seconds we have to wait between beginning note 
-## creation and starting audio playback, so that all the tracks are in sync with the audio.
-## This is the maximum of [initial_delay] among all the instrument tracks for this song.
-func start(initial_delay: float) -> void:	
-	# Give the other tracks enough time to sync audio and visuals.
-	await get_tree().create_timer(initial_delay - self.initial_delay, false).timeout
+func start() -> void:
+	# Reset
+	current_beat = 0
+	beat_timer.stop()
 	
 	# Begin creating notes
-	var beat_timer = Timer.new()
 	beat_timer.wait_time = beat_duration
 	beat_timer.one_shot = false
 	beat_timer.connect("timeout", new_beat)

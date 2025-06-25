@@ -11,7 +11,6 @@ point_count = 3
 
 [node name="InstrumentTrack" type="Node2D"]
 script = ExtResource("1_pd2th")
-beats = 6
 
 [node name="Path2D" type="Path2D" parent="."]
 curve = SubResource("Curve2D_nrapc")
@@ -46,5 +45,3 @@ points = PackedVector2Array(-183.962, 567.196, 195.822, 623.944)
 width = 8.0
 
 [node name="Notes" type="Node2D" parent="."]
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
