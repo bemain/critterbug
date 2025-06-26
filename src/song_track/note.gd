@@ -1,3 +1,4 @@
+# TODO: Rename
 class_name NoteNode
 extends Node2D
 
@@ -6,24 +7,29 @@ extends Node2D
 const _scene: PackedScene = preload("res://src/song_track/note.tscn")
 
 # Create an instance of this scene, with the given parameters.
-static func instantiate(path, time_until_hit, track, track_width, spawn_time, offset):
-	var note = _scene.instantiate()
-	note.path = path
-	note.time_until_hit = time_until_hit
-	note.timer = offset
-	note.track_offset = (1.5*track_width) - (track * track_width)
-	return note
+static func instantiate(note: Note, track: InstrumentTrack):
+	var node = _scene.instantiate()
+	node.note = note
+	node.track = track
+	node.timer = -track.beat_duration * note.subbeat
+	return node
 
+## The data for this note.
+var note: Note
+## The track that this belongs to.
+var track: InstrumentTrack
 
-var path: Path2D
+## The offset on the track in the x-direction
+var x_offset: float:
+	get: return (1.5*track.width) - (note.track * track.width)
 
-var time_until_hit: float
 var timer: float
-var track_offset: float
-
 
 func _process(delta: float) -> void:
 	timer += delta
-	var t = timer / time_until_hit
-	var path_point = path.curve.sample_baked_with_rotation(t * path.curve.get_baked_length())
-	position = path_point.get_origin() + self.track_offset * path_point.y
+	var t = timer / (track.beats * track.beat_duration)
+	var path_point = track.path.curve.sample_baked_with_rotation(track.hit_marker_position * t * track.path.curve.get_baked_length())
+	position = path_point.get_origin() + self.x_offset * path_point.y
+	
+	if track.beat_length * timer / track.beat_duration >= track.length:
+		queue_free()
