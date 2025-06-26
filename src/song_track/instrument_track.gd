@@ -1,11 +1,23 @@
 class_name InstrumentTrack
 extends Node2D
+## A track that displays the notes played by an [member instrument] and allows the user to hit them 
+## using the keyboard.
+## 
+## If the user presses the right key when a note passes the hit marker, the note is removed and 
+## [signal note_hit] is emitted. If a note passes the hit marker without being hit, the 
+## [signal note_missed] is emitted instead.
+
 
 ## Emitted when the user hits a [param note].
 signal note_hit(note: Note)
 
+## Emitted when the user fails to hit a [param note] in time.
+signal note_missed(note: Note)
 
+
+## The song that is playing on this track.
 var song: Song
+## The instrument that is playing on this track.
 var instrument: Instrument
 
 
@@ -52,9 +64,9 @@ var hit_marker_position: float:
 	get: return $Visuals.hit_marker_position
 
 
-## Begin creating notes for the given [instrument]. 
+## Begin creating notes for the given [member instrument]. 
 ##
-## Note that the SongManager handles starting audio playback, so that all tracks play simultaneously.
+## Note that the [SongManager] handles starting audio playback, so that all tracks play simultaneously.
 func start() -> void:
 	# Reset
 	current_beat = 0
@@ -68,6 +80,8 @@ func start() -> void:
 	beat_timer.start()
 
 
+## Callback for when the [member beat_timer] times out.
+## Creates new notes for the upcoming beat and increases the [member current_beat].
 func new_beat() -> void:
 	for n in instrument.notes_in_beat(current_beat):
 		var note = NoteNode.instantiate(n, self)
@@ -82,10 +96,12 @@ func _input(event):
 			_check_note_hit(i)
 
 
+## Check if a note is currently on the hit marker of the given [param track]
 func _check_note_hit(track: int):
-	## Check if a note is currently on the hit marker of the given [track]
 	var notes = $Notes.get_children().filter(func(note: NoteNode): return note.note.track == track)
 	for note: NoteNode in notes:
 		if abs(note.timer - beats * beat_duration) <= hit_window:
 			note.queue_free()
 			note_hit.emit(note.note)
+		elif note.timer - beats * beat_duration > hit_window:
+			note_missed.emit(note.note)

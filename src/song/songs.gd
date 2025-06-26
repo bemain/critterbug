@@ -1,12 +1,16 @@
 extends Node
+## Singleton responsible for loading songs from disk.
+##
+## Some [member songs] are loaded automatically at startup from the [member songs_dir] directory,
+## and more can be loaded manually with [method load_song].
 
 var songs_dir: String = "res://songs"
 
+## All the songs that have already been loaded.
 @onready var songs: Array = _get_song_paths(songs_dir).map(load_song)
 
-
-# Get the paths to all .chrp files in the directory at path. 
-# Searches recursively.
+## Get the paths to all .chrp files in the directory at path. 
+## Searches recursively.
 func _get_song_paths(path: String) -> Array[String]:
 	var file_paths: Array[String] = []
 	var dir = DirAccess.open(path)
@@ -23,6 +27,9 @@ func _get_song_paths(path: String) -> Array[String]:
 	return file_paths
 
 
-# Load a .chrp file into memory.
+## Load a .chrp file into memory, and add it to the loaded [member songs].
 func load_song(path: String) -> Song:
-	return ResourceLoader.load(path) as Song
+	var song := ResourceLoader.load(path) as Song
+	if not song in songs:
+		songs.append(song)
+	return song

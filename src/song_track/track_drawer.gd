@@ -1,5 +1,6 @@
 @tool
 extends Node2D
+## Updates the visuals of the [InstrumentTrack] to follow the [member path].
 
 @export var resolution: int = 10:
 	set(value):
@@ -21,8 +22,9 @@ extends Node2D
 
 func _ready():
 	path.curve.connect("changed", update_lines)
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+
+
+## Update the vertical lines and the hit marker to match the [member path].
 func update_lines() -> void:
 	if not track: return
 	

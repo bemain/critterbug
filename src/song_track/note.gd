@@ -1,12 +1,14 @@
-# TODO: Rename
 class_name NoteNode
 extends Node2D
+## A visual representation of a [Note] on an [InstrumentTrack].
+
+# TODO: Rename
 
 
-# The scene that uses this script. Used for the [instantiate] method.
+## The scene that uses this script. Used for the [instantiate] method.
 const _scene: PackedScene = preload("res://src/song_track/note.tscn")
 
-# Create an instance of this scene, with the given parameters.
+## Create an instance of this scene, with the given parameters.
 static func instantiate(note: Note, track: InstrumentTrack):
 	var node = _scene.instantiate()
 	node.note = note
