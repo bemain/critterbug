@@ -12,3 +12,5 @@ position = Vector2(542, 0)
 [node name="Players" type="Node" parent="."]
 
 [node name="Primary" type="AudioStreamPlayer" parent="Players"]
+
+[connection signal="note_hit" from="InstrumentTrack" to="." method="_on_instrument_track_note_hit"]

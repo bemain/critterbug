@@ -54,3 +54,8 @@ func _create_instrument_player(instrument: Instrument) -> AudioStreamPlayer:
 	player.set_stream(load(instrument.audio_path))
 	$Players.add_child(player)
 	return player
+
+
+func _on_instrument_track_note_hit(note: Note) -> void:
+	print("Hit note: %s" % note)
+	# TODO: Keep track of score

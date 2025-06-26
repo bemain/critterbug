@@ -1,6 +1,10 @@
 class_name InstrumentTrack
 extends Node2D
 
+## Emitted when the user hits a [param note].
+signal note_hit(note: Note)
+
+
 var song: Song
 var instrument: Instrument
 
@@ -84,4 +88,4 @@ func _check_note_hit(track: int):
 	for note: NoteNode in notes:
 		if abs(note.timer - beats * beat_duration) <= hit_window:
 			note.queue_free()
-			# TODO: Report score
+			note_hit.emit(note.note)
