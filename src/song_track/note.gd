@@ -13,7 +13,6 @@ static func instantiate(note: Note, track: InstrumentTrack):
 	var node = _scene.instantiate()
 	node.note = note
 	node.track = track
-	node.timer = -track.beat_duration * note.subbeat
 	return node
 
 ## The data for this note.
@@ -21,17 +20,25 @@ var note: Note
 ## The track that this belongs to.
 var track: InstrumentTrack
 
-## The offset on the track in the x-direction
+
+## After how many seconds in the song that this note occurs.
+var seconds: float: 
+	get: return (note.beat + note.subbeat) * track.beat_duration
+
+## The offset on the track in the x-direction.
 var x_offset: float:
 	get: return (1.5*track.width) - (note.track * track.width)
 
-var timer: float
-
-func _process(delta: float) -> void:
-	timer += delta
-	var t = timer / (track.beats * track.beat_duration)
+## Move this note to the correct position along the [member track], and remove it if it has reached 
+## the end.
+func update(song_position: float) -> void:
+	## How many beats it is between the current beat and when this note is played.
+	## This is negative before the note is played, close to 0 when the note can be hit, and positive
+	## when the note has passed the hit marker.
+	var beats_from_hit = (song_position - seconds) / track.beat_duration
+	var t = beats_from_hit / track.beats + 1
 	var path_point = track.path.curve.sample_baked_with_rotation(track.hit_marker_position * t * track.path.curve.get_baked_length())
-	position = path_point.get_origin() + self.x_offset * path_point.y
+	position = path_point.get_origin() + x_offset * path_point.y
 	
-	if track.beat_length * timer / track.beat_duration >= track.length:
+	if beats_from_hit >= track.beats * (1 - track.hit_marker_position):
 		queue_free()

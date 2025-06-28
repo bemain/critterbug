@@ -45,49 +45,39 @@ var beat_length: float:
 var beat_duration: float:
 	get: return 60.0/song.bpm
 
-## The number of seconds this tracks would need to wait between beginning note creation and starting 
-## audio playback for the audio and the visuals to be in sync.
-var initial_delay: float:
-	get: return beats * beat_duration
-
-var current_beat: int = 0
-
-var beat_timer: Timer = Timer.new()
+## The most recent position in the song reported.
+var last_position: float = -INF
 
 @onready var path: Path2D = $Path2D
 
 ## The number of seconds off the user can be for a press to be considered a hit.
-@export var hit_window = 0.1
+@export var hit_window = 0.05
 
 ## How much of the track is above the hit marker, as a fraction
 var hit_marker_position: float:
 	get: return $Visuals.hit_marker_position
 
 
-## Begin creating notes for the given [member instrument]. 
-##
-## Note that the [SongManager] handles starting audio playback, so that all tracks play simultaneously.
-func start() -> void:
-	# Reset
-	current_beat = 0
-	beat_timer.stop()
-	
-	# Begin creating notes
-	beat_timer.wait_time = beat_duration
-	beat_timer.one_shot = false
-	beat_timer.connect("timeout", new_beat)
-	add_child(beat_timer)
-	beat_timer.start()
-
-
-## Callback for when the [member beat_timer] times out.
-## Creates new notes for the upcoming beat and increases the [member current_beat].
-func new_beat() -> void:
-	for n in instrument.notes_in_beat(current_beat):
+## Move the notes along the track, and create new ones when needed.
+## Should be called every frame with [param song_position] as the current position in the [member song]. 
+func update(song_position: float) -> void:
+	if song_position <= last_position: return  # Can't go backwards
+		
+	# Add new notes
+	for n in instrument.notes.filter(
+		func(note): 
+			var note_create_at = (note.beat + note.subbeat - beats) * beat_duration
+			return last_position < note_create_at and note_create_at <= song_position
+	):
 		var note = NoteNode.instantiate(n, self)
 		$Notes.add_child(note)
 	
-	current_beat += 1
+	last_position = song_position
+	
+	# Update notes
+	for note: NoteNode in $Notes.get_children():
+		note.update(song_position)
+
 
 
 func _input(event):
@@ -100,8 +90,8 @@ func _input(event):
 func _check_note_hit(track: int):
 	var notes = $Notes.get_children().filter(func(note: NoteNode): return note.note.track == track)
 	for note: NoteNode in notes:
-		if abs(note.timer - beats * beat_duration) <= hit_window:
+		if abs(last_position - note.seconds) <= hit_window:
 			note.queue_free()
 			note_hit.emit(note.note)
-		elif note.timer - beats * beat_duration > hit_window:
+		elif last_position - note.seconds > hit_window:
 			note_missed.emit(note.note)

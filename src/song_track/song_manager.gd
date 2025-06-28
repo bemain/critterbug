@@ -22,40 +22,38 @@ var song: Song
 ## The track for the instrument that is controlled by the local player
 @onready var track: InstrumentTrack = $InstrumentTrack
 
-## Audio players for the instruments of the [member song].
-var instrument_players: Dictionary[Instrument, AudioStreamPlayer] = {}
+## Audio player that handles audio playback for the [member song].
+@onready var player: AudioStreamPlayer = $AudioStreamPlayer
+var instrument_audio_indices: Dictionary[Instrument, int] = {}
+
+
+
+## The current position in the [member song], in seconds.
+var position: float:
+	get: return player.get_playback_position() + AudioServer.get_time_since_last_mix()
 
 
 func _ready():
 	track.song = song
 	track.instrument = song.instruments[0] # TODO: Allow selecting instrument
 	
-	# Prepare players
-	if not song.audio_path.is_empty():
-		$Players/Primary.set_stream(load(song.audio_path))
+	# Prepare audio
+	var group := AudioStreamSynchronized.new()
+	group.stream_count = song.instruments.size() + 1
+	group.set_sync_stream(0, load(song.audio_path))
+	for i in range(song.instruments.size()):
+		var instrument = song.instruments[i]
+		instrument_audio_indices[instrument] = i+1
+		var audio = load(instrument.audio_path)
+		group.set_sync_stream(i+1, audio)
+	player.set_stream(group)
 	
-	for instrument in song.instruments:
-		instrument_players[instrument] = _create_instrument_player(instrument)
-	
-	# Wait before starting audio playback, so that the audio is in sync with the visuals.
-	get_tree().create_timer(track.initial_delay, false).timeout.connect(func(): 
-		for player: AudioStreamPlayer in $Players.get_children():
-			player.play()
-	)
-	
-	# Start visuals
-	track.start()
+	player.play()
 
 
-## Creates an audio player that plays the given [param instrument], if it has its own audio.
-func _create_instrument_player(instrument: Instrument) -> AudioStreamPlayer:
-	if instrument.audio_path.is_empty():
-		return null
-	
-	var player := AudioStreamPlayer.new()
-	player.set_stream(load(instrument.audio_path))
-	$Players.add_child(player)
-	return player
+func _process(delta: float) -> void:
+	track.update(position) # TODO: Compensate for latency.
+
 
 
 func _on_instrument_track_note_hit(note: Note) -> void:

@@ -1,16 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://bfmmn3ld35j0y"]
+[gd_scene load_steps=4 format=3 uid="uid://bfmmn3ld35j0y"]
 
 [ext_resource type="Script" uid="uid://cyrrmusxg7tul" path="res://src/song_track/song_manager.gd" id="1_1j6bh"]
 [ext_resource type="PackedScene" uid="uid://cr1rtnsd7tpad" path="res://src/song_track/instrument_track.tscn" id="2_obqhv"]
+
+[sub_resource type="AudioStreamMP3" id="AudioStreamMP3_obqhv"]
 
 [node name="SongManager" type="Node2D"]
 script = ExtResource("1_1j6bh")
 
 [node name="InstrumentTrack" parent="." instance=ExtResource("2_obqhv")]
-position = Vector2(542, 0)
+position = Vector2(551, 0)
 
-[node name="Players" type="Node" parent="."]
-
-[node name="Primary" type="AudioStreamPlayer" parent="Players"]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamMP3_obqhv")
 
 [connection signal="note_hit" from="InstrumentTrack" to="." method="_on_instrument_track_note_hit"]
