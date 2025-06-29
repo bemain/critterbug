@@ -59,3 +59,11 @@ func _process(delta: float) -> void:
 func _on_instrument_track_note_hit(note: Note) -> void:
 	print("Hit note: %s" % note)
 	# TODO: Keep track of score
+
+
+func _on_instrument_track_note_missed(note: Note) -> void:
+	print("Missed note: %s" % note)
+
+
+func _on_instrument_track_wrong_note(track: int) -> void:
+	print("Wrong note on track %d" % track)

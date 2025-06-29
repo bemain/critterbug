@@ -4,8 +4,9 @@ extends Node2D
 ## using the keyboard.
 ## 
 ## If the user presses the right key when a note passes the hit marker, the note is removed and 
-## [signal note_hit] is emitted. If a note passes the hit marker without being hit, the 
-## [signal note_missed] is emitted instead.
+## [signal note_hit] is emitted. 
+## If a note passes the hit marker without being hit, [signal note_missed] is emitted.
+## If the user presses a key but no note is passing the hit marker, the [signal wrong_note] is emitted.
 
 
 ## Emitted when the user hits a [param note].
@@ -13,6 +14,9 @@ signal note_hit(note: Note)
 
 ## Emitted when the user fails to hit a [param note] in time.
 signal note_missed(note: Note)
+
+## Emitted when the user presses a key but no note is passing the hit marker on that [param track] at that time.
+signal wrong_note(track: int)
 
 
 ## The song that is playing on this track.
@@ -64,12 +68,13 @@ func update(song_position: float) -> void:
 	if song_position <= last_position: return  # Can't go backwards
 		
 	# Add new notes
-	for n in instrument.notes.filter(
-		func(note): 
-			var note_create_at = (note.beat + note.subbeat - beats) * beat_duration
-			return last_position < note_create_at and note_create_at <= song_position
-	):
-		var note = NoteNode.instantiate(n, self)
+	var new_notes = instrument.notes.filter(func(note): 
+		var note_create_at = (note.beat + note.subbeat - beats) * beat_duration
+		return last_position < note_create_at and note_create_at <= song_position
+	)
+	for n in new_notes:
+		var note: NoteNode = NoteNode.instantiate(n, self)
+		note.missed.connect(func(): note_missed.emit(n))
 		$Notes.add_child(note)
 	
 	last_position = song_position
@@ -93,5 +98,6 @@ func _check_note_hit(track: int):
 		if abs(last_position - note.seconds) <= hit_window:
 			note.queue_free()
 			note_hit.emit(note.note)
-		elif last_position - note.seconds > hit_window:
-			note_missed.emit(note.note)
+			return 
+	
+	wrong_note.emit(track)

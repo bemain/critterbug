@@ -15,6 +15,11 @@ static func instantiate(note: Note, track: InstrumentTrack):
 	node.track = track
 	return node
 
+
+## Emitted if this note reaches the end of the track without being hit.
+signal missed()
+
+
 ## The data for this note.
 var note: Note
 ## The track that this belongs to.
@@ -41,4 +46,5 @@ func update(song_position: float) -> void:
 	position = path_point.get_origin() + x_offset * path_point.y
 	
 	if beats_from_hit >= track.beats * (1 - track.hit_marker_position):
+		missed.emit()
 		queue_free()
