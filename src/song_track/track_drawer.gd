@@ -6,7 +6,7 @@ extends Node2D
 	set(value):
 		resolution = value
 		update_lines()
-@export var hit_marker_position: float = 0.9:
+@export_range(0,1) var hit_marker_position: float = 0.8:
 	set(value):
 		hit_marker_position = value
 		update_lines()

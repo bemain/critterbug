@@ -26,6 +26,8 @@ var note: Note
 var track: InstrumentTrack
 
 
+@onready var animation: AnimationPlayer = $AnimationPlayer
+
 ## After how many seconds in the song that this note occurs.
 var seconds: float: 
 	get: return (note.beat + note.subbeat) * track.beat_duration
@@ -33,6 +35,9 @@ var seconds: float:
 ## The offset on the track in the x-direction.
 var x_offset: float:
 	get: return (1.5*track.width) - (note.track * track.width)
+
+## Whether this note has passed the hit marker and thus can't be hit any longer.
+var is_missed: bool = false
 
 ## Move this note to the correct position along the [member track], and remove it if it has reached 
 ## the end.
@@ -45,6 +50,9 @@ func update(song_position: float) -> void:
 	var path_point = track.path.curve.sample_baked_with_rotation(track.hit_marker_position * t * track.path.curve.get_baked_length())
 	position = path_point.get_origin() + x_offset * path_point.y
 	
-	if beats_from_hit >= track.beats * (1 - track.hit_marker_position):
+	if is_missed: return
+	
+	if song_position > seconds + track.hit_window:
+		is_missed = true
 		missed.emit()
-		queue_free()
+		animation.play("missed")

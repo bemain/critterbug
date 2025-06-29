@@ -93,7 +93,7 @@ func _input(event):
 
 ## Check if a note is currently on the hit marker of the given [param track]
 func _check_note_hit(track: int):
-	var notes = $Notes.get_children().filter(func(note: NoteNode): return note.note.track == track)
+	var notes = $Notes.get_children().filter(func(note: NoteNode): return not note.is_missed and note.note.track == track)
 	for note: NoteNode in notes:
 		if abs(last_position - note.seconds) <= hit_window:
 			note.queue_free()
