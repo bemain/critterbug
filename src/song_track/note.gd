@@ -25,7 +25,16 @@ var note: Note
 ## The track that this belongs to.
 var track: InstrumentTrack
 
+## The textures used for the note, depending on which track it is on.
+const textures: Array = [
+	preload("res://src/song_track/assets/square.png"),
+	preload("res://src/song_track/assets/triangle.png"),
+	preload("res://src/song_track/assets/circle.png"),
+	preload("res://src/song_track/assets/pentagon.png"),
+]
 
+
+@onready var sprite: Sprite2D = $Sprite2D
 @onready var animation: AnimationPlayer = $AnimationPlayer
 
 ## After how many seconds in the song that this note occurs.
@@ -38,6 +47,12 @@ var x_offset: float:
 
 ## Whether this note has passed the hit marker and thus can't be hit any longer.
 var is_missed: bool = false
+
+
+func _ready() -> void:
+	sprite.texture = textures[note.track]
+	sprite.scale = Vector2(0.2, 0.2)
+
 
 ## Move this note to the correct position along the [member track], and remove it if it has reached 
 ## the end.

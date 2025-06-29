@@ -17,7 +17,6 @@ curve = SubResource("Curve2D_nrapc")
 
 [node name="Visuals" type="Node2D" parent="."]
 script = ExtResource("2_vtt3f")
-hit_marker_position = 0.5
 
 [node name="Divider1" type="Line2D" parent="Visuals"]
 points = PackedVector2Array(128, 0, 128, 74.8889, 128, 149.778, 128, 224.667, 128, 299.556, 128, 374.444, 128, 449.333, 128, 524.222, 128, 599.111, 128, 674)
@@ -40,7 +39,7 @@ points = PackedVector2Array(-128, 0, -128, 74.8889, -128, 149.778, -128, 224.667
 width = 3.0
 
 [node name="HitMarker" type="Line2D" parent="Visuals"]
-points = PackedVector2Array(-192, 337, 192, 337)
+points = PackedVector2Array(-192, 539.2, 192, 539.2)
 width = 8.0
 
 [node name="Notes" type="Node2D" parent="."]
