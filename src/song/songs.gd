@@ -4,10 +4,30 @@ extends Node
 ## Some [member songs] are loaded automatically at startup from the [member songs_dir] directory,
 ## and more can be loaded manually with [method load_song].
 
+## Persistent config related to playing songs.
+var config: ConfigFile = ConfigFile.new()
+var config_path: String = "user://songs.cfg"
+
+## The user-inputted audio latency. We compensate by to try and sync the visuals with the audio.
+@export var audio_latency_ms: float:
+	get: return config.get_value("General", "latency")
+	set(value): config.set_value("General", "latency", value)
+
+
 var songs_dir: String = "res://songs"
 
 ## All the songs that have already been loaded.
 @onready var songs: Array = _get_song_paths(songs_dir).map(load_song)
+
+
+func _ready() -> void:
+	config.load(config_path)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		# Game is closing
+		config.save(config_path)
 
 ## Get the paths to all .chrp files in the directory at path. 
 ## Searches recursively.

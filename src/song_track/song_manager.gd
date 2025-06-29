@@ -52,7 +52,7 @@ func _ready():
 
 
 func _process(delta: float) -> void:
-	track.update(position) # TODO: Compensate for latency.
+	track.update(position - Songs.audio_latency_ms / 1000)
 
 
 
