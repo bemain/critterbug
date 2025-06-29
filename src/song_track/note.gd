@@ -45,8 +45,8 @@ var seconds: float:
 var x_offset: float:
 	get: return (1.5*track.width) - (note.track * track.width)
 
-## Whether this note has passed the hit marker and thus can't be hit any longer.
-var is_missed: bool = false
+## Whether this note can be hit.
+var is_active: bool = true
 
 
 func _ready() -> void:
@@ -65,9 +65,9 @@ func update(song_position: float) -> void:
 	var path_point = track.path.curve.sample_baked_with_rotation(track.hit_marker_position * t * track.path.curve.get_baked_length())
 	position = path_point.get_origin() + x_offset * path_point.y
 	
-	if is_missed: return
+	if not is_active: return
 	
 	if song_position > seconds + track.hit_window:
-		is_missed = true
+		is_active = false
 		missed.emit()
 		animation.play("missed")
