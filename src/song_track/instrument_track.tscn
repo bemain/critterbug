@@ -5,7 +5,7 @@
 
 [sub_resource type="Curve2D" id="Curve2D_nrapc"]
 _data = {
-"points": PackedVector2Array(-2.08764, -75.3223, 0, 0, 0, 0, 0, 0, 0, 0, 0, 229, 0, 0, -2.83047, 232.337, 0, 674)
+"points": PackedVector2Array(-2.08764, -75.3223, 0, 0, 0, 0, 0, 0, 0, 0, 0, 230, 0, 0, -2.83047, 232.337, 0, 674)
 }
 point_count = 3
 
@@ -18,28 +18,32 @@ curve = SubResource("Curve2D_nrapc")
 [node name="Visuals" type="Node2D" parent="."]
 script = ExtResource("2_vtt3f")
 
-[node name="Divider1" type="Line2D" parent="Visuals"]
+[node name="Dividers" type="Node2D" parent="Visuals"]
+
+[node name="Divider1" type="Line2D" parent="Visuals/Dividers"]
 points = PackedVector2Array(128, 0, 128, 74.8889, 128, 149.778, 128, 224.667, 128, 299.556, 128, 374.444, 128, 449.333, 128, 524.222, 128, 599.111, 128, 674)
 width = 3.0
 
-[node name="Divider2" type="Line2D" parent="Visuals"]
+[node name="Divider2" type="Line2D" parent="Visuals/Dividers"]
 points = PackedVector2Array(64, 0, 64, 74.8889, 64, 149.778, 64, 224.667, 64, 299.556, 64, 374.444, 64, 449.333, 64, 524.222, 64, 599.111, 64, 674)
 width = 3.0
 
-[node name="Divider3" type="Line2D" parent="Visuals"]
+[node name="Divider3" type="Line2D" parent="Visuals/Dividers"]
 points = PackedVector2Array(0, 0, 0, 74.8889, 0, 149.778, 0, 224.667, 0, 299.556, 0, 374.444, 0, 449.333, 0, 524.222, 0, 599.111, 0, 674)
 width = 3.0
 
-[node name="Divider4" type="Line2D" parent="Visuals"]
+[node name="Divider4" type="Line2D" parent="Visuals/Dividers"]
 points = PackedVector2Array(-64, 0, -64, 74.8889, -64, 149.778, -64, 224.667, -64, 299.556, -64, 374.444, -64, 449.333, -64, 524.222, -64, 599.111, -64, 674)
 width = 3.0
 
-[node name="Divider5" type="Line2D" parent="Visuals"]
+[node name="Divider5" type="Line2D" parent="Visuals/Dividers"]
 points = PackedVector2Array(-128, 0, -128, 74.8889, -128, 149.778, -128, 224.667, -128, 299.556, -128, 374.444, -128, 449.333, -128, 524.222, -128, 599.111, -128, 674)
 width = 3.0
 
 [node name="HitMarker" type="Line2D" parent="Visuals"]
 points = PackedVector2Array(-192, 539.2, 192, 539.2)
 width = 8.0
+
+[node name="Beats" type="Node2D" parent="."]
 
 [node name="Notes" type="Node2D" parent="."]

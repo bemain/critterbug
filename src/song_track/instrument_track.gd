@@ -62,11 +62,18 @@ var hit_marker_position: float:
 	get: return $Visuals.hit_marker_position
 
 
+func _ready() -> void:
+	# Create beat lines
+	for i in range(beats):
+		var line := Line2D.new()
+		line.width = 1.0
+		$Beats.add_child(line)
+
 ## Move the notes along the track, and create new ones when needed.
 ## Should be called every frame with [param song_position] as the current position in the [member song]. 
 func update(song_position: float) -> void:
 	if song_position <= last_position: return  # Can't go backwards
-		
+	
 	# Add new notes
 	var new_notes = instrument.notes.filter(func(note): 
 		var note_create_at = (note.beat + note.subbeat - beats) * beat_duration
@@ -78,6 +85,16 @@ func update(song_position: float) -> void:
 		$Notes.add_child(note)
 	
 	last_position = song_position
+	
+	# Update beat lines
+	for i: int in range(beats):
+		var line: Line2D = $Beats.get_child(i)
+		var t = fposmod((song_position / beat_duration + i) / beats, 1)
+		var path_point = path.curve.sample_baked_with_rotation(hit_marker_position * t * path.curve.get_baked_length())
+		line.set_points(PackedVector2Array([
+			path_point.get_origin() + width * 2 * path_point.y,
+			path_point.get_origin() - width * 2 * path_point.y,
+		]))
 	
 	# Update notes
 	for note: NoteNode in $Notes.get_children():
