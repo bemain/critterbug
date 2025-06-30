@@ -55,7 +55,7 @@ var last_position: float = -INF
 @onready var path: Path2D = $Path2D
 
 ## The number of seconds off the user can be for a press to be considered a hit.
-@export var hit_window = 0.1	
+@export var hit_window = 0.05
 
 ## How much of the track is above the hit marker, as a fraction
 var hit_marker_position: float:

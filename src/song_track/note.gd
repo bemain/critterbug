@@ -36,6 +36,7 @@ const textures: Array = [
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation: AnimationPlayer = $AnimationPlayer
+@onready var sustain_line: Line2D = $SustainLine
 
 ## After how many seconds in the song that this note occurs.
 var seconds: float: 
@@ -45,6 +46,8 @@ var seconds: float:
 var x_offset: float:
 	get: return (1.5*track.width) - (note.track * track.width)
 
+const sustain_line_resolution: int = 10
+
 ## Whether this note can be hit.
 var is_active: bool = true
 
@@ -52,6 +55,9 @@ var is_active: bool = true
 func _ready() -> void:
 	sprite.texture = textures[note.track]
 	sprite.scale = Vector2(0.2, 0.2)
+	
+	if note.duration <= 0:
+		sustain_line.queue_free()
 
 
 ## Move this note to the correct position along the [member track], and remove it if it has reached 
@@ -62,8 +68,18 @@ func update(song_position: float) -> void:
 	## when the note has passed the hit marker.
 	var beats_from_hit = (song_position - seconds) / track.beat_duration
 	var t = beats_from_hit / track.beats + 1
-	var path_point = track.path.curve.sample_baked_with_rotation(track.hit_marker_position * t * track.path.curve.get_baked_length())
+	var path_point := track.path.curve.sample_baked_with_rotation(track.hit_marker_position * t * track.path.curve.get_baked_length())
 	position = path_point.get_origin() + x_offset * path_point.y
+	
+	if note.duration > 0:
+		# Update sustain line
+		var beats_from_end = beats_from_hit + note.duration
+		var new_points = []
+		for i in range(sustain_line_resolution+1):
+			var s = t - note.duration * i / (sustain_line_resolution * track.beats)
+			path_point = track.path.curve.sample_baked_with_rotation(track.hit_marker_position * s * track.path.curve.get_baked_length())
+			new_points.append(path_point.get_origin() + x_offset * path_point.y - position)
+		sustain_line.set_points(PackedVector2Array(new_points))
 	
 	if not is_active: return
 	

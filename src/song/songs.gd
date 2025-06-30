@@ -22,6 +22,9 @@ var songs_dir: String = "res://songs"
 
 func _ready() -> void:
 	config.load(config_path)
+	
+	if audio_latency_ms == 0:
+		audio_latency_ms = AudioServer.get_output_latency()
 
 
 func _notification(what: int) -> void:
