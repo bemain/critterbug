@@ -19,7 +19,7 @@ audio:
 1   ..22    .3
 
 [bass]
-# The empty line here is important, since the [drums] have a pickup measure
+# The empty line here is important, since the [drums] have a pickup beat
 
     .2  0
 0   .2  ...0
@@ -29,3 +29,37 @@ audio:
 0   .2  ...0
 ...0.2..
     .1
+    .2  0
+0   .2  ...0
+...0.2..
+    .1
+    .2  0
+0   .2  ...0
+...0.2..
+    .1
+    .2  0
+0   .2  ...0
+...0.2..
+    .1
+    .2  0
+0   .2  ...0
+...0.2..
+    .1
+    .2  0
+0   .2  ...0
+...0.2..
+    .1
+    .2  0
+0   .2  ...0
+...0.2..
+    .1
+0
+-.
+0
+-
+        0
+        -
+        -
+        -
+            0
+           

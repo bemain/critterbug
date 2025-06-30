@@ -12,6 +12,10 @@ class_name Note
 ## For example, a subbeat of [code]0[/code] means the note is "on" the beat, and subbeat of [code]0.5[/code] is halfway betweens the beats.
 @export_range(0,1) var subbeat: float
 
+## For how long this note should be pressed. 
+## If this is [code]0[/code], the note just has to be hit. If it is greater than [code]0[/code], it has to be sustained for this long.
+@export var duration: float = 0
+
 ## How important this note is considered for the melodic structure. 
 ## Lower importance notes are only shown to users on a higher difficulty.
 ## A note with priority [code]0[/code] is considered of highest importance.

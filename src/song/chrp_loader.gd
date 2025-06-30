@@ -83,14 +83,26 @@ func _load(path: String, original_path: String, use_sub_threads: bool, cache_mod
 			continue
 		
 		# Instrument data
-		for j in range(ceil(line.length() / 4.0)):
-			var notes = line.substr(j*4, 4).strip_edges()
-			for offset in range(notes.length()):
-				# . or other strange note. TODO: Handle strange notes
-				if not notes[offset].is_valid_int(): continue
-				# Add note
-				var note := Note.new(j, beat, float(offset) / notes.length(), int(notes[offset]))
-				instrument.notes.append(note)
+		for track: int in range(ceil(line.length() / 4.0)):
+			var notes: String = line.substr(track*4, 4).strip_edges()
+			for offset: int in range(notes.length()):
+				var subbeat := float(offset) / notes.length()
+				match notes[offset]:
+					"-":
+						# Sustain the previous note
+						var notes_on_track = instrument.notes.filter(func(note): return note.track == track)
+						assert(notes_on_track.size() >= 1, "Sustain has to be preceeded by a note")
+						var note = notes_on_track[-1]
+						var subbeat_end = subbeat + 1.0 / notes.length()
+						note.duration = beat - note.beat - 1 + subbeat_end - note.subbeat
+					
+					var priority when priority.is_valid_int():
+						# Add note
+						var note := Note.new(track, beat, subbeat, int(priority))
+						instrument.notes.append(note)
+				
+					# TODO: Handle strange notes
+				
 		beat += 1
 	
 	if instrument != null:
