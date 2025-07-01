@@ -1,5 +1,4 @@
-extends Resource
-class_name Note
+class_name Note extends Resource
 
 ## The track ("lane") that this note belongs to. 
 ## Count starts on 0.

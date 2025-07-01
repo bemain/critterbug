@@ -1,5 +1,4 @@
-class_name InstrumentTrack
-extends Node2D
+class_name InstrumentTrack extends Node2D
 ## A track that displays the notes played by an [member instrument] and allows the user to hit them 
 ## using the keyboard.
 ## 

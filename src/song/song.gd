@@ -1,5 +1,4 @@
-extends Resource
-class_name Song
+class_name Song extends Resource
 
 ## The title of the song.
 @export var title: String

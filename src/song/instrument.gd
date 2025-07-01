@@ -1,5 +1,4 @@
-extends Resource
-class_name Instrument
+class_name Instrument extends Resource
 
 ## Human-readable name for this instrument
 @export var name: String

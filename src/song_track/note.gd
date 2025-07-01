@@ -1,5 +1,4 @@
-class_name NoteNode
-extends Node2D
+class_name NoteNode extends Node2D
 ## A visual representation of a [Note] on an [InstrumentTrack].
 
 # TODO: Rename

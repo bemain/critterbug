@@ -1,5 +1,4 @@
-class_name SongManager
-extends Node
+class_name SongManager extends Node
 ## A node responsible for playing a song.
 ##
 ## It collects the results from all players, makes sure the audio is in sync with the visuals,
@@ -35,7 +34,7 @@ var position: float:
 
 func _ready():
 	track.song = song
-	track.instrument = song.instruments[0] # TODO: Allow selecting instrument
+	track.instrument = song.instruments[1] # TODO: Allow selecting instrument
 	
 	# Prepare audio
 	var group := AudioStreamSynchronized.new()

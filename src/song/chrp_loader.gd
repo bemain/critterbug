@@ -1,6 +1,5 @@
 # This script defines a custom resource loader for .chrp files.
-extends ResourceFormatLoader
-class_name CHRPDataResource
+class_name CHRPDataResource extends ResourceFormatLoader
 
 
 ## Returns an array of strings, where each string is an extension this loader can handle.
@@ -94,7 +93,7 @@ func _load(path: String, original_path: String, use_sub_threads: bool, cache_mod
 						assert(notes_on_track.size() >= 1, "Sustain has to be preceeded by a note")
 						var note = notes_on_track[-1]
 						var subbeat_end = subbeat + 1.0 / notes.length()
-						note.duration = beat - note.beat - 1 + subbeat_end - note.subbeat
+						note.duration = beat - note.beat + subbeat_end - note.subbeat
 					
 					var priority when priority.is_valid_int():
 						# Add note
