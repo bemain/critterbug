@@ -81,6 +81,7 @@ func update(song_position: float) -> void:
 	for n in new_notes:
 		var note: NoteNode = NoteNode.instantiate(n, self)
 		note.missed.connect(func(): note_missed.emit(n))
+		note.hit.connect(func(): note_hit.emit(n))
 		$Notes.add_child(note)
 	
 	last_position = song_position
@@ -112,9 +113,7 @@ func _check_note_hit(track: int):
 	var notes = $Notes.get_children().filter(func(note: NoteNode): return note.is_active and note.note.track == track)
 	for note: NoteNode in notes:
 		if abs(last_position - note.seconds) <= hit_window:
-			note.is_active = false
-			note.animation.play("hit")
-			note_hit.emit(note.note)
-			return 
+			note.register_hit()
+			return
 	
 	wrong_note.emit(track)
