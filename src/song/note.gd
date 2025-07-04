@@ -21,11 +21,12 @@ class_name Note extends Resource
 @export var priority: int
 
 
-func _init(track: int, beat: int, subbeat := 1.0, priority := 0):
+func _init(track: int, beat: int, subbeat := 1.0, priority := 0, duration := 0.0):
 	self.track = track
 	self.beat = beat
 	self.subbeat = subbeat
 	self.priority = priority
+	self.duration = duration
 
 func _to_string() -> String:
-	return "Note(priority: %d, track: %d, beat: %.2f)" % [priority, track, beat + subbeat] 
+	return "Note(priority: %d, track: %d, beat: %.2f" % [priority, track, beat + subbeat] + ("-%.2f)" % (beat + subbeat + duration) if duration != 0 else ")")
