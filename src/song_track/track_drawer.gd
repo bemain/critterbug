@@ -28,13 +28,13 @@ func _ready():
 func update_lines() -> void:
 	if not track: return
 	
-	for l in range(vert_lines.size()):
+	for line_index in range(vert_lines.size()):
 		var new_points = []
 		for i in range(resolution):
 			var t = float(i) / (resolution-1)
 			var point_on_path = path.curve.sample_baked_with_rotation(t * path.curve.get_baked_length())
-			new_points.append(point_on_path.get_origin() + (-(2*width) + l * width)*point_on_path.y)
-		vert_lines[l].set_points(PackedVector2Array(new_points))
+			new_points.append(point_on_path.get_origin() + (-(2*width) + line_index * width)*point_on_path.y)
+		vert_lines[line_index].set_points(PackedVector2Array(new_points))
 	
 	var hit_marker_path_point = path.curve.sample_baked_with_rotation(hit_marker_position * path.curve.get_baked_length())
 	hit_marker.set_points(PackedVector2Array([

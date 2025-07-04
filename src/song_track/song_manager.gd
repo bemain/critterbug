@@ -1,4 +1,4 @@
-class_name SongManager extends Node
+class_name SongManager extends Node2D
 ## A node responsible for playing a song.
 ##
 ## It collects the results from all players, makes sure the audio is in sync with the visuals,
@@ -28,7 +28,7 @@ var instrument_audio_indices: Dictionary[Instrument, int] = {}
 
 
 ## The current position in the [member song], in seconds.
-var position: float:
+var song_position: float:
 	get: return player.get_playback_position() + AudioServer.get_time_since_last_mix()
 
 
@@ -51,7 +51,7 @@ func _ready():
 
 
 func _process(delta: float) -> void:
-	track.update(position - Songs.audio_latency_ms / 1000)
+	track.update(song_position - Songs.audio_latency_ms / 1000)
 
 
 

@@ -95,9 +95,10 @@ func _load(path: String, original_path: String, use_sub_threads: bool, cache_mod
 						var subbeat_end = subbeat + 1.0 / notes.length()
 						note.duration = beat - note.beat + subbeat_end - note.subbeat
 					
-					var priority when priority.is_valid_int():
+					var digit when digit.is_valid_int():
 						# Add note
-						var note := Note.new(track, beat, subbeat, int(priority))
+						var priority := int(digit)
+						var note := Note.new(track, beat, subbeat, priority)
 						instrument.notes.append(note)
 				
 					# TODO: Handle strange notes
