@@ -89,7 +89,7 @@ func _load(path: String, original_path: String, use_sub_threads: bool, cache_mod
 				match notes[offset]:
 					"-":
 						# Sustain the previous note
-						var notes_on_track = instrument.notes.filter(func(note): return note.track == track)
+						var notes_on_track = instrument.notes.filter(func(n): return n.track == track)
 						assert(notes_on_track.size() >= 1, "Sustain has to be preceeded by a note")
 						var note = notes_on_track[-1]
 						var subbeat_end = subbeat + 1.0 / notes.length()
