@@ -1,12 +1,39 @@
 extends Node
+## Singleton responsible for loading songs from disk.
+##
+## Some [member songs] are loaded automatically at startup from the [member songs_dir] directory,
+## and more can be loaded manually with [method load_song].
+
+## Persistent config related to playing songs.
+var config: ConfigFile = ConfigFile.new()
+var config_path: String = "user://songs.cfg"
+
+## The user-inputted audio latency. We compensate by to try and sync the visuals with the audio.
+@export var audio_latency_ms: float:
+	get: return config.get_value("General", "latency")
+	set(value): config.set_value("General", "latency", value)
+
 
 var songs_dir: String = "res://songs"
 
+## All the songs that have already been loaded.
 @onready var songs: Array = _get_song_paths(songs_dir).map(load_song)
 
 
-# Get the paths to all .chrp files in the directory at path. 
-# Searches recursively.
+func _ready() -> void:
+	config.load(config_path)
+	
+	if audio_latency_ms == 0:
+		audio_latency_ms = AudioServer.get_output_latency()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		# Game is closing
+		config.save(config_path)
+
+## Get the paths to all .chrp files in the directory at path. 
+## Searches recursively.
 func _get_song_paths(path: String) -> Array[String]:
 	var file_paths: Array[String] = []
 	var dir = DirAccess.open(path)
@@ -23,6 +50,9 @@ func _get_song_paths(path: String) -> Array[String]:
 	return file_paths
 
 
-# Load a .chrp file into memory.
+## Load a .chrp file into memory, and add it to the loaded [member songs].
 func load_song(path: String) -> Song:
-	return ResourceLoader.load(path) as Song
+	var song := ResourceLoader.load(path) as Song
+	if not song in songs:
+		songs.append(song)
+	return song
