@@ -1,4 +1,4 @@
-extends Node2D
+extends Node3D
 
 func _ready() -> void:
 	var manager := SongManager.instantiate(Songs.songs[0]) # FIXME: Just for testing

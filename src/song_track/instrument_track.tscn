@@ -10,6 +10,7 @@ _data = {
 point_count = 3
 
 [node name="InstrumentTrack" type="Node2D"]
+visible = false
 script = ExtResource("1_pd2th")
 
 [node name="Path2D" type="Path2D" parent="."]

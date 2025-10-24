@@ -1,9 +1,122 @@
-[gd_scene load_steps=2 format=3 uid="uid://bifurmsfeys1d"]
+[gd_scene load_steps=35 format=3 uid="uid://bifurmsfeys1d"]
 
 [ext_resource type="Script" uid="uid://dkbrj50v8x84m" path="res://world.gd" id="1_f3sb7"]
+[ext_resource type="Script" uid="uid://c8b4go8b56y3n" path="res://addons/proton_scatter/src/scatter.gd" id="2_ic0uy"]
+[ext_resource type="Script" uid="uid://cd2vv4fpbr2kb" path="res://addons/proton_scatter/src/stack/modifier_stack.gd" id="3_k3n1d"]
+[ext_resource type="Script" uid="uid://c8ybjmom2sxhw" path="res://addons/proton_scatter/src/modifiers/base_modifier.gd" id="4_2o6r5"]
+[ext_resource type="Script" uid="uid://bvn6vb4jlntyh" path="res://addons/proton_scatter/src/modifiers/create_inside_random.gd" id="5_70uel"]
+[ext_resource type="Script" uid="uid://17kco1gn0u8y" path="res://addons/proton_scatter/src/modifiers/randomize_transforms.gd" id="6_hiqwa"]
+[ext_resource type="Script" uid="uid://4gifimuy56a2" path="res://addons/proton_scatter/src/modifiers/relax.gd" id="7_2u3nc"]
+[ext_resource type="Script" uid="uid://wb02hxqyhhcv" path="res://addons/proton_scatter/src/modifiers/project_on_geometry.gd" id="8_udxuc"]
+[ext_resource type="Script" uid="uid://q5087d8uw4v6" path="res://addons/proton_scatter/src/modifiers/offset_scale.gd" id="9_hiqwa"]
+[ext_resource type="Script" uid="uid://b5o5857yp7umk" path="res://addons/proton_scatter/src/scatter_item.gd" id="9_ikiii"]
+[ext_resource type="Script" uid="uid://bglbmejqp3xpx" path="res://addons/proton_scatter/src/scatter_shape.gd" id="10_cbp6q"]
+[ext_resource type="Script" uid="uid://m1xgjqb30jgd" path="res://addons/proton_scatter/src/shapes/sphere_shape.gd" id="11_26xuy"]
+[ext_resource type="PackedScene" uid="uid://b78c7or5ydas6" path="res://assets/Forest Nature Pack/Rock_1_K_Color1.gltf" id="13_2u3nc"]
+[ext_resource type="PackedScene" uid="uid://csqv2ckg32cxg" path="res://assets/Forest Nature Pack/Tree_1_B_Color1.gltf" id="14_udxuc"]
+[ext_resource type="PackedScene" uid="uid://cpcr3cyt3cvjo" path="res://assets/Forest Nature Pack/Tree_1_C_Color1.gltf" id="15_ikiii"]
 
-[node name="World" type="Node2D"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hiqwa"]
+
+[sub_resource type="Sky" id="Sky_2u3nc"]
+sky_material = SubResource("ProceduralSkyMaterial_hiqwa")
+
+[sub_resource type="Environment" id="Environment_hiqwa"]
+background_mode = 1
+background_color = Color(0.9691369, 0.9691369, 0.9691368, 1)
+sky = SubResource("Sky_2u3nc")
+ambient_light_source = 3
+reflected_light_source = 2
+volumetric_fog_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_036b0"]
+size = Vector2(10, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dwbse"]
+albedo_color = Color(0.24705882, 0.3764706, 0, 1)
+metallic_specular = 0.2
+
+[sub_resource type="Resource" id="Resource_cbp6q"]
+script = ExtResource("5_70uel")
+amount = 500
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="Resource_26xuy"]
+script = ExtResource("6_hiqwa")
+position = Vector3(0.15, 0, 0.15)
+rotation = Vector3(10, 360, 10)
+scale = Vector3(0.1, 0.1, 0.1)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Resource_4h6ng"]
+script = ExtResource("7_2u3nc")
+offset_step = 0.2
+consecutive_step_multiplier = 0.75
+restrict_height = true
+
+[sub_resource type="Resource" id="Resource_o3ebs"]
+script = ExtResource("8_udxuc")
+ray_length = 5.0
+ray_offset = 5.0
+remove_points_on_miss = false
+
+[sub_resource type="Resource" id="Resource_k83mh"]
+script = ExtResource("9_hiqwa")
+scale = Vector3(0.3, 0.3, 0.3)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Resource_qktwf"]
+script = ExtResource("3_k3n1d")
+stack = Array[ExtResource("4_2o6r5")]([SubResource("Resource_cbp6q"), SubResource("Resource_26xuy"), SubResource("Resource_4h6ng"), SubResource("Resource_o3ebs"), SubResource("Resource_k83mh")])
+
+[sub_resource type="Resource" id="Resource_bh8nc"]
+script = ExtResource("11_26xuy")
+radius = 5.0
+
+[sub_resource type="Resource" id="Resource_bc84e"]
+script = ExtResource("5_70uel")
+amount = 75
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="Resource_wukud"]
+script = ExtResource("6_hiqwa")
+position = Vector3(0.15, 0, 0.15)
+rotation = Vector3(10, 360, 10)
+scale = Vector3(0.1, 0.1, 0.1)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Resource_il2jm"]
+script = ExtResource("7_2u3nc")
+offset_step = 0.2
+consecutive_step_multiplier = 0.75
+restrict_height = true
+
+[sub_resource type="Resource" id="Resource_wjb0r"]
+script = ExtResource("8_udxuc")
+ray_length = 5.0
+ray_offset = 5.0
+remove_points_on_miss = false
+
+[sub_resource type="Resource" id="Resource_mc2jv"]
+script = ExtResource("3_k3n1d")
+stack = Array[ExtResource("4_2o6r5")]([SubResource("Resource_bc84e"), SubResource("Resource_wukud"), SubResource("Resource_il2jm"), SubResource("Resource_wjb0r")])
+
+[sub_resource type="Resource" id="Resource_bo7i5"]
+script = ExtResource("11_26xuy")
+radius = 5.0
+metadata/_custom_type_script = "uid://m1xgjqb30jgd"
+
+[sub_resource type="FogMaterial" id="FogMaterial_hiqwa"]
+density = 0.2
+emission = Color(0.3328807, 0.33288068, 0.33288068, 1)
+
+[node name="World" type="Node3D"]
 script = ExtResource("1_f3sb7")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hiqwa")
 
 [node name="AudioLatency" type="Control" parent="."]
 layout_mode = 3
@@ -34,5 +147,67 @@ grow_vertical = 0
 max_value = 200.0
 allow_greater = true
 allow_lesser = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.27897426, 0, 0.9602986, 0, 1, 0, -0.9602986, 0, -0.27897426, 1.4632132, 0.3337344, -0.95385206)
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_036b0")
+surface_material_override/0 = SubResource("StandardMaterial3D_dwbse")
+
+[node name="LowGrass" type="Node3D" parent="."]
+script = ExtResource("2_ic0uy")
+global_seed = 2
+modifier_stack = SubResource("Resource_qktwf")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
+metadata/_custom_type_script = "uid://c8b4go8b56y3n"
+
+[node name="ScatterItem" type="Node3D" parent="LowGrass"]
+script = ExtResource("9_ikiii")
+path = "uid://mer5vu2w3s2c"
+
+[node name="ScatterItem2" type="Node3D" parent="LowGrass"]
+script = ExtResource("9_ikiii")
+path = "uid://bdsno1v0htfqr"
+
+[node name="ScatterShape" type="Node3D" parent="LowGrass"]
+script = ExtResource("10_cbp6q")
+shape = SubResource("Resource_bh8nc")
+
+[node name="TallGrass" type="Node3D" parent="."]
+script = ExtResource("2_ic0uy")
+modifier_stack = SubResource("Resource_mc2jv")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
+metadata/_custom_type_script = "uid://c8b4go8b56y3n"
+
+[node name="ScatterItem" type="Node3D" parent="TallGrass"]
+script = ExtResource("9_ikiii")
+path = "uid://do5n3t4ys3qsf"
+
+[node name="ScatterItem2" type="Node3D" parent="TallGrass"]
+script = ExtResource("9_ikiii")
+path = "uid://brmr21datyed1"
+metadata/_custom_type_script = "uid://b5o5857yp7umk"
+
+[node name="ScatterShape" type="Node3D" parent="TallGrass"]
+visible = false
+script = ExtResource("10_cbp6q")
+shape = SubResource("Resource_bo7i5")
+
+[node name="Rock_1_K_Color12" parent="." instance=ExtResource("13_2u3nc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.352, 0, -1.0874194)
+
+[node name="Tree_1_B_Color12" parent="." instance=ExtResource("14_udxuc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36470246, 2.3841858e-07, -1.2757378)
+
+[node name="Tree_1_C_Color12" parent="." instance=ExtResource("15_ikiii")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1344388, 0, 3.9375613)
+
+[node name="FogVolume" type="FogVolume" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+size = Vector3(10, 2, 10)
+material = SubResource("FogMaterial_hiqwa")
 
 [connection signal="value_changed" from="AudioLatency/Slider" to="." method="_on_latency_slider_value_changed"]
