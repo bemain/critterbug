@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bifurmsfeys1d"]
+[gd_scene load_steps=39 format=3 uid="uid://bifurmsfeys1d"]
 
 [ext_resource type="Script" uid="uid://dkbrj50v8x84m" path="res://world.gd" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://c8b4go8b56y3n" path="res://addons/proton_scatter/src/scatter.gd" id="2_ic0uy"]
@@ -12,22 +12,24 @@
 [ext_resource type="Script" uid="uid://b5o5857yp7umk" path="res://addons/proton_scatter/src/scatter_item.gd" id="9_ikiii"]
 [ext_resource type="Script" uid="uid://bglbmejqp3xpx" path="res://addons/proton_scatter/src/scatter_shape.gd" id="10_cbp6q"]
 [ext_resource type="Script" uid="uid://m1xgjqb30jgd" path="res://addons/proton_scatter/src/shapes/sphere_shape.gd" id="11_26xuy"]
-[ext_resource type="PackedScene" uid="uid://b78c7or5ydas6" path="res://assets/Forest Nature Pack/Rock_1_K_Color1.gltf" id="13_2u3nc"]
-[ext_resource type="PackedScene" uid="uid://csqv2ckg32cxg" path="res://assets/Forest Nature Pack/Tree_1_B_Color1.gltf" id="14_udxuc"]
-[ext_resource type="PackedScene" uid="uid://cpcr3cyt3cvjo" path="res://assets/Forest Nature Pack/Tree_1_C_Color1.gltf" id="15_ikiii"]
+[ext_resource type="PackedScene" uid="uid://b5y0crw32uw03" path="res://assets/Stylized Nature Megakit/CommonTree_1.gltf" id="14_hiqwa"]
+[ext_resource type="PackedScene" uid="uid://bfyemfud8x5ki" path="res://assets/Stylized Nature Megakit/CommonTree_5.gltf" id="15_2u3nc"]
+[ext_resource type="PackedScene" uid="uid://b4wexx70lnv4p" path="res://assets/Stylized Nature Megakit/Flower_3_Single.gltf" id="16_2u3nc"]
+[ext_resource type="PackedScene" uid="uid://carvm2lwhbalu" path="res://assets/Stylized Nature Megakit/Pebble_Round_5.gltf" id="17_cbp6q"]
+[ext_resource type="PackedScene" uid="uid://coc4uvuha7vre" path="res://assets/Stylized Nature Megakit/RockPath_Round_Small_1.gltf" id="18_26xuy"]
+[ext_resource type="PackedScene" uid="uid://db6dex6vb5vyb" path="res://assets/Stylized Nature Megakit/RockPath_Round_Small_2.gltf" id="19_bc84e"]
+[ext_resource type="PackedScene" uid="uid://cu4pnvl0bebke" path="res://assets/Stylized Nature Megakit/Rock_Medium_3.gltf" id="19_cbp6q"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hiqwa"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cbp6q"]
 
 [sub_resource type="Sky" id="Sky_2u3nc"]
-sky_material = SubResource("ProceduralSkyMaterial_hiqwa")
+sky_material = SubResource("ProceduralSkyMaterial_cbp6q")
 
 [sub_resource type="Environment" id="Environment_hiqwa"]
-background_mode = 1
-background_color = Color(0.9691369, 0.9691369, 0.9691368, 1)
+background_mode = 2
 sky = SubResource("Sky_2u3nc")
-ambient_light_source = 3
-reflected_light_source = 2
 volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_036b0"]
 size = Vector2(10, 10)
@@ -118,6 +120,10 @@ script = ExtResource("1_f3sb7")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hiqwa")
 
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.7952123, -0.080398284, -0.600977, -0.045415293, 0.98048776, -0.19126247, 0.6046278, 0.17938778, 0.77604467, 0, 0, 0)
+shadow_enabled = true
+
 [node name="AudioLatency" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -149,7 +155,8 @@ allow_greater = true
 allow_lesser = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.27897426, 0, 0.9602986, 0, 1, 0, -0.9602986, 0, -0.27897426, 1.4632132, 0.3337344, -0.95385206)
+transform = Transform3D(-0.27897426, 0, 0.9602986, 0, 1, 0, -0.9602986, 0, -0.27897426, 1.9151142, 0.4691676, -0.95385206)
+current = true
 
 [node name="Ground" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_036b0")
@@ -165,11 +172,12 @@ metadata/_custom_type_script = "uid://c8b4go8b56y3n"
 
 [node name="ScatterItem" type="Node3D" parent="LowGrass"]
 script = ExtResource("9_ikiii")
-path = "uid://mer5vu2w3s2c"
+path = "uid://bx2285c888vpk"
 
 [node name="ScatterItem2" type="Node3D" parent="LowGrass"]
 script = ExtResource("9_ikiii")
-path = "uid://bdsno1v0htfqr"
+proportion = 50
+path = "uid://ck1gi5dnose6q"
 
 [node name="ScatterShape" type="Node3D" parent="LowGrass"]
 script = ExtResource("10_cbp6q")
@@ -184,11 +192,12 @@ metadata/_custom_type_script = "uid://c8b4go8b56y3n"
 
 [node name="ScatterItem" type="Node3D" parent="TallGrass"]
 script = ExtResource("9_ikiii")
-path = "uid://do5n3t4ys3qsf"
+path = "uid://c3nd3wdj267u"
 
 [node name="ScatterItem2" type="Node3D" parent="TallGrass"]
 script = ExtResource("9_ikiii")
-path = "uid://brmr21datyed1"
+proportion = 50
+path = "uid://b207buw28dtce"
 metadata/_custom_type_script = "uid://b5o5857yp7umk"
 
 [node name="ScatterShape" type="Node3D" parent="TallGrass"]
@@ -196,18 +205,30 @@ visible = false
 script = ExtResource("10_cbp6q")
 shape = SubResource("Resource_bo7i5")
 
-[node name="Rock_1_K_Color12" parent="." instance=ExtResource("13_2u3nc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.352, 0, -1.0874194)
-
-[node name="Tree_1_B_Color12" parent="." instance=ExtResource("14_udxuc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36470246, 2.3841858e-07, -1.2757378)
-
-[node name="Tree_1_C_Color12" parent="." instance=ExtResource("15_ikiii")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1344388, 0, 3.9375613)
-
 [node name="FogVolume" type="FogVolume" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 size = Vector3(10, 2, 10)
 material = SubResource("FogMaterial_hiqwa")
+
+[node name="CommonTree_12" parent="." instance=ExtResource("14_hiqwa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.21640563, 0, -1.472056)
+
+[node name="CommonTree_52" parent="." instance=ExtResource("15_2u3nc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6267414, 0, 3.0551271)
+
+[node name="Flower_3_Single2" parent="." instance=ExtResource("16_2u3nc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8867861, 0, 0.5097712)
+
+[node name="Pebble_Round_52" parent="." instance=ExtResource("17_cbp6q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2184392, 0, 0.43375063)
+
+[node name="RockPath_Round_Small_12" parent="." instance=ExtResource("18_26xuy")]
+transform = Transform3D(0.41114852, 0, -0.91156834, 0, 1, 0, 0.91156834, 0, 0.41114852, 0.8357402, 0, -0.56337166)
+
+[node name="RockPath_Round_Small_22" parent="." instance=ExtResource("19_bc84e")]
+transform = Transform3D(0.6841526, 0, -0.7293389, 0, 1, 0, 0.7293389, 0, 0.6841526, -0.38042927, 0, 0.25844526)
+
+[node name="Rock_Medium_32" parent="." instance=ExtResource("19_cbp6q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4833548, 0, -1.8498366)
 
 [connection signal="value_changed" from="AudioLatency/Slider" to="." method="_on_latency_slider_value_changed"]
