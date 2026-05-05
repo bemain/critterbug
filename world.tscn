@@ -1,11 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://bifurmsfeys1d"]
+[gd_scene format=3 uid="uid://bifurmsfeys1d"]
 
 [ext_resource type="Script" uid="uid://dkbrj50v8x84m" path="res://world.gd" id="1_f3sb7"]
 
-[node name="World" type="Node2D"]
+[node name="World" type="Node2D" unique_id=567539085]
 script = ExtResource("1_f3sb7")
 
-[node name="AudioLatency" type="Control" parent="."]
+[node name="AudioLatency" type="Control" parent="." unique_id=1545712800]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 28.0
@@ -14,7 +14,7 @@ offset_right = 284.0
 offset_bottom = 56.0
 metadata/_edit_group_ = true
 
-[node name="Label" type="RichTextLabel" parent="AudioLatency"]
+[node name="Label" type="RichTextLabel" parent="AudioLatency" unique_id=1969152179]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -22,7 +22,7 @@ offset_bottom = 24.0
 grow_horizontal = 2
 text = "Latency:    ms"
 
-[node name="Slider" type="HSlider" parent="AudioLatency"]
+[node name="Slider" type="HSlider" parent="AudioLatency" unique_id=42807716]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0

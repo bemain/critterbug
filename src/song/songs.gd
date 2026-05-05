@@ -4,13 +4,13 @@ extends Node
 ## Some [member songs] are loaded automatically at startup from the [member songs_dir] directory,
 ## and more can be loaded manually with [method load_song].
 
-## Persistent config related to playing songs.
+## Persistent config related to playing songs. TODO: Extend this class to provide centralized defaults.
 var config: ConfigFile = ConfigFile.new()
 var config_path: String = "user://songs.cfg"
 
-## The user-inputted audio latency. We compensate by to try and sync the visuals with the audio.
+## The user-inputted audio latency. We compensate by this to try and sync the visuals with the audio.
 @export var audio_latency_ms: float:
-	get: return config.get_value("General", "latency")
+	get: return config.get_value("General", "latency", 0)
 	set(value): config.set_value("General", "latency", value)
 
 
