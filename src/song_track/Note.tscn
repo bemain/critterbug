@@ -1,7 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://cmxj6673inu4p"]
+[gd_scene format=3 uid="uid://cmxj6673inu4p"]
 
-[ext_resource type="Script" uid="uid://bnsyue4ip5ao4" path="res://src/song_track/note.gd" id="1_tyvxt"]
-[ext_resource type="Texture2D" uid="uid://i52pjm7gort8" path="res://icon.png" id="2_4m8l7"]
+[ext_resource type="Script" uid="uid://bnsyue4ip5ao4" path="res://src/song_track/note.gd" id="1_mrhqn"]
+[ext_resource type="Texture2D" uid="uid://i52pjm7gort8" path="res://icon.png" id="2_x07t5"]
 
 [sub_resource type="Animation" id="Animation_wrxep"]
 length = 0.001
@@ -150,22 +150,18 @@ _data = {
 &"missed": SubResource("Animation_gx7pd")
 }
 
-[node name="note" type="Node2D"]
-script = ExtResource("1_tyvxt")
+[node name="Note" type="Node2D" unique_id=1149896927]
+script = ExtResource("1_mrhqn")
 
-[node name="SustainLine" type="Line2D" parent="."]
+[node name="SustainLine" type="Line2D" parent="." unique_id=667925164]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="SustainLine"]
-libraries = {
-&"": SubResource("AnimationLibrary_bispr")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SustainLine" unique_id=947566698]
+libraries/ = SubResource("AnimationLibrary_bispr")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=402877941]
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_4m8l7")
+texture = ExtResource("2_x07t5")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D" unique_id=337941556]
 root_node = NodePath("../..")
-libraries = {
-&"": SubResource("AnimationLibrary_fjfyq")
-}
+libraries/ = SubResource("AnimationLibrary_fjfyq")

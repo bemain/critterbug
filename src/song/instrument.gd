@@ -8,11 +8,11 @@ class_name Instrument extends Resource
 @export var audio_path: String
 
 ## The notes played by this instrument.
-@export var notes: Array[Note] = []
+@export var notes: Array[NoteData] = []
 
 
 ## Get the notes played by this instrument on the specifc [param beat].
-func notes_in_beat(beat: int) -> Array[Note]:
+func notes_in_beat(beat: int) -> Array[NoteData]:
 	return notes.filter(func (note): return note.beat==beat)
 
 

@@ -1,3 +1,4 @@
+@tool
 class_name SongManager extends Node2D
 ## A node responsible for playing a song.
 ##
@@ -7,7 +8,7 @@ class_name SongManager extends Node2D
 
 
 ## The scene that uses this script. Used for the [instantiate] method.
-const _scene: PackedScene = preload("res://src/song_track/song_manager.tscn")
+const _scene: PackedScene = preload("res://src/song_track/SongManager.tscn")
 
 ## Create an instance of this scene, with the given parameters.
 static func instantiate(song: Song) -> SongManager:
@@ -15,11 +16,12 @@ static func instantiate(song: Song) -> SongManager:
 	manager.song = song
 	return manager
 
-## The song that this plays.
-var song: Song
 
 ## The track for the instrument that is controlled by the local player
-@onready var track: InstrumentTrack = $InstrumentTrack
+@export var track: InstrumentTrack:
+	set(value):
+		track = value
+		update_configuration_warnings()
 
 ## Audio player that handles audio playback for the [member song].
 @onready var player: AudioStreamPlayer = $AudioStreamPlayer
@@ -31,8 +33,8 @@ var instrument_audio_indices: Dictionary[Instrument, int] = {}
 var song_position: float:
 	get: return player.get_playback_position() + AudioServer.get_time_since_last_mix()
 
-
-func _ready():
+## Begin playing a [param song].
+func play(song: Song):
 	track.song = song
 	track.instrument = song.instruments[1] # TODO: Allow selecting instrument
 	
@@ -50,17 +52,32 @@ func _ready():
 	player.play()
 
 
+func _get_configuration_warnings() -> PackedStringArray:
+	if track == null:
+		return ["No InstrumentTrack has been assigned."]
+	return []
+
+
+func _ready() -> void:
+	if Engine.is_editor_hint(): return
+	if track != null:
+		track.note_hit.connect(_on_instrument_track_note_hit)
+		track.note_missed.connect(_on_instrument_track_note_missed)
+		track.wrong_note.connect(_on_instrument_track_wrong_note)
+
+
 func _process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
 	track.update(song_position - Songs.audio_latency_ms / 1000)
 
 
 
-func _on_instrument_track_note_hit(note: Note) -> void:
+func _on_instrument_track_note_hit(note: NoteData) -> void:
 	print("Hit note: %s" % note)
 	# TODO: Keep track of score
 
 
-func _on_instrument_track_note_missed(note: Note) -> void:
+func _on_instrument_track_note_missed(note: NoteData) -> void:
 	print("Missed note: %s" % note)
 
 

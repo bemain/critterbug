@@ -98,7 +98,7 @@ func _load(path: String, original_path: String, use_sub_threads: bool, cache_mod
 					var digit when digit.is_valid_int():
 						# Add note
 						var priority := int(digit)
-						var note := Note.new(track, beat, subbeat, priority)
+						var note := NoteData.new(track, beat, subbeat, priority)
 						instrument.notes.append(note)
 				
 					# TODO: Handle strange notes

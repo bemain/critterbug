@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bifurmsfeys1d"]
+
+[ext_resource type="Script" uid="uid://dkbrj50v8x84m" path="res://main.gd" id="1_glv2v"]
+[ext_resource type="PackedScene" uid="uid://bfmmn3ld35j0y" path="res://src/song_track/SongManager.tscn" id="2_uu6xs"]
+[ext_resource type="PackedScene" uid="uid://cr1rtnsd7tpad" path="res://src/song_track/InstrumentTrack.tscn" id="3_r0du0"]
+
+[node name="Main" type="Node2D" unique_id=567539085]
+script = ExtResource("1_glv2v")
+
+[node name="GUI" type="Control" parent="." unique_id=1530683264]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AudioLatency" type="Control" parent="GUI" unique_id=1545712800]
+anchors_preset = 0
+offset_left = 28.0
+offset_top = 16.0
+offset_right = 284.0
+offset_bottom = 56.0
+metadata/_edit_group_ = true
+
+[node name="Label" type="RichTextLabel" parent="GUI/AudioLatency" unique_id=1969152179]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 24.0
+grow_horizontal = 2
+text = "Latency:    ms"
+
+[node name="Slider" type="HSlider" parent="GUI/AudioLatency" unique_id=42807716]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+max_value = 200.0
+allow_greater = true
+allow_lesser = true
+
+[node name="SongManager" parent="." unique_id=1343633690 node_paths=PackedStringArray("track") instance=ExtResource("2_uu6xs")]
+track = NodePath("InstrumentTrack")
+
+[node name="InstrumentTrack" parent="SongManager" unique_id=2093186276 instance=ExtResource("3_r0du0")]
+
+[connection signal="value_changed" from="GUI/AudioLatency/Slider" to="." method="_on_latency_slider_value_changed"]

@@ -1,4 +1,4 @@
-class_name Note extends Resource
+class_name NoteData extends Resource
 
 ## The track ("lane") that this note belongs to. 
 ## Count starts on 0.

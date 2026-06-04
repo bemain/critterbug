@@ -9,10 +9,10 @@ class_name InstrumentTrack extends Node2D
 
 
 ## Emitted when the user hits a [param note].
-signal note_hit(note: Note)
+signal note_hit(note: NoteData)
 
 ## Emitted when the user fails to hit a [param note] in time.
-signal note_missed(note: Note)
+signal note_missed(note: NoteData)
 
 ## Emitted when the user presses a key but no note is passing the hit marker on that [param track] at that time.
 signal wrong_note(track: int)
