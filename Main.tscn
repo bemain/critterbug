@@ -46,5 +46,6 @@ allow_lesser = true
 track = NodePath("InstrumentTrack")
 
 [node name="InstrumentTrack" parent="SongManager" unique_id=2093186276 instance=ExtResource("3_r0du0")]
+position = Vector2(545, -8)
 
 [connection signal="value_changed" from="GUI/AudioLatency/Slider" to="." method="_on_latency_slider_value_changed"]
