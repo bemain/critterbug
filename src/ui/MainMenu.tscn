@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://cdm8v1sbt8pmw"]
+
+[ext_resource type="Script" uid="uid://bytvatu6cafxj" path="res://src/ui/main_menu.gd" id="1_adkca"]
+
+[node name="MainMenu" type="Control" unique_id=2022242668]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_adkca")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1776863565]
+layout_mode = 0
+offset_left = -40.0
+offset_top = -51.0
+offset_right = 39.0
+offset_bottom = 50.0
+
+[node name="StoryButton" type="Button" parent="VBoxContainer" unique_id=930496495]
+layout_mode = 2
+disabled = true
+text = "Story"
+
+[node name="FreeplayButton" type="Button" parent="VBoxContainer" unique_id=1581893203]
+layout_mode = 2
+text = "Free play"
+
+[node name="SettingsButton" type="Button" parent="VBoxContainer" unique_id=73655641]
+layout_mode = 2
+disabled = true
+text = "Settings"
+
+[connection signal="pressed" from="VBoxContainer/StoryButton" to="." method="_on_story_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/FreeplayButton" to="." method="_on_freeplay_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
