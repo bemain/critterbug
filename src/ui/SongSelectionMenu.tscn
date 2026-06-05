@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://g6pxma0xmhnl"]
+
+[ext_resource type="Script" uid="uid://clq8u6v8q7vx5" path="res://src/ui/song_selection_menu.gd" id="1_mhedq"]
+
+[node name="SongSelectionMenu" type="Control" unique_id=2022242668]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_mhedq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=859422666]
+layout_mode = 0
+offset_left = -51.0
+offset_top = -76.0
+offset_right = 50.0
+offset_bottom = 75.0
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1341644915]
+layout_mode = 2
+text = "Select a song"
+
+[node name="ItemList" type="ItemList" parent="VBoxContainer" unique_id=1300479750]
+layout_mode = 2
+auto_width = true
+auto_height = true
+item_count = 3
+item_0/text = "Test song 1"
+item_1/text = "Test song 2"
+item_2/text = "Test song 3"
+
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=1203641133]
+layout_mode = 2
+text = "Back"
+
+[connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

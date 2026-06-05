@@ -1,19 +1,35 @@
 [gd_scene format=3 uid="uid://bifurmsfeys1d"]
 
 [ext_resource type="Script" uid="uid://dkbrj50v8x84m" path="res://main.gd" id="1_glv2v"]
+[ext_resource type="Script" uid="uid://bg5e12tqm32yh" path="res://src/ui/debug_ui.gd" id="2_cm0pq"]
+[ext_resource type="Script" uid="uid://c4lkw8dnke71s" path="res://src/ui/ui.gd" id="2_fos0i"]
 [ext_resource type="PackedScene" uid="uid://bfmmn3ld35j0y" path="res://src/song_track/SongManager.tscn" id="2_uu6xs"]
 [ext_resource type="PackedScene" uid="uid://cr1rtnsd7tpad" path="res://src/song_track/InstrumentTrack.tscn" id="3_r0du0"]
+[ext_resource type="PackedScene" uid="uid://cdm8v1sbt8pmw" path="res://src/ui/MainMenu.tscn" id="4_lgr22"]
+[ext_resource type="PackedScene" uid="uid://g6pxma0xmhnl" path="res://src/ui/SongSelectionMenu.tscn" id="5_trn2v"]
 
 [node name="Main" type="Node2D" unique_id=567539085]
 script = ExtResource("1_glv2v")
 
-[node name="GUI" type="Control" parent="." unique_id=1530683264]
+[node name="UI" type="Control" parent="." unique_id=1530683264]
 layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_fos0i")
+
+[node name="Debug" type="Control" parent="UI" unique_id=657631501]
+visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("2_cm0pq")
 
-[node name="AudioLatency" type="Control" parent="GUI" unique_id=1545712800]
+[node name="AudioLatency" type="Control" parent="UI/Debug" unique_id=1545712800]
 anchors_preset = 0
 offset_left = 28.0
 offset_top = 16.0
@@ -21,7 +37,7 @@ offset_right = 284.0
 offset_bottom = 56.0
 metadata/_edit_group_ = true
 
-[node name="Label" type="RichTextLabel" parent="GUI/AudioLatency" unique_id=1969152179]
+[node name="Label" type="RichTextLabel" parent="UI/Debug/AudioLatency" unique_id=1969152179]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -29,7 +45,7 @@ offset_bottom = 24.0
 grow_horizontal = 2
 text = "Latency:    ms"
 
-[node name="Slider" type="HSlider" parent="GUI/AudioLatency" unique_id=42807716]
+[node name="Slider" type="HSlider" parent="UI/Debug/AudioLatency" unique_id=42807716]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -42,10 +58,37 @@ max_value = 200.0
 allow_greater = true
 allow_lesser = true
 
+[node name="MainMenu" parent="UI" unique_id=2022242668 instance=ExtResource("4_lgr22")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SongSelectionMenu" parent="UI" unique_id=1335325177 instance=ExtResource("5_trn2v")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="SongManager" parent="." unique_id=1343633690 node_paths=PackedStringArray("track") instance=ExtResource("2_uu6xs")]
 track = NodePath("InstrumentTrack")
 
 [node name="InstrumentTrack" parent="SongManager" unique_id=2093186276 instance=ExtResource("3_r0du0")]
+visible = false
 position = Vector2(545, -8)
 
-[connection signal="value_changed" from="GUI/AudioLatency/Slider" to="." method="_on_latency_slider_value_changed"]
+[connection signal="value_changed" from="UI/Debug/AudioLatency/Slider" to="UI/Debug" method="_on_latency_slider_value_changed"]
+[connection signal="freeplay_pressed" from="UI/MainMenu" to="UI" method="_on_main_menu_freeplay_pressed"]
+[connection signal="back_pressed" from="UI/SongSelectionMenu" to="UI" method="_on_song_selection_menu_back_pressed"]
+[connection signal="song_selected" from="UI/SongSelectionMenu" to="." method="_on_song_selection_menu_song_selected"]
+[connection signal="song_selected" from="UI/SongSelectionMenu" to="UI" method="_on_song_selection_menu_song_selected"]
+[connection signal="song_finished" from="SongManager" to="UI" method="_on_song_manager_song_finished"]

@@ -6,16 +6,8 @@ class_name SongManager extends Node2D
 ## and updates the playback and score when the players hit or miss notes.
 ## TODO: This script should also handle syncing between players when implementing multiplayer
 
-
-## The scene that uses this script. Used for the [instantiate] method.
-const _scene: PackedScene = preload("res://src/song_track/SongManager.tscn")
-
-## Create an instance of this scene, with the given parameters.
-static func instantiate(song: Song) -> SongManager:
-	var manager: SongManager = _scene.instantiate()
-	manager.song = song
-	return manager
-
+## Emitted when a [param song] has finished playing.
+signal song_finished(song: Song)
 
 ## The track for the instrument that is controlled by the local player
 @export var track: InstrumentTrack:
@@ -28,8 +20,17 @@ static func instantiate(song: Song) -> SongManager:
 var instrument_audio_indices: Dictionary[Instrument, int] = {}
 
 
+## The song currently played, if any
+var current_song: Song
 
-## The current position in the [member song], in seconds.
+## The statistics of the current playthough of the [member current_song].
+var current_stats: PerformanceStats
+
+## Whether a song is currently being played
+var playing: bool:
+	get: return current_song != null
+
+## The current position in the [member current_song], in seconds.
 var song_position: float:
 	get: return player.get_playback_position() + AudioServer.get_time_since_last_mix()
 
@@ -60,15 +61,25 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
-	if track != null:
-		track.note_hit.connect(_on_instrument_track_note_hit)
-		track.note_missed.connect(_on_instrument_track_note_missed)
-		track.wrong_note.connect(_on_instrument_track_wrong_note)
+	
+	player.finished.connect(func(): 
+		song_finished.emit(current_song)
+		current_song = null
+	)
+	
+	track.note_hit.connect(_on_instrument_track_note_hit)
+	track.note_missed.connect(_on_instrument_track_note_missed)
+	track.wrong_note.connect(_on_instrument_track_wrong_note)
 
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
-	track.update(song_position - Songs.audio_latency_ms / 1000)
+	
+	if player.playing:
+		track.visible = true
+		track.update(song_position - Songs.audio_latency_ms / 1000)
+	else:
+		track.visible = false
 
 
 
