@@ -36,6 +36,9 @@ var song_position: float:
 
 ## Begin playing a [param song].
 func play(song: Song):
+	current_song = song
+	current_stats = PerformanceStats.new(song)
+	
 	track.song = song
 	track.instrument = song.instruments[1] # TODO: Allow selecting instrument
 	
@@ -65,6 +68,7 @@ func _ready() -> void:
 	player.finished.connect(func(): 
 		song_finished.emit(current_song)
 		current_song = null
+		# TODO: Save stats
 	)
 	
 	track.note_hit.connect(_on_instrument_track_note_hit)
@@ -85,12 +89,14 @@ func _process(delta: float) -> void:
 
 func _on_instrument_track_note_hit(note: NoteData) -> void:
 	print("Hit note: %s" % note)
-	# TODO: Keep track of score
+	current_stats.notes_hit.append(note)
 
 
 func _on_instrument_track_note_missed(note: NoteData) -> void:
 	print("Missed note: %s" % note)
+	current_stats.notes_missed.append(note)
 
 
-func _on_instrument_track_wrong_note(track: int) -> void:
+func _on_instrument_track_wrong_note(beat: float, track: int) -> void:
 	print("Wrong note on track %d" % track)
+	current_stats.wrong_notes[beat] = track

@@ -15,7 +15,7 @@ signal note_hit(note: NoteData)
 signal note_missed(note: NoteData)
 
 ## Emitted when the user presses a key but no note is passing the hit marker on that [param track] at that time.
-signal wrong_note(track: int)
+signal wrong_note(beat: float, track: int)
 
 
 ## The song that is playing on this track.
@@ -116,4 +116,4 @@ func _check_note_hit(track: int):
 			note.register_hit()
 			return
 	
-	wrong_note.emit(track)
+	wrong_note.emit(last_position / beat_duration, track)
