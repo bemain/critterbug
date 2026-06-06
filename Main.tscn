@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bg5e12tqm32yh" path="res://src/ui/debug_ui.gd" id="2_cm0pq"]
 [ext_resource type="Script" uid="uid://c4lkw8dnke71s" path="res://src/ui/ui.gd" id="2_fos0i"]
 [ext_resource type="PackedScene" uid="uid://bfmmn3ld35j0y" path="res://src/song_track/SongManager.tscn" id="2_uu6xs"]
-[ext_resource type="PackedScene" uid="uid://cr1rtnsd7tpad" path="res://src/song_track/InstrumentTrack.tscn" id="3_r0du0"]
+[ext_resource type="PackedScene" uid="uid://cr1rtnsd7tpad" path="res://src/song_track/PartTrack.tscn" id="3_r0du0"]
 [ext_resource type="PackedScene" uid="uid://cdm8v1sbt8pmw" path="res://src/ui/MainMenu.tscn" id="4_lgr22"]
 [ext_resource type="PackedScene" uid="uid://g6pxma0xmhnl" path="res://src/ui/SongSelectionMenu.tscn" id="5_trn2v"]
 [ext_resource type="PackedScene" uid="uid://daqsevubmvm3i" path="res://src/ui/SongStatistics.tscn" id="6_trn2v"]

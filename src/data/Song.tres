@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Song" format=3 uid="uid://c8utxktu23qms"]
 
 [ext_resource type="Script" uid="uid://cog88vilx714s" path="res://src/data/song.gd" id="1_bpuqq"]
-[ext_resource type="Script" uid="uid://lecsj3j2em7r" path="res://src/data/instrument.gd" id="1_tnvn0"]
+[ext_resource type="Script" uid="uid://lecsj3j2em7r" path="res://src/data/song_part.gd" id="1_tnvn0"]
 
 [resource]
 script = ExtResource("1_bpuqq")

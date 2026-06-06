@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cr1rtnsd7tpad"]
 
-[ext_resource type="Script" uid="uid://drjno63q102cb" path="res://src/song_track/instrument_track.gd" id="1_b4ncs"]
+[ext_resource type="Script" uid="uid://drjno63q102cb" path="res://src/song_track/part_track.gd" id="1_b4ncs"]
 [ext_resource type="Script" uid="uid://ceojiltv1m375" path="res://src/song_track/track_drawer.gd" id="2_vud8d"]
 
 [sub_resource type="Curve2D" id="Curve2D_nrapc"]

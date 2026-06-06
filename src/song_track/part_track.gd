@@ -1,5 +1,5 @@
-class_name InstrumentTrack extends Node2D
-## A track that displays the notes played by an [member instrument] and allows the user to hit them 
+class_name PartTrack extends Node2D
+## A track that displays the notes played by an [member part] and allows the user to hit them 
 ## using the keyboard.
 ## 
 ## If the user presses the right key when a note passes the hit marker, the note is removed and 
@@ -18,11 +18,11 @@ signal note_missed(note: NoteData)
 signal wrong_note(beat: float, track: int)
 
 
-## The song that is playing on this track.
-var song: Song
-## The instrument that is playing on this track.
-var instrument: Instrument
+## The part that is playing on this track.
+var part: SongPart
 
+var song: Song:
+	get: return part.song
 
 ## The length of the entire track, in pixels.
 var length: float = 500:
@@ -70,10 +70,9 @@ func _ready() -> void:
 
 
 ## Reset the track and prepare the given [param song] for playback.
-func load_song(song: Song, instrument: Instrument):
+func load_song(part: SongPart):
 	last_position = 0
-	self.song = song
-	self.instrument = instrument
+	self.part = part
 
 ## Move the notes along the track, and create new ones when needed.
 ## Should be called every frame with [param song_position] as the current position in the [member song]. 
@@ -81,7 +80,7 @@ func update(song_position: float) -> void:
 	if song_position <= last_position: return  # Can't go backwards
 	
 	# Add new notes
-	var new_notes = instrument.notes.filter(func(note): 
+	var new_notes = part.notes.filter(func(note): 
 		var note_create_at = (note.beat + note.subbeat - beats) * beat_duration
 		return last_position < note_create_at and note_create_at <= song_position
 	)

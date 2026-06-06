@@ -5,9 +5,9 @@ signal back_pressed()
 
 ## Display the given [param stats].
 func load_stats(stats: PerformanceStats):
-	var song := Songs.by_id(stats.song_id)
+	var song := stats.part.song
 	$VBoxContainer/SongTitle.text = song.title
-	$VBoxContainer/InstrumentName.text = stats.instrument_name
+	$VBoxContainer/InstrumentName.text = stats.part.name
 	$VBoxContainer/PercentageHit.text = "%.1f%%" % (stats.fraction_notes_hit*100)
 
 

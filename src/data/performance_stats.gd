@@ -2,11 +2,8 @@ class_name PerformanceStats extends Resource
 ## Statistics from playing a [member song].
 ## TODO: Persist these to disk.
 
-## The id of the song that was played.
-var song_id: String
-
-## The name of the instrument that was played.
-var instrument_name: String
+## The part that was played.
+var part: SongPart
 
 ## Notes that the user hit.
 var hit_notes: Array[NoteData] = []
@@ -33,10 +30,9 @@ var fraction_notes_hit: float:
 	get: return float(num_notes_hit) / (num_notes_hit + num_notes_missed)
 
 
-func _init(song: Song, instrument: Instrument):
-	self.song_id = song.id
-	self.instrument_name = instrument.name
+func _init(part: SongPart):
+	self.part = part
 
 
 func _to_string() -> String:
-	return "PerformanceStats(song: %s)" % [Songs.by_id(song_id)]
+	return "PerformanceStats(part: %s)" % [part]
