@@ -19,6 +19,11 @@ var songs_dir: String = "res://songs"
 ## All the songs that have already been loaded.
 @onready var songs: Array = _get_song_paths(songs_dir).map(load_song)
 
+func by_id(id: String) -> Song:
+	var matches = songs.filter(func(song): return song.id == id)
+	if matches.is_empty(): return null
+	return matches[0]
+
 
 func _ready() -> void:
 	config.load(config_path)

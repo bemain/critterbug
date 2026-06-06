@@ -36,11 +36,10 @@ var song_position: float:
 
 ## Begin playing a [param song].
 func play(song: Song):
-	current_song = song
-	current_stats = PerformanceStats.new(song)
+	track.load_song(song, song.instruments[1]) # TODO: Allow selecting instrument
 	
-	track.song = song
-	track.instrument = song.instruments[1] # TODO: Allow selecting instrument
+	current_song = song
+	current_stats = PerformanceStats.new(song, $InstrumentTrack.instrument)
 	
 	# Prepare audio
 	var group := AudioStreamSynchronized.new()
@@ -65,12 +64,6 @@ func _get_configuration_warnings() -> PackedStringArray:
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
 	
-	player.finished.connect(func(): 
-		song_finished.emit(current_song)
-		current_song = null
-		# TODO: Save stats
-	)
-	
 	track.note_hit.connect(_on_instrument_track_note_hit)
 	track.note_missed.connect(_on_instrument_track_note_missed)
 	track.wrong_note.connect(_on_instrument_track_wrong_note)
@@ -88,15 +81,18 @@ func _process(delta: float) -> void:
 
 
 func _on_instrument_track_note_hit(note: NoteData) -> void:
-	print("Hit note: %s" % note)
-	current_stats.notes_hit.append(note)
+	current_stats.hit_notes.append(note)
 
 
 func _on_instrument_track_note_missed(note: NoteData) -> void:
-	print("Missed note: %s" % note)
-	current_stats.notes_missed.append(note)
+	current_stats.missed_notes.append(note)
 
 
 func _on_instrument_track_wrong_note(beat: float, track: int) -> void:
-	print("Wrong note on track %d" % track)
 	current_stats.wrong_notes[beat] = track
+
+
+func _on_player_finished() -> void:
+	song_finished.emit(current_song)
+	current_song = null
+	# TODO: Save stats

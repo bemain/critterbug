@@ -68,6 +68,13 @@ func _ready() -> void:
 		line.width = 1.0
 		$Beats.add_child(line)
 
+
+## Reset the track and prepare the given [param song] for playback.
+func load_song(song: Song, instrument: Instrument):
+	last_position = 0
+	self.song = song
+	self.instrument = instrument
+
 ## Move the notes along the track, and create new ones when needed.
 ## Should be called every frame with [param song_position] as the current position in the [member song]. 
 func update(song_position: float) -> void:

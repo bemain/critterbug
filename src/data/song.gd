@@ -1,5 +1,9 @@
 class_name Song extends Resource
 
+## The unique ID of this song, persistent across reboots.
+var id: String:
+	get: return (title.sha256_text() + artist.sha256_text()).sha256_text()
+
 ## The title of the song.
 @export var title: String
 ## The artist who wrote the song.

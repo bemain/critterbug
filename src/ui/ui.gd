@@ -4,6 +4,7 @@ extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$SongSelectionMenu.hide()
+	$SongStatistics.hide()
 	$MainMenu.show()
 
 
@@ -23,4 +24,10 @@ func _on_song_selection_menu_song_selected(song: Song) -> void:
 
 
 func _on_song_manager_song_finished(song: Song) -> void:
+	$SongStatistics.load_stats($"../SongManager".current_stats)
+	$SongStatistics.show()
+
+
+func _on_song_statistics_back_pressed() -> void:
+	$SongStatistics.hide()
 	$SongSelectionMenu.show()
