@@ -95,8 +95,7 @@ grow_vertical = 2
 track = NodePath("InstrumentTrack")
 
 [node name="InstrumentTrack" parent="SongManager" unique_id=2093186276 instance=ExtResource("3_r0du0")]
-visible = false
-position = Vector2(545, -8)
+position = Vector2(548, -27)
 
 [connection signal="value_changed" from="UI/Debug/AudioLatency/Slider" to="UI/Debug" method="_on_latency_slider_value_changed"]
 [connection signal="freeplay_pressed" from="UI/MainMenu" to="UI" method="_on_main_menu_freeplay_pressed"]
