@@ -1,6 +1,6 @@
 @tool
 extends Node2D
-## Updates the visuals of the [InstrumentTrack] to follow the [member path].
+## Updates the visuals of the [PartTrack] to follow the [member path].
 
 @export var resolution: int = 10:
 	set(value):

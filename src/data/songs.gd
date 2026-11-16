@@ -18,10 +18,13 @@ var songs_dir: String = "res://songs"
 
 
 ## All the songs that have already been loaded.
-@onready var songs: Array = _get_song_paths(songs_dir).map(load_song)
+var songs: Array = []
 
 func _ready() -> void:
 	config.load(config_path)
+	
+	for path in _get_song_paths(songs_dir):
+		load_song(path)
 	
 	if audio_latency_ms == 0:
 		audio_latency_ms = AudioServer.get_output_latency()

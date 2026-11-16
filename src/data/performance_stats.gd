@@ -27,7 +27,11 @@ var num_notes_missed: int:
 
 ## The fraction of the total notes that the user hit.
 var fraction_notes_hit: float:
-	get: return float(num_notes_hit) / (num_notes_hit + num_notes_missed)
+	get:
+		var num_notes := num_notes_hit + num_notes_missed
+		if num_notes == 0:
+			return 0.0
+		return float(num_notes_hit) / num_notes
 
 
 func _init(part: SongPart):

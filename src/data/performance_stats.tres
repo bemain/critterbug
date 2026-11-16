@@ -1,6 +1,0 @@
-[gd_resource type="Resource" script_class="PerformanceStats" format=3 uid="uid://cvovy4qgt11ky"]
-
-[ext_resource type="Script" uid="uid://cocy8f0ctq2wl" path="res://src/data/performance_stats.gd" id="1_hc0q6"]
-
-[resource]
-script = ExtResource("1_hc0q6")
