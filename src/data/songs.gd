@@ -16,9 +16,9 @@ var config_path: String = "user://songs.cfg"
 
 var songs_dir: String = "res://songs"
 
+
 ## All the songs that have already been loaded.
 @onready var songs: Array = _get_song_paths(songs_dir).map(load_song)
-
 
 func _ready() -> void:
 	config.load(config_path)
@@ -32,7 +32,7 @@ func _notification(what: int) -> void:
 		# Game is closing
 		config.save(config_path)
 
-## Get the paths to all .chrp files in the directory at path. 
+## Get the paths to all .chrp files in the directory at [param path]. 
 ## Searches recursively.
 func _get_song_paths(path: String) -> Array[String]:
 	var file_paths: Array[String] = []
@@ -50,7 +50,7 @@ func _get_song_paths(path: String) -> Array[String]:
 	return file_paths
 
 
-## Load a .chrp file into memory, and add it to the loaded [member songs].
+## Load a .chrp file into memory, and add it to the list of [member songs].
 func load_song(path: String) -> Song:
 	var song := ResourceLoader.load(path) as Song
 	if not song in songs:

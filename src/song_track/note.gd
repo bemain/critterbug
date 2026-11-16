@@ -1,5 +1,5 @@
 class_name NoteNode extends Node2D
-## A visual representation of a [NoteData] on an [InstrumentTrack].
+## A visual representation of a [NoteData] on an [PartTrack].
 
 # TODO: Rename
 
@@ -8,7 +8,7 @@ class_name NoteNode extends Node2D
 const _scene: PackedScene = preload("res://src/song_track/Note.tscn")
 
 ## Create an instance of this scene, with the given parameters.
-static func instantiate(note: NoteData, track: InstrumentTrack):
+static func instantiate(note: NoteData, track: PartTrack):
 	var node = _scene.instantiate()
 	node.note = note
 	node.track = track
@@ -29,7 +29,7 @@ signal sustain_started()
 ## The data for this note.
 var note: NoteData
 ## The track that this belongs to.
-var track: InstrumentTrack
+var track: PartTrack
 
 ## The textures used for the note, depending on which track it is on.
 const textures: Array = [

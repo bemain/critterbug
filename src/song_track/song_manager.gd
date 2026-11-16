@@ -9,15 +9,15 @@ class_name SongManager extends Node2D
 ## Emitted when a [param song] has finished playing.
 signal song_finished(song: Song)
 
-## The track for the instrument that is controlled by the local player
-@export var track: InstrumentTrack:
+## The track for the part that is controlled by the local player
+@export var track: PartTrack:
 	set(value):
 		track = value
 		update_configuration_warnings()
 
 ## Audio player that handles audio playback for the [member song].
 @onready var player: AudioStreamPlayer = $AudioStreamPlayer
-var instrument_audio_indices: Dictionary[Instrument, int] = {}
+var part_audio_indices: Dictionary[SongPart, int] = {}
 
 
 ## The song currently played, if any
@@ -36,17 +36,19 @@ var song_position: float:
 
 ## Begin playing a [param song].
 func play(song: Song):
-	track.song = song
-	track.instrument = song.instruments[1] # TODO: Allow selecting instrument
+	track.load_song(song.parts[1]) # TODO: Allow selecting instrument
+	
+	current_song = song
+	current_stats = PerformanceStats.new($InstrumentTrack.part)
 	
 	# Prepare audio
 	var group := AudioStreamSynchronized.new()
-	group.stream_count = song.instruments.size() + 1
+	group.stream_count = song.parts.size() + 1
 	group.set_sync_stream(0, load(song.audio_path))
-	for i in range(song.instruments.size()):
-		var instrument = song.instruments[i]
-		instrument_audio_indices[instrument] = i+1
-		var audio = load(instrument.audio_path)
+	for i in range(song.parts.size()):
+		var part = song.parts[i]
+		part_audio_indices[part] = i+1
+		var audio = load(part.audio_path)
 		group.set_sync_stream(i+1, audio)
 	player.set_stream(group)
 	
@@ -62,14 +64,9 @@ func _get_configuration_warnings() -> PackedStringArray:
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
 	
-	player.finished.connect(func(): 
-		song_finished.emit(current_song)
-		current_song = null
-	)
-	
-	track.note_hit.connect(_on_instrument_track_note_hit)
-	track.note_missed.connect(_on_instrument_track_note_missed)
-	track.wrong_note.connect(_on_instrument_track_wrong_note)
+	track.note_hit.connect(_on_part_track_note_hit)
+	track.note_missed.connect(_on_part_track_note_missed)
+	track.wrong_note.connect(_on_part_track_wrong_note)
 
 
 func _process(delta: float) -> void:
@@ -83,14 +80,19 @@ func _process(delta: float) -> void:
 
 
 
-func _on_instrument_track_note_hit(note: NoteData) -> void:
-	print("Hit note: %s" % note)
-	# TODO: Keep track of score
+func _on_part_track_note_hit(note: NoteData) -> void:
+	current_stats.hit_notes.append(note)
 
 
-func _on_instrument_track_note_missed(note: NoteData) -> void:
-	print("Missed note: %s" % note)
+func _on_part_track_note_missed(note: NoteData) -> void:
+	current_stats.missed_notes.append(note)
 
 
-func _on_instrument_track_wrong_note(track: int) -> void:
-	print("Wrong note on track %d" % track)
+func _on_part_track_wrong_note(beat: float, track: int) -> void:
+	current_stats.wrong_notes[beat] = track
+
+
+func _on_player_finished() -> void:
+	song_finished.emit(current_song)
+	current_song = null
+	# TODO: Save stats

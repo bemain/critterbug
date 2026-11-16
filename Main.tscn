@@ -4,9 +4,10 @@
 [ext_resource type="Script" uid="uid://bg5e12tqm32yh" path="res://src/ui/debug_ui.gd" id="2_cm0pq"]
 [ext_resource type="Script" uid="uid://c4lkw8dnke71s" path="res://src/ui/ui.gd" id="2_fos0i"]
 [ext_resource type="PackedScene" uid="uid://bfmmn3ld35j0y" path="res://src/song_track/SongManager.tscn" id="2_uu6xs"]
-[ext_resource type="PackedScene" uid="uid://cr1rtnsd7tpad" path="res://src/song_track/InstrumentTrack.tscn" id="3_r0du0"]
+[ext_resource type="PackedScene" uid="uid://cr1rtnsd7tpad" path="res://src/song_track/PartTrack.tscn" id="3_r0du0"]
 [ext_resource type="PackedScene" uid="uid://cdm8v1sbt8pmw" path="res://src/ui/MainMenu.tscn" id="4_lgr22"]
 [ext_resource type="PackedScene" uid="uid://g6pxma0xmhnl" path="res://src/ui/SongSelectionMenu.tscn" id="5_trn2v"]
+[ext_resource type="PackedScene" uid="uid://daqsevubmvm3i" path="res://src/ui/SongStatistics.tscn" id="6_trn2v"]
 
 [node name="Main" type="Node2D" unique_id=567539085]
 script = ExtResource("1_glv2v")
@@ -79,16 +80,27 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="SongStatistics" parent="UI" unique_id=1908516856 instance=ExtResource("6_trn2v")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="SongManager" parent="." unique_id=1343633690 node_paths=PackedStringArray("track") instance=ExtResource("2_uu6xs")]
 track = NodePath("InstrumentTrack")
 
 [node name="InstrumentTrack" parent="SongManager" unique_id=2093186276 instance=ExtResource("3_r0du0")]
-visible = false
-position = Vector2(545, -8)
+position = Vector2(548, -27)
 
 [connection signal="value_changed" from="UI/Debug/AudioLatency/Slider" to="UI/Debug" method="_on_latency_slider_value_changed"]
 [connection signal="freeplay_pressed" from="UI/MainMenu" to="UI" method="_on_main_menu_freeplay_pressed"]
 [connection signal="back_pressed" from="UI/SongSelectionMenu" to="UI" method="_on_song_selection_menu_back_pressed"]
 [connection signal="song_selected" from="UI/SongSelectionMenu" to="." method="_on_song_selection_menu_song_selected"]
 [connection signal="song_selected" from="UI/SongSelectionMenu" to="UI" method="_on_song_selection_menu_song_selected"]
+[connection signal="back_pressed" from="UI/SongStatistics" to="UI" method="_on_song_statistics_back_pressed"]
 [connection signal="song_finished" from="SongManager" to="UI" method="_on_song_manager_song_finished"]

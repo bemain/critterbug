@@ -65,23 +65,23 @@ func _load(path: String, original_path: String, use_sub_threads: bool, cache_mod
 						["_", var audio]: song.audio_path = dir_path + audio
 						[var instr, var audio]: audio_paths[instr] = dir_path +  audio
 	
-	# Instruments
-	var instrument: Instrument = null
+	# Parts
+	var part: SongPart = null
 	var beat := 0
 	for line in lines.slice(line_n): # Continue after the header
 		if line.begins_with("#"): continue # Comment
 		
 		if line.begins_with("["):
-			# New instrument
-			if instrument != null:
-				song.instruments.append(instrument)
+			# New part
+			if part != null:
+				song.parts.append(part)
 			beat = 0
-			instrument = Instrument.new(line.substr(1, line.length() - 2))
-			if audio_paths.has(instrument.name):
-				instrument.audio_path = audio_paths[instrument.name]
+			part = SongPart.new(song, line.substr(1, line.length() - 2))
+			if audio_paths.has(part.name):
+				part.audio_path = audio_paths[part.name]
 			continue
 		
-		# Instrument data
+		# Part data
 		for track: int in range(ceil(line.length() / 4.0)):
 			var notes: String = line.substr(track*4, 4).strip_edges()
 			for offset: int in range(notes.length()):
@@ -89,7 +89,7 @@ func _load(path: String, original_path: String, use_sub_threads: bool, cache_mod
 				match notes[offset]:
 					"-":
 						# Sustain the previous note
-						var notes_on_track = instrument.notes.filter(func(n): return n.track == track)
+						var notes_on_track = part.notes.filter(func(n): return n.track == track)
 						assert(notes_on_track.size() >= 1, "Sustain has to be preceeded by a note")
 						var note = notes_on_track[-1]
 						var subbeat_end = subbeat + 1.0 / notes.length()
@@ -99,14 +99,14 @@ func _load(path: String, original_path: String, use_sub_threads: bool, cache_mod
 						# Add note
 						var priority := int(digit)
 						var note := NoteData.new(track, beat, subbeat, priority)
-						instrument.notes.append(note)
+						part.notes.append(note)
 				
 					# TODO: Handle strange notes
 				
 		beat += 1
 	
-	if instrument != null:
-		song.instruments.append(instrument)
+	if part != null:
+		song.parts.append(part)
 	
 	
 	file.close()

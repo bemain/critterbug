@@ -1,5 +1,10 @@
 class_name Song extends Resource
 
+## The unique identifier of this song.
+## This is persistent across reboots.
+var id: String:
+	get: return (title.sha256_text() + artist.sha256_text()).sha256_text()
+
 ## The title of the song.
 @export var title: String
 ## The artist who wrote the song.
@@ -10,12 +15,12 @@ class_name Song extends Resource
 @export var bpb: int
 
 ## The path to the main audio file for this song. 
-## Should generally exclude the sound made by any [member instruments], as they have their own audio 
+## Should generally exclude the sound made by any [member parts], as they have their own audio 
 ## files.
 @export var audio_path: String
 
-## The instruments the user can select from when playing this song.
-@export var instruments: Array[Instrument] = []
+## The parts the user can select from when playing this song.
+@export var parts: Array[SongPart] = []
 
 func _to_string() -> String:
 	return "Song(%s, %s, %d/4 @ %d bpm)" % [title, artist, bpb, bpm] 
