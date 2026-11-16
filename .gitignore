@@ -379,3 +379,7 @@ $RECYCLE.BIN/
 *.msp
 *.lnk
 *.generated.props
+
+# Claude Code
+.claude/settings.local.json
+.claude/skills/godot-gdscript-api/
