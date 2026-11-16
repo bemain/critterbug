@@ -1,44 +1,30 @@
-# This script defines a custom resource loader for .chrp files.
 class_name CHRPDataResource extends ResourceFormatLoader
+## Loads .chrp song files as [Song] resources.
 
 
-## Returns an array of strings, where each string is an extension this loader can handle.
-## Godot uses this to determine which loader to use for a given file.
 func _get_recognized_extensions() -> PackedStringArray:
-	# This loader will recognize files with the ".chrp" extension.
 	return ["chrp"]
 
 
-## Returns true if this loader can load resources of the specified 'type'.
-## This helps Godot understand if your loader is relevant for a given resource request.
 func _handles_type(type: StringName) -> bool:
-	# This loader is designed to load our custom CHRPDataResource type.
-	# We also handle "Resource" as a fallback or general type, as custom resources
-	# often inherit from Resource.
 	return type == "CHRPDataResource" or type == "Resource"
 
 
-## Returns the name of the resource type that this loader produces for a given path.
-## This is called before _load and can help Godot determine the expected type.
 func _get_resource_type(path: String) -> String:
-	# If the path ends with ".chrp", we'll return our custom resource type name.
 	if path.to_lower().ends_with(".chrp"):
 		return "CHRPDataResource"
-	return "" # Return empty string if not applicable
+	return ""
 
-## This is the core method where you implement the actual loading logic for your .chrp file.
-## It takes the 'path' to the file and an optional 'original_path' (usually the same).
-## It should return the loaded Resource object or null if loading fails.
+
+## Parses the .chrp file at [param path] into a [Song], or returns null if it can't be opened.
 func _load(path: String, original_path: String, use_sub_threads: bool, cache_mode: int) -> Song:
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 	var dir_path = path.get_base_dir() + "/"
 
-	# Error handling: Check if the file could be opened.
 	if file == null:
-		# Use FileAccess.get_open_error() to get a descriptive error message.
 		var error_code: Error = FileAccess.get_open_error()
 		printerr("Failed to open CHRP file '%s': %s" % [path, error_string(error_code)])
-		return null # Return null to indicate loading failure.
+		return null
 
 	var content = file.get_as_text()
 	var song: Song = Song.new()
