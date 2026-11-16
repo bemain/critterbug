@@ -39,7 +39,7 @@ func play(song: Song):
 	track.load_song(song.parts[1]) # TODO: Allow selecting instrument
 	
 	current_song = song
-	current_stats = PerformanceStats.new($InstrumentTrack.part)
+	current_stats = PerformanceStats.new(track.part)
 	
 	# Prepare audio
 	var group := AudioStreamSynchronized.new()
@@ -57,7 +57,7 @@ func play(song: Song):
 
 func _get_configuration_warnings() -> PackedStringArray:
 	if track == null:
-		return ["No InstrumentTrack has been assigned."]
+		return ["No PartTrack has been assigned."]
 	return []
 
 

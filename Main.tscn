@@ -92,9 +92,9 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="SongManager" parent="." unique_id=1343633690 node_paths=PackedStringArray("track") instance=ExtResource("2_uu6xs")]
-track = NodePath("InstrumentTrack")
+track = NodePath("PartTrack")
 
-[node name="InstrumentTrack" parent="SongManager" unique_id=2093186276 instance=ExtResource("3_r0du0")]
+[node name="PartTrack" parent="SongManager" unique_id=2093186276 instance=ExtResource("3_r0du0")]
 position = Vector2(548, -27)
 
 [connection signal="value_changed" from="UI/Debug/AudioLatency/Slider" to="UI/Debug" method="_on_latency_slider_value_changed"]
