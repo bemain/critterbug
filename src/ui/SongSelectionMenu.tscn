@@ -30,10 +30,6 @@ layout_mode = 2
 allow_reselect = true
 auto_width = true
 auto_height = true
-item_count = 3
-item_0/text = "Test song 1"
-item_1/text = "Test song 2"
-item_2/text = "Test song 3"
 
 [node name="BackButton" type="Button" parent="VBoxContainer" unique_id=1203641133]
 layout_mode = 2
