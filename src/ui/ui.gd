@@ -44,7 +44,7 @@ func _on_song_selection_menu_back_pressed() -> void:
 	$MainMenu.show()
 
 
-func _on_song_selection_menu_part_selected(part: SongPart, difficulty: Difficulty.Level) -> void:
+func _on_song_selection_menu_part_selected(part: SongPart, difficulty: Difficulty.Level, is_adaptive: bool) -> void:
 	$MainMenu.hide()
 	$SongSelectionMenu.hide()
 

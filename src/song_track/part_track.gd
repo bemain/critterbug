@@ -30,8 +30,13 @@ signal wrong_note(beat: float, track: int)
 ## The part that is playing on this track.
 var part: SongPart
 
-## Which of the [member part]'s notes are shown and judged.
-var difficulty: Difficulty.Level
+## Which of the [member part]'s notes are shown and judged. A change only affects notes that haven't
+## spawned yet, so nothing on the track appears or disappears.
+var difficulty: Difficulty.Level:
+	set(value):
+		difficulty = value
+		if part != null:
+			notes = part.notes.filter(func(note): return Difficulty.shows(difficulty, note))
 
 ## The notes of the [member part] that are shown at the [member difficulty].
 var notes: Array[NoteData] = []
@@ -104,7 +109,6 @@ func load_song(part: SongPart, difficulty: Difficulty.Level):
 	last_position = -INF
 	self.part = part
 	self.difficulty = difficulty
-	notes = part.notes.filter(func(note): return Difficulty.shows(difficulty, note))
 
 ## Stop playing: presses are ignored until the next [method load_song].
 func unload() -> void:

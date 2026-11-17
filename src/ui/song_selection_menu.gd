@@ -2,7 +2,10 @@ extends Control
 ## Lets the player pick a song, then the part of it they want to play.
 
 signal back_pressed()
-signal part_selected(part: SongPart, difficulty: Difficulty.Level)
+signal part_selected(part: SongPart, difficulty: Difficulty.Level, is_adaptive: bool)
+
+## The difficulty dropdown's id for "Auto", which adapts during the song.
+const AUTO_ID := 100
 
 @onready var title_label: Label = $VBoxContainer/Label
 @onready var item_list: ItemList = $VBoxContainer/ItemList
@@ -19,6 +22,7 @@ var _is_double_click := false
 func _ready() -> void:
 	for level_name: String in Difficulty.Level.keys():
 		difficulty_button.add_item(level_name.capitalize(), Difficulty.Level[level_name])
+	difficulty_button.add_item("Auto", AUTO_ID)
 	difficulty_button.select(difficulty_button.get_item_index(Difficulty.Level.NORMAL))
 	visibility_changed.connect(_focus_list)
 	_show_songs()
@@ -84,4 +88,8 @@ func _choose(index: int) -> void:
 
 	var part := selected_song.parts[index]
 	_show_songs()
-	part_selected.emit(part, difficulty_button.get_selected_id() as Difficulty.Level)
+	var id := difficulty_button.get_selected_id()
+	if id == AUTO_ID:
+		part_selected.emit(part, Difficulty.ADAPTIVE_START, true)
+	else:
+		part_selected.emit(part, id as Difficulty.Level, false)
