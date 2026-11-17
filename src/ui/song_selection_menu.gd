@@ -12,6 +12,9 @@ signal part_selected(part: SongPart, difficulty: Difficulty.Level)
 ## The song whose parts are listed, or null while the songs are listed.
 var selected_song: Song
 
+## Whether the event the list is handling is the second press of a double-click.
+var _is_double_click := false
+
 
 func _ready() -> void:
 	for level_name: String in Difficulty.Level.keys():
@@ -56,9 +59,25 @@ func _on_back_button_pressed() -> void:
 		_show_songs()
 
 
-## Called when an item is chosen: confirmed with the keyboard or a gamepad, or double-clicked.
-## Moving through the list only selects, so it never starts a song.
+func _on_item_list_gui_input(event: InputEvent) -> void:
+	_is_double_click = event is InputEventMouseButton and event.double_click
+
+
+## A single left click chooses an item. The second press of a double-click is ignored, since the
+## first one has already changed the list.
+func _on_item_list_item_clicked(index: int, _at_position: Vector2, mouse_button_index: int) -> void:
+	if mouse_button_index == MOUSE_BUTTON_LEFT and not _is_double_click:
+		_choose(index)
+
+
+## Confirming with the keyboard or a gamepad chooses the selected item. Moving through the list only
+## selects, so it never starts a song.
 func _on_item_list_item_activated(index: int) -> void:
+	if not _is_double_click:
+		_choose(index)
+
+
+func _choose(index: int) -> void:
 	if selected_song == null:
 		_show_parts(Songs.songs[index])
 		return
