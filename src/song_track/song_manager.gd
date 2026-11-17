@@ -34,21 +34,22 @@ var playing: bool:
 var song_position: float:
 	get: return player.get_playback_position() + AudioServer.get_time_since_last_mix()
 
-## Begin playing a [param song].
-func play(song: Song):
-	track.load_song(song.parts[1]) # TODO: Allow selecting instrument
+## Begin playing the song that [param part] belongs to, with [param part] on the [member track].
+func play(part: SongPart):
+	var song := part.song
+	track.load_song(part)
 	
 	current_song = song
-	current_stats = PerformanceStats.new(track.part)
+	current_stats = PerformanceStats.new(part)
 	
 	# Prepare audio
 	var group := AudioStreamSynchronized.new()
 	group.stream_count = song.parts.size() + 1
 	group.set_sync_stream(0, load(song.audio_path))
 	for i in range(song.parts.size()):
-		var part = song.parts[i]
-		part_audio_indices[part] = i+1
-		var audio = load(part.audio_path)
+		var song_part = song.parts[i]
+		part_audio_indices[song_part] = i+1
+		var audio = load(song_part.audio_path)
 		group.set_sync_stream(i+1, audio)
 	player.set_stream(group)
 	
