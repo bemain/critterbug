@@ -17,6 +17,9 @@ signal note_hit(note: NoteData, offset_s: float)
 ## Emitted when the user holds a sustained [param note] to its end.
 signal hold_finished(note: NoteData)
 
+## Emitted when the user lets go of a sustained [param note] before its end.
+signal hold_released(note: NoteData)
+
 ## Emitted when the user fails to hit a [param note] in time.
 signal note_missed(note: NoteData)
 
@@ -115,6 +118,7 @@ func update(song_position: float) -> void:
 		note.missed.connect(func(): note_missed.emit(n))
 		note.hit.connect(func(offset_s): note_hit.emit(n, offset_s))
 		note.hold_finished.connect(func(): hold_finished.emit(n))
+		note.hold_released.connect(func(): hold_released.emit(n))
 		$Notes.add_child(note)
 	
 	last_position = song_position

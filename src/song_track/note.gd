@@ -25,6 +25,9 @@ signal hit(offset_s: float)
 ## Emitted if the user holds a sustained note down for its entire duration.
 signal hold_finished()
 
+## Emitted if the user lets go of a sustained note before its end.
+signal hold_released()
+
 ## Emitted when the user starts holding down this note, if this is a sustained note.
 signal sustain_started()
 
@@ -89,6 +92,7 @@ func update(song_position: float) -> void:
 			if not Input.is_action_pressed("play_%d" % note.track):
 				# The user let go too early. The head was already judged, so this only loses the hold.
 				is_held_down = false
+				hold_released.emit()
 				$SustainLine/AnimationPlayer.play("missed")
 			elif beats_from_hit >= note.duration - track.hit_window / track.beat_duration:
 				# The user held the entire sustain
