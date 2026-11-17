@@ -13,9 +13,22 @@ var missed_notes: Array[NoteData] = []
 
 ## Excessive notes that the user played when they were not intended to be played.
 ##
-## The key is the beat that the note was played, and the value is the track it 
+## The key is the beat that the note was played, and the value is the track it
 ## was played on.
 var wrong_notes: Dictionary[float, int] = {}
+
+## The total score, following the rules in [Scoring].
+var score: int = 0
+
+## How many notes got each [enum Scoring.Judgement].
+var judgement_counts: Dictionary[Scoring.Judgement, int] = {
+	Scoring.Judgement.PERFECT: 0,
+	Scoring.Judgement.GOOD: 0,
+	Scoring.Judgement.MISS: 0,
+}
+
+## The most recent judgements, oldest first, at most [constant Scoring.RECENT_JUDGEMENTS] of them.
+var recent_judgements: Array[Scoring.Judgement] = []
 
 ## The number of notes the user hit.
 var num_notes_hit: int:
@@ -33,9 +46,51 @@ var fraction_notes_hit: float:
 			return 0.0
 		return float(num_notes_hit) / num_notes
 
+## The fraction of the [member recent_judgements] that were hits, or 0 if there are none yet.
+var recent_accuracy: float:
+	get:
+		if recent_judgements.is_empty():
+			return 0.0
+		var hits := recent_judgements.filter(func(j): return j != Scoring.Judgement.MISS).size()
+		return float(hits) / recent_judgements.size()
+
 
 func _init(part: SongPart):
 	self.part = part
+
+
+## Record that [param note] was hit [param offset_s] seconds from its time.
+func record_hit(note: NoteData, offset_s: float) -> void:
+	var judgement := Scoring.judge(offset_s)
+	if judgement == Scoring.Judgement.MISS:
+		record_miss(note)
+		return
+	hit_notes.append(note)
+	_record_judgement(judgement)
+
+
+## Record that [param note] passed without being hit.
+func record_miss(note: NoteData) -> void:
+	missed_notes.append(note)
+	_record_judgement(Scoring.Judgement.MISS)
+
+
+## Record that the sustained [param note] was held to its end.
+func record_hold_finished(note: NoteData) -> void:
+	score += Scoring.HOLD_BONUS
+
+
+## Record a press on [param track] at [param beat] when no note was there.
+func record_wrong_note(beat: float, track: int) -> void:
+	wrong_notes[beat] = track
+
+
+func _record_judgement(judgement: Scoring.Judgement) -> void:
+	score += Scoring.POINTS[judgement]
+	judgement_counts[judgement] += 1
+	recent_judgements.append(judgement)
+	if recent_judgements.size() > Scoring.RECENT_JUDGEMENTS:
+		recent_judgements.pop_front()
 
 
 func _to_string() -> String:

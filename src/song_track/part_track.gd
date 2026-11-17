@@ -2,14 +2,20 @@ class_name PartTrack extends Node2D
 ## A track that displays the notes played by an [member part] and allows the user to hit them 
 ## using the keyboard.
 ## 
-## If the user presses the right key when a note passes the hit marker, the note is removed and 
-## [signal note_hit] is emitted. 
+## The track only reports what happened; judging and scoring is done by [PerformanceStats].
+##
+## If the user presses the right key when a note passes the hit marker, [signal note_hit] is emitted
+## with how far off the press was. For a sustained note, [signal hold_finished] follows if the user
+## holds it to its end.
 ## If a note passes the hit marker without being hit, [signal note_missed] is emitted.
 ## If the user presses a key but no note is passing the hit marker, the [signal wrong_note] is emitted.
 
 
-## Emitted when the user hits a [param note].
-signal note_hit(note: NoteData)
+## Emitted when the user hits a [param note], [param offset_s] seconds from its time (negative is early).
+signal note_hit(note: NoteData, offset_s: float)
+
+## Emitted when the user holds a sustained [param note] to its end.
+signal hold_finished(note: NoteData)
 
 ## Emitted when the user fails to hit a [param note] in time.
 signal note_missed(note: NoteData)
@@ -57,10 +63,14 @@ var beat_duration: float:
 ## The most recent position in the song reported.
 var last_position: float = -INF
 
+## Returns the current position in the song, in seconds. Presses are timed with it rather than with
+## [member last_position], which is up to a frame old.
+var position_source: Callable
+
 @onready var path: Path2D = $Path2D
 
 ## The number of seconds off the user can be for a press to be considered a hit.
-@export var hit_window = 0.05
+var hit_window: float = Scoring.GOOD_WINDOW_S
 
 ## How much of the track is above the hit marker, as a fraction
 var hit_marker_position: float:
@@ -97,7 +107,8 @@ func update(song_position: float) -> void:
 	for n in new_notes:
 		var note: NoteNode = NoteNode.instantiate(n, self)
 		note.missed.connect(func(): note_missed.emit(n))
-		note.hit.connect(func(): note_hit.emit(n))
+		note.hit.connect(func(offset_s): note_hit.emit(n, offset_s))
+		note.hold_finished.connect(func(): hold_finished.emit(n))
 		$Notes.add_child(note)
 	
 	last_position = song_position
@@ -126,10 +137,13 @@ func _input(event):
 
 ## Check if a note is currently on the hit marker of the given [param track]
 func _check_note_hit(track: int):
+	# The audio clock can briefly read behind the last frame; never judge earlier than that.
+	var position: float = maxf(position_source.call(), last_position)
 	var notes = $Notes.get_children().filter(func(note: NoteNode): return note.is_active and note.note.track == track)
 	for note: NoteNode in notes:
-		if abs(last_position - note.seconds) <= hit_window:
-			note.register_hit()
+		var offset_s := position - note.seconds
+		if abs(offset_s) <= hit_window:
+			note.register_hit(offset_s)
 			return
 	
-	wrong_note.emit(last_position / beat_duration, track)
+	wrong_note.emit(position / beat_duration, track)
