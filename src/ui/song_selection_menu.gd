@@ -6,7 +6,8 @@ signal part_selected(part: SongPart, difficulty: Difficulty.Level)
 
 @onready var title_label: Label = $VBoxContainer/Label
 @onready var item_list: ItemList = $VBoxContainer/ItemList
-@onready var difficulty_button: OptionButton = $VBoxContainer/DifficultyButton
+@onready var difficulty_row: Control = $VBoxContainer/Difficulty
+@onready var difficulty_button: OptionButton = $VBoxContainer/Difficulty/DifficultyButton
 
 ## The song whose parts are listed, or null while the songs are listed.
 var selected_song: Song
@@ -22,7 +23,7 @@ func _ready() -> void:
 func _show_songs() -> void:
 	selected_song = null
 	title_label.text = "Select a song"
-	difficulty_button.hide()
+	difficulty_row.hide()
 	item_list.clear()
 	for song: Song in Songs.songs:
 		item_list.add_item(song.title)
@@ -31,7 +32,7 @@ func _show_songs() -> void:
 func _show_parts(song: Song) -> void:
 	selected_song = song
 	title_label.text = "Select a part"
-	difficulty_button.show()
+	difficulty_row.show()
 	item_list.clear()
 	for part: SongPart in song.parts:
 		item_list.add_item(part.name)

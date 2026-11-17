@@ -94,6 +94,12 @@ func load_song(part: SongPart, difficulty: Difficulty.Level):
 	self.difficulty = difficulty
 	notes = part.notes.filter(func(note): return Difficulty.shows(difficulty, note))
 
+## Stop playing: presses are ignored until the next [method load_song].
+func unload() -> void:
+	part = null
+	notes = []
+
+
 ## Move the notes along the track, and create new ones when needed.
 ## Should be called every frame with [param song_position] as the current position in the [member song]. 
 func update(song_position: float) -> void:
@@ -130,6 +136,8 @@ func update(song_position: float) -> void:
 
 
 func _input(event):
+	if part == null:
+		return
 	for i in range(4):
 		if event.is_action_pressed("play_%d" %i):
 			_check_note_hit(i)

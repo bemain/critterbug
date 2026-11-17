@@ -25,9 +25,17 @@ grow_vertical = 2
 layout_mode = 2
 text = "Select a song"
 
-[node name="DifficultyButton" type="OptionButton" parent="VBoxContainer" unique_id=1739286451]
+[node name="Difficulty" type="HBoxContainer" parent="VBoxContainer" unique_id=1946027713]
 visible = false
 layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Difficulty" unique_id=1213874509]
+layout_mode = 2
+text = "Difficulty"
+
+[node name="DifficultyButton" type="OptionButton" parent="VBoxContainer/Difficulty" unique_id=1739286451]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="ItemList" type="ItemList" parent="VBoxContainer" unique_id=1300479750]
 layout_mode = 2
