@@ -148,6 +148,9 @@ func _on_part_track_wrong_note(beat: float, track: int) -> void:
 
 ## Called when any of the song's audio players finishes; the song ends when all of them have.
 func _on_player_finished() -> void:
+	# Players that end in the same mix step each get here; only the first of them ends the song.
+	if current_song == null:
+		return
 	if player.playing or part_players.values().any(func(p: AudioStreamPlayer): return p.playing):
 		return
 	song_finished.emit(current_song)
