@@ -34,10 +34,10 @@ var playing: bool:
 var song_position: float:
 	get: return player.get_playback_position() + AudioServer.get_time_since_last_mix()
 
-## Begin playing the song that [param part] belongs to, with [param part] on the [member track].
-func play(part: SongPart):
+## Begin playing the song that [param part] belongs to, with [param part] on the [member track] at [param difficulty].
+func play(part: SongPart, difficulty: Difficulty.Level):
 	var song := part.song
-	track.load_song(part)
+	track.load_song(part, difficulty)
 	
 	current_song = song
 	current_stats = PerformanceStats.new(part)

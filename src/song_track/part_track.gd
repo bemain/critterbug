@@ -21,6 +21,12 @@ signal wrong_note(beat: float, track: int)
 ## The part that is playing on this track.
 var part: SongPart
 
+## Which of the [member part]'s notes are shown and judged.
+var difficulty: Difficulty.Level
+
+## The notes of the [member part] that are shown at the [member difficulty].
+var notes: Array[NoteData] = []
+
 var song: Song:
 	get: return part.song
 
@@ -69,10 +75,12 @@ func _ready() -> void:
 		$Beats.add_child(line)
 
 
-## Reset the track and prepare the given [param song] for playback.
-func load_song(part: SongPart):
+## Reset the track and prepare [param part] for playback at [param difficulty].
+func load_song(part: SongPart, difficulty: Difficulty.Level):
 	last_position = 0
 	self.part = part
+	self.difficulty = difficulty
+	notes = part.notes.filter(func(note): return Difficulty.shows(difficulty, note))
 
 ## Move the notes along the track, and create new ones when needed.
 ## Should be called every frame with [param song_position] as the current position in the [member song]. 
@@ -80,7 +88,7 @@ func update(song_position: float) -> void:
 	if song_position <= last_position: return  # Can't go backwards
 	
 	# Add new notes
-	var new_notes = part.notes.filter(func(note): 
+	var new_notes = notes.filter(func(note): 
 		var note_create_at = (note.beat + note.subbeat - beats) * beat_duration
 		return last_position < note_create_at and note_create_at <= song_position
 	)
