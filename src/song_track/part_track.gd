@@ -137,7 +137,8 @@ func _input(event):
 
 ## Check if a note is currently on the hit marker of the given [param track]
 func _check_note_hit(track: int):
-	var position: float = position_source.call()
+	# The audio clock can briefly read behind the last frame; never judge earlier than that.
+	var position: float = maxf(position_source.call(), last_position)
 	var notes = $Notes.get_children().filter(func(note: NoteNode): return note.is_active and note.note.track == track)
 	for note: NoteNode in notes:
 		var offset_s := position - note.seconds
