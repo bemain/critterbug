@@ -63,6 +63,10 @@ var beat_duration: float:
 ## The most recent position in the song reported.
 var last_position: float = -INF
 
+## Returns the current position in the song, in seconds. Presses are timed with it rather than with
+## [member last_position], which is up to a frame old.
+var position_source: Callable
+
 @onready var path: Path2D = $Path2D
 
 ## The number of seconds off the user can be for a press to be considered a hit.
@@ -133,11 +137,12 @@ func _input(event):
 
 ## Check if a note is currently on the hit marker of the given [param track]
 func _check_note_hit(track: int):
+	var position: float = position_source.call()
 	var notes = $Notes.get_children().filter(func(note: NoteNode): return note.is_active and note.note.track == track)
 	for note: NoteNode in notes:
-		var offset_s := last_position - note.seconds
+		var offset_s := position - note.seconds
 		if abs(offset_s) <= hit_window:
 			note.register_hit(offset_s)
 			return
 	
-	wrong_note.emit(last_position / beat_duration, track)
+	wrong_note.emit(position / beat_duration, track)
