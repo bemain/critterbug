@@ -106,4 +106,5 @@ func _on_part_track_wrong_note(beat: float, track: int) -> void:
 func _on_player_finished() -> void:
 	song_finished.emit(current_song)
 	current_song = null
+	track.unload()
 	# TODO: Save stats
