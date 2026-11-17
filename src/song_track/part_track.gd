@@ -142,6 +142,12 @@ func update(song_position: float) -> void:
 
 
 
+func _process(_delta: float) -> void:
+	# An action can be released without an event, for example when the window loses focus.
+	for i in range(4):
+		_lanes_down[i] = _lanes_down[i] and Input.is_action_pressed("play_%d" % i)
+
+
 func _input(event):
 	for i in range(4):
 		var action := "play_%d" % i
