@@ -65,14 +65,15 @@ func _init(part: SongPart):
 	self.part = part
 
 
-## Record that [param note] was hit [param offset_s] seconds from its time.
-func record_hit(note: NoteData, offset_s: float) -> void:
+## Record that [param note] was hit [param offset_s] seconds from its time, and return its judgement.
+func record_hit(note: NoteData, offset_s: float) -> Scoring.Judgement:
 	var judgement := Scoring.judge(offset_s)
 	if judgement == Scoring.Judgement.MISS:
 		record_miss(note)
-		return
+		return judgement
 	hit_notes.append(note)
 	_record_judgement(judgement)
+	return judgement
 
 
 ## Record that [param note] passed without being hit.

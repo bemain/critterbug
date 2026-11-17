@@ -18,9 +18,12 @@ const MUTE_FADE_S := 0.05
 		track = value
 		update_configuration_warnings()
 
-## Audio player that handles audio playback for the [member song].
+## Audio player for the [member current_song]'s backing track. The song's time follows it.
 @onready var player: AudioStreamPlayer = $AudioStreamPlayer
-var part_audio_indices: Dictionary[SongPart, int] = {}
+
+## One audio player per part of the [member current_song], so each part can be faded on its own.
+## A player's volume is ramped per sample within each mix step, which keeps the fades free of clicks.
+var part_players: Dictionary[SongPart, AudioStreamPlayer] = {}
 
 ## The linear gain each part's audio is at or fading towards: 1 when playing, 0 when muted after a miss.
 var _part_gains: Dictionary[SongPart, float] = {}
@@ -59,18 +62,25 @@ func play(part: SongPart, difficulty: Difficulty.Level):
 		fade.kill()
 	_part_fades.clear()
 	_part_gains.clear()
-	part_audio_indices.clear()
-	var group := AudioStreamSynchronized.new()
-	group.stream_count = song.parts.size() + 1
-	group.set_sync_stream(0, load(song.audio_path))
-	for i in range(song.parts.size()):
-		var song_part = song.parts[i]
-		part_audio_indices[song_part] = i+1
-		var audio = load(song_part.audio_path)
-		group.set_sync_stream(i+1, audio)
-	player.set_stream(group)
+	for part_player: AudioStreamPlayer in part_players.values():
+		part_player.queue_free()
+	part_players.clear()
 	
+	player.stream = load(song.audio_path)
+	for song_part: SongPart in song.parts:
+		var part_player := AudioStreamPlayer.new()
+		part_player.playback_type = player.playback_type
+		part_player.stream = load(song_part.audio_path)
+		part_player.finished.connect(_on_player_finished)
+		add_child(part_player)
+		part_players[song_part] = part_player
+	
+	# Start every stream within the same mix step, so they play sample-aligned.
+	AudioServer.lock()
 	player.play()
+	for part_player: AudioStreamPlayer in part_players.values():
+		part_player.play()
+	AudioServer.unlock()
 
 
 func _get_configuration_warnings() -> PackedStringArray:
@@ -105,20 +115,17 @@ func _process(delta: float) -> void:
 func _fade_part(part: SongPart, gain: float) -> void:
 	if _part_gains.get(part, 1.0) == gain:
 		return
-	var group := player.stream as AudioStreamSynchronized
-	var index: int = part_audio_indices[part]
-	var from := db_to_linear(group.get_sync_stream_volume(index))
 	_part_gains[part] = gain
 	if _part_fades.has(part):
 		_part_fades[part].kill()
 	var fade := create_tween()
-	fade.tween_method(func(g: float): group.set_sync_stream_volume(index, linear_to_db(g)), from, gain, MUTE_FADE_S)
+	fade.tween_property(part_players[part], "volume_linear", gain, MUTE_FADE_S)
 	_part_fades[part] = fade
 
 
 func _on_part_track_note_hit(note: NoteData, offset_s: float) -> void:
-	current_stats.record_hit(note, offset_s)
-	_fade_part(track.part, 1.0)
+	var judgement := current_stats.record_hit(note, offset_s)
+	_fade_part(track.part, 0.0 if judgement == Scoring.Judgement.MISS else 1.0)
 
 
 func _on_part_track_note_missed(note: NoteData) -> void:
@@ -139,7 +146,10 @@ func _on_part_track_wrong_note(beat: float, track: int) -> void:
 	# A sound for pressing when no note is there would play here.
 
 
+## Called when any of the song's audio players finishes; the song ends when all of them have.
 func _on_player_finished() -> void:
+	if player.playing or part_players.values().any(func(p: AudioStreamPlayer): return p.playing):
+		return
 	song_finished.emit(current_song)
 	current_song = null
 	track.unload()
