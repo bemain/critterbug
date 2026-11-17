@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://c6s3tq8m4n2pk"]
+
+[ext_resource type="Script" uid="uid://d4nfs2dw8gevv" path="res://src/ui/settings_menu.gd" id="1_set"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 24
+
+[node name="SettingsMenu" type="Control" unique_id=1418823051]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_set")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1985034417]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -120.0
+offset_right = 150.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="VBoxContainer" unique_id=1203398741]
+layout_mode = 2
+text = "Settings"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="LatencyCaption" type="Label" parent="VBoxContainer" unique_id=1659283410]
+layout_mode = 2
+text = "Audio latency"
+horizontal_alignment = 1
+
+[node name="Latency" type="HBoxContainer" parent="VBoxContainer" unique_id=1310462281]
+layout_mode = 2
+alignment = 1
+
+[node name="Minus10" type="Button" parent="VBoxContainer/Latency" unique_id=1767320945]
+layout_mode = 2
+text = "-10"
+
+[node name="Minus1" type="Button" parent="VBoxContainer/Latency" unique_id=1140937756]
+layout_mode = 2
+text = "-1"
+
+[node name="Value" type="Label" parent="VBoxContainer/Latency" unique_id=1580346372]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "0 ms"
+horizontal_alignment = 1
+
+[node name="Plus1" type="Button" parent="VBoxContainer/Latency" unique_id=1078210547]
+layout_mode = 2
+text = "+1"
+
+[node name="Plus10" type="Button" parent="VBoxContainer/Latency" unique_id=1903466119]
+layout_mode = 2
+text = "+10"
+
+[node name="CalibrateButton" type="Button" parent="VBoxContainer" unique_id=1527390836]
+layout_mode = 2
+text = "Calibrate by tapping along"
+
+[node name="Status" type="Label" parent="VBoxContainer" unique_id=1349217056]
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Result" type="HBoxContainer" parent="VBoxContainer" unique_id=1844129673]
+visible = false
+layout_mode = 2
+alignment = 1
+
+[node name="ApplyButton" type="Button" parent="VBoxContainer/Result" unique_id=1462839016]
+layout_mode = 2
+text = "Apply"
+
+[node name="RetryButton" type="Button" parent="VBoxContainer/Result" unique_id=1735291864]
+layout_mode = 2
+text = "Retry"
+
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=1290563718]
+layout_mode = 2
+text = "Back"
+
+[node name="Clicks" type="AudioStreamPlayer" parent="." unique_id=1612940387]
+playback_type = 1
+
+[connection signal="pressed" from="VBoxContainer/Latency/Minus10" to="." method="_on_minus_10_pressed"]
+[connection signal="pressed" from="VBoxContainer/Latency/Minus1" to="." method="_on_minus_1_pressed"]
+[connection signal="pressed" from="VBoxContainer/Latency/Plus1" to="." method="_on_plus_1_pressed"]
+[connection signal="pressed" from="VBoxContainer/Latency/Plus10" to="." method="_on_plus_10_pressed"]
+[connection signal="pressed" from="VBoxContainer/CalibrateButton" to="." method="_on_calibrate_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Result/ApplyButton" to="." method="_on_apply_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Result/RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

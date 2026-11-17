@@ -32,7 +32,6 @@ text = "Free play"
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer" unique_id=73655641]
 layout_mode = 2
-disabled = true
 text = "Settings"
 
 [connection signal="pressed" from="VBoxContainer/StoryButton" to="." method="_on_story_button_pressed"]

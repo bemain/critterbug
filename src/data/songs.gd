@@ -8,10 +8,13 @@ extends Node
 var config: ConfigFile = ConfigFile.new()
 var config_path: String = "user://songs.cfg"
 
-## The user-inputted audio latency. We compensate by this to try and sync the visuals with the audio.
+## The audio latency, in milliseconds, set in the settings. The game compensates for it to keep the
+## visuals and the judging in sync with what the player hears. It is saved as soon as it changes.
 @export var audio_latency_ms: float:
 	get: return config.get_value("General", "latency", 0)
-	set(value): config.set_value("General", "latency", value)
+	set(value):
+		config.set_value("General", "latency", value)
+		config.save(config_path)
 
 
 var songs_dir: String = "res://songs"
@@ -26,14 +29,8 @@ func _ready() -> void:
 	for path in _get_song_paths(songs_dir):
 		load_song(path)
 	
-	if audio_latency_ms == 0:
-		audio_latency_ms = AudioServer.get_output_latency()
-
-
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		# Game is closing
-		config.save(config_path)
+	if not config.has_section_key("General", "latency"):
+		audio_latency_ms = AudioServer.get_output_latency() * 1000
 
 ## Get the paths to all .chrp files in the directory at [param path]. 
 ## Searches recursively.
