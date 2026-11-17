@@ -20,6 +20,12 @@ var wrong_notes: Dictionary[float, int] = {}
 ## The total score, following the rules in [Scoring].
 var score: int = 0
 
+## How many notes have been hit in a row. A miss resets it; a wrong press does not.
+var combo: int = 0
+
+## The highest [member combo] reached.
+var longest_combo: int = 0
+
 ## How many notes got each [enum Scoring.Judgement].
 var judgement_counts: Dictionary[Scoring.Judgement, int] = {
 	Scoring.Judgement.PERFECT: 0,
@@ -77,7 +83,7 @@ func record_miss(note: NoteData) -> void:
 
 ## Record that the sustained [param note] was held to its end.
 func record_hold_finished(note: NoteData) -> void:
-	score += Scoring.HOLD_BONUS
+	score += Scoring.HOLD_BONUS * Scoring.multiplier(combo)
 
 
 ## Record a press on [param track] at [param beat] when no note was there.
@@ -86,7 +92,12 @@ func record_wrong_note(beat: float, track: int) -> void:
 
 
 func _record_judgement(judgement: Scoring.Judgement) -> void:
-	score += Scoring.POINTS[judgement]
+	if judgement == Scoring.Judgement.MISS:
+		combo = 0
+	else:
+		combo += 1
+		longest_combo = maxi(longest_combo, combo)
+	score += Scoring.POINTS[judgement] * Scoring.multiplier(combo)
 	judgement_counts[judgement] += 1
 	recent_judgements.append(judgement)
 	if recent_judgements.size() > Scoring.RECENT_JUDGEMENTS:

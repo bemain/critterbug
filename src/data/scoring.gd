@@ -18,8 +18,19 @@ const POINTS: Dictionary[Judgement, int] = {
 ## Extra points for holding a sustained note to its end.
 const HOLD_BONUS := 50
 
+## Every this many notes hit in a row raises the combo multiplier by one.
+const COMBO_STEP := 10
+## The highest combo multiplier.
+const MAX_MULTIPLIER := 4
+
 ## How many of the most recent judgements the short-term accuracy is computed over.
 const RECENT_JUDGEMENTS := 8
+
+
+## The points multiplier for a [param combo] of notes hit in a row: x1 below [constant COMBO_STEP],
+## then one more for each further step, up to [constant MAX_MULTIPLIER].
+static func multiplier(combo: int) -> int:
+	return mini(1 + combo / COMBO_STEP, MAX_MULTIPLIER)
 
 
 ## The judgement for a hit [param offset_s] seconds from the note's time (negative is early).
