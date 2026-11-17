@@ -39,6 +39,12 @@ var notes: Array[NoteData] = []
 ## Whether each lane's action was down at the last input event, to find presses.
 var _lanes_down: Array[bool] = [false, false, false, false]
 
+## How far an analog input, such as a trigger, must go for a lane to go down.
+const PRESS_STRENGTH := 0.5
+## How far back it must come for the lane to come up again, so a trigger resting near
+## [constant PRESS_STRENGTH] does not chatter.
+const RELEASE_STRENGTH := 0.3
+
 var song: Song:
 	get: return part.song
 
@@ -145,7 +151,7 @@ func update(song_position: float) -> void:
 func _process(_delta: float) -> void:
 	# An action can be released without an event, for example when the window loses focus.
 	for i in range(4):
-		_lanes_down[i] = _lanes_down[i] and Input.is_action_pressed("play_%d" % i)
+		_lanes_down[i] = _lanes_down[i] and Input.get_action_raw_strength("play_%d" % i) >= RELEASE_STRENGTH
 
 
 func _input(event):
@@ -155,7 +161,8 @@ func _input(event):
 			continue
 		# A trigger sends many motion events while it is pressed, so act on the lane going down,
 		# whichever device it comes from.
-		var is_down := Input.is_action_pressed(action)
+		var threshold := RELEASE_STRENGTH if _lanes_down[i] else PRESS_STRENGTH
+		var is_down := Input.get_action_raw_strength(action) >= threshold
 		if is_down and not _lanes_down[i] and part != null:
 			_check_note_hit(i)
 		_lanes_down[i] = is_down
