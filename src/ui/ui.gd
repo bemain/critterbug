@@ -18,7 +18,7 @@ func _on_song_selection_menu_back_pressed() -> void:
 	$MainMenu.show()
 
 
-func _on_song_selection_menu_song_selected(song: Song) -> void:
+func _on_song_selection_menu_part_selected(part: SongPart) -> void:
 	$MainMenu.hide()
 	$SongSelectionMenu.hide()
 
