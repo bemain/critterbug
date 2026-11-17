@@ -77,7 +77,9 @@ func _ready() -> void:
 
 ## Reset the track and prepare [param part] for playback at [param difficulty].
 func load_song(part: SongPart, difficulty: Difficulty.Level):
-	last_position = 0
+	# -INF so that the first update also spawns notes due before the song starts,
+	# partway down the track.
+	last_position = -INF
 	self.part = part
 	self.difficulty = difficulty
 	notes = part.notes.filter(func(note): return Difficulty.shows(difficulty, note))
