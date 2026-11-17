@@ -84,7 +84,7 @@ func _finish_calibration() -> void:
 	_set_buttons_disabled(false)
 	var offsets := _tap_offsets()
 	if offsets.size() < MIN_TAPS:
-		status_label.text = "Only %d taps were on the beat. Try again." % offsets.size()
+		status_label.text = "Only %d of %d clicks had a tap on the beat. Try again." % [offsets.size(), MEASURED_CLICKS]
 		calibrate_button.grab_focus()
 		return
 	_measured_ms = roundf(_median(offsets) * 1000)

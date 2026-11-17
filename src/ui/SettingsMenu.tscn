@@ -45,6 +45,7 @@ text = "-10"
 
 [node name="Minus1" type="Button" parent="VBoxContainer/Latency" unique_id=1140937756]
 layout_mode = 2
+focus_neighbor_right = NodePath("../Plus1")
 text = "-1"
 
 [node name="Value" type="Label" parent="VBoxContainer/Latency" unique_id=1580346372]
@@ -55,6 +56,7 @@ horizontal_alignment = 1
 
 [node name="Plus1" type="Button" parent="VBoxContainer/Latency" unique_id=1078210547]
 layout_mode = 2
+focus_neighbor_left = NodePath("../Minus1")
 text = "+1"
 
 [node name="Plus10" type="Button" parent="VBoxContainer/Latency" unique_id=1903466119]
@@ -63,6 +65,7 @@ text = "+10"
 
 [node name="CalibrateButton" type="Button" parent="VBoxContainer" unique_id=1527390836]
 layout_mode = 2
+focus_neighbor_top = NodePath("../Latency/Minus1")
 text = "Calibrate by tapping along"
 
 [node name="Status" type="Label" parent="VBoxContainer" unique_id=1349217056]
