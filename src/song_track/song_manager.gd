@@ -31,8 +31,15 @@ var playing: bool:
 	get: return current_song != null
 
 ## The current position in the [member current_song], in seconds.
+## It never decreases within a song, although the audio clock it follows can briefly read backwards.
 var song_position: float:
-	get: return player.get_playback_position() + AudioServer.get_time_since_last_mix()
+	get:
+		var audio_position := player.get_playback_position() + AudioServer.get_time_since_last_mix()
+		_max_song_position = maxf(_max_song_position, audio_position)
+		return _max_song_position
+
+## The highest [member song_position] handed out during the current song.
+var _max_song_position: float = -INF
 
 ## The [member song_position] compensated for audio latency, which is what the [member track] shows.
 var track_position: float:
@@ -45,6 +52,7 @@ func play(part: SongPart, difficulty: Difficulty.Level):
 	
 	current_song = song
 	current_stats = PerformanceStats.new(part)
+	_max_song_position = -INF
 	
 	# Prepare audio
 	var group := AudioStreamSynchronized.new()
