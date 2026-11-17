@@ -86,18 +86,18 @@ func update(song_position: float) -> void:
 	
 	if note.duration > 0:
 		if is_held_down:
-			if Input.is_action_pressed("play_%d" % note.track):
-				# Cut off the sustain line at the current position
-				sustain_start = song_position
-			else:
+			if not Input.is_action_pressed("play_%d" % note.track):
 				# The user let go too early. The head was already judged, so this only loses the hold.
 				is_held_down = false
 				$SustainLine/AnimationPlayer.play("missed")
-			if beats_from_hit >= note.duration - track.hit_window:
+			elif beats_from_hit >= note.duration - track.hit_window / track.beat_duration:
 				# The user held the entire sustain
 				sustain_start = seconds + note.duration * track.beat_duration # Make the sustain line 0 in length
 				is_held_down = false
 				hold_finished.emit()
+			else:
+				# Cut off the sustain line at the current position
+				sustain_start = song_position
 		
 		# Update sustain line
 		var start = (song_position - sustain_start) / (track.beat_duration * track.beats) + 1 # Start (bottom) of the sustain line
