@@ -67,6 +67,7 @@ func _ready() -> void:
 	
 	track.note_hit.connect(_on_part_track_note_hit)
 	track.note_missed.connect(_on_part_track_note_missed)
+	track.hold_finished.connect(_on_part_track_hold_finished)
 	track.wrong_note.connect(_on_part_track_wrong_note)
 
 
@@ -81,16 +82,20 @@ func _process(delta: float) -> void:
 
 
 
-func _on_part_track_note_hit(note: NoteData) -> void:
-	current_stats.hit_notes.append(note)
+func _on_part_track_note_hit(note: NoteData, offset_s: float) -> void:
+	current_stats.record_hit(note, offset_s)
 
 
 func _on_part_track_note_missed(note: NoteData) -> void:
-	current_stats.missed_notes.append(note)
+	current_stats.record_miss(note)
+
+
+func _on_part_track_hold_finished(note: NoteData) -> void:
+	current_stats.record_hold_finished(note)
 
 
 func _on_part_track_wrong_note(beat: float, track: int) -> void:
-	current_stats.wrong_notes[beat] = track
+	current_stats.record_wrong_note(beat, track)
 
 
 func _on_player_finished() -> void:

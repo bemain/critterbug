@@ -18,9 +18,12 @@ static func instantiate(note: NoteData, track: PartTrack):
 ## Emitted if this note reaches the end of the track without being hit.
 signal missed()
 
-## Emitted if the user presses the right key when this note is passing the hit marker, 
-## and holds it down for the note's entire duration.
-signal hit()
+## Emitted if the user presses the right key when this note is passing the hit marker,
+## [param offset_s] seconds from its time (negative is early).
+signal hit(offset_s: float)
+
+## Emitted if the user holds a sustained note down for its entire duration.
+signal hold_finished()
 
 ## Emitted when the user starts holding down this note, if this is a sustained note.
 signal sustain_started()
@@ -87,15 +90,14 @@ func update(song_position: float) -> void:
 				# Cut off the sustain line at the current position
 				sustain_start = song_position
 			else:
-				# The user let go too early
+				# The user let go too early. The head was already judged, so this only loses the hold.
 				is_held_down = false
-				missed.emit()
 				$SustainLine/AnimationPlayer.play("missed")
 			if beats_from_hit >= note.duration - track.hit_window:
 				# The user held the entire sustain
 				sustain_start = seconds + note.duration * track.beat_duration # Make the sustain line 0 in length
 				is_held_down = false
-				hit.emit()
+				hold_finished.emit()
 		
 		# Update sustain line
 		var start = (song_position - sustain_start) / (track.beat_duration * track.beats) + 1 # Start (bottom) of the sustain line
@@ -115,13 +117,12 @@ func update(song_position: float) -> void:
 		queue_free()
 
 
-func register_hit():
+func register_hit(offset_s: float):
 	is_active = false
+	hit.emit(offset_s)
 	if note.duration > 0:
 		is_held_down = true
 		sustain_started.emit()
-	else:
-		hit.emit()
 	$Sprite2D/AnimationPlayer.play("hit")
 
 func register_miss():
