@@ -3,6 +3,16 @@ extends Control
 signal back_pressed()
 
 
+func _ready() -> void:
+	visibility_changed.connect(_focus_back)
+
+
+## Focus the Back button, so a gamepad or the keyboard can leave the screen.
+func _focus_back() -> void:
+	if is_visible_in_tree():
+		$VBoxContainer/BackButton.grab_focus()
+
+
 ## Display the given [param stats].
 func load_stats(stats: PerformanceStats):
 	var song := stats.part.song
