@@ -34,10 +34,14 @@ var playing: bool:
 var song_position: float:
 	get: return player.get_playback_position() + AudioServer.get_time_since_last_mix()
 
-## Begin playing the song that [param part] belongs to, with [param part] on the [member track].
-func play(part: SongPart):
+## The [member song_position] compensated for audio latency, which is what the [member track] shows.
+var track_position: float:
+	get: return song_position - Songs.audio_latency_ms / 1000
+
+## Begin playing the song that [param part] belongs to, with [param part] on the [member track] at [param difficulty].
+func play(part: SongPart, difficulty: Difficulty.Level):
 	var song := part.song
-	track.load_song(part)
+	track.load_song(part, difficulty)
 	
 	current_song = song
 	current_stats = PerformanceStats.new(part)
@@ -67,7 +71,9 @@ func _ready() -> void:
 	
 	track.note_hit.connect(_on_part_track_note_hit)
 	track.note_missed.connect(_on_part_track_note_missed)
+	track.hold_finished.connect(_on_part_track_hold_finished)
 	track.wrong_note.connect(_on_part_track_wrong_note)
+	track.position_source = func(): return track_position
 
 
 func _process(delta: float) -> void:
@@ -75,25 +81,30 @@ func _process(delta: float) -> void:
 	
 	if player.playing:
 		track.visible = true
-		track.update(song_position - Songs.audio_latency_ms / 1000)
+		track.update(track_position)
 	else:
 		track.visible = false
 
 
 
-func _on_part_track_note_hit(note: NoteData) -> void:
-	current_stats.hit_notes.append(note)
+func _on_part_track_note_hit(note: NoteData, offset_s: float) -> void:
+	current_stats.record_hit(note, offset_s)
 
 
 func _on_part_track_note_missed(note: NoteData) -> void:
-	current_stats.missed_notes.append(note)
+	current_stats.record_miss(note)
+
+
+func _on_part_track_hold_finished(note: NoteData) -> void:
+	current_stats.record_hold_finished(note)
 
 
 func _on_part_track_wrong_note(beat: float, track: int) -> void:
-	current_stats.wrong_notes[beat] = track
+	current_stats.record_wrong_note(beat, track)
 
 
 func _on_player_finished() -> void:
 	song_finished.emit(current_song)
 	current_song = null
+	track.unload()
 	# TODO: Save stats
