@@ -55,6 +55,11 @@ text = "Score: 0"
 label_settings = SubResource("LabelSettings_yggbo")
 horizontal_alignment = 1
 
+[node name="LongestCombo" type="Label" parent="VBoxContainer" unique_id=1659034217]
+layout_mode = 2
+text = "Longest combo: 0"
+horizontal_alignment = 1
+
 [node name="Judgements" type="Label" parent="VBoxContainer" unique_id=1302958841]
 layout_mode = 2
 text = "Perfect 0 · Good 0 · Miss 0"

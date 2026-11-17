@@ -13,8 +13,11 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	$Score.visible = song_manager.playing
+	$Combo.visible = song_manager.playing
 	if song_manager.playing:
-		$Score.text = "Score: %d" % song_manager.current_stats.score
+		var stats := song_manager.current_stats
+		$Score.text = "Score: %d" % stats.score
+		$Combo.text = "Combo: %d  x%d" % [stats.combo, Scoring.multiplier(stats.combo)]
 
 
 func _on_main_menu_freeplay_pressed() -> void:
