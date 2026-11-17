@@ -133,7 +133,7 @@ func _adapt_difficulty() -> void:
 	var level := difficulty
 	if recent_accuracy >= Difficulty.RAISE_ACCURACY:
 		level = mini(difficulty + 1, Difficulty.Level.EXPERT) as Difficulty.Level
-	elif recent_accuracy <= Difficulty.LOWER_ACCURACY:
+	elif recent_accuracy < Difficulty.LOWER_ACCURACY:
 		level = maxi(difficulty - 1, Difficulty.Level.EASY) as Difficulty.Level
 	if level == difficulty:
 		return

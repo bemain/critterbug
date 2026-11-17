@@ -162,13 +162,19 @@ func _fade_part(part: SongPart, gain: float) -> void:
 func _on_part_track_note_hit(note: NoteData, offset_s: float) -> void:
 	var judgement := current_stats.record_hit(note, offset_s)
 	_fade_part(track.part, 0.0 if judgement == Scoring.Judgement.MISS else 1.0)
-	track.difficulty = current_stats.difficulty
+	_follow_difficulty()
 
 
 func _on_part_track_note_missed(note: NoteData) -> void:
 	current_stats.record_miss(note)
 	_fade_part(track.part, 0.0)
-	track.difficulty = current_stats.difficulty
+	_follow_difficulty()
+
+
+## Show the [member track] the level the player's stats are at, which changes on Auto.
+func _follow_difficulty() -> void:
+	if track.difficulty != current_stats.difficulty:
+		track.difficulty = current_stats.difficulty
 
 
 func _on_part_track_hold_finished(note: NoteData) -> void:
