@@ -14,6 +14,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	$Score.visible = song_manager.playing
 	$Combo.visible = song_manager.playing
+	var count_in_beat := song_manager.count_in_beat
+	$CountIn.visible = count_in_beat > 0
+	$CountIn.text = str(count_in_beat)
 	if song_manager.playing:
 		var stats := song_manager.current_stats
 		$Score.text = "Score: %d" % stats.score

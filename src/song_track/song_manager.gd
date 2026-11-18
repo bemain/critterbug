@@ -41,16 +41,27 @@ var current_stats: PerformanceStats
 var playing: bool:
 	get: return current_song != null
 
-## The current position in the [member current_song], in seconds.
+## The current position in the [member current_song], in seconds. It is negative during the count-in.
 ## It never decreases within a song, although the audio clock it follows can briefly read backwards.
 var song_position: float:
 	get:
-		var audio_position := player.get_playback_position() + AudioServer.get_time_since_last_mix()
+		var audio_position := player.get_playback_position() + AudioServer.get_time_since_last_mix() - _count_in_s
 		_max_song_position = maxf(_max_song_position, audio_position)
 		return _max_song_position
 
 ## The highest [member song_position] handed out during the current song.
 var _max_song_position: float = -INF
+
+## How long the [member current_song]'s count-in lasts, in seconds.
+var _count_in_s: float = 0.0
+
+## The beat of the count-in that the player is hearing, from 1 to the song's beats per bar, or 0
+## outside the count-in.
+var count_in_beat: int:
+	get:
+		if not playing or track_position >= 0 or track_position < -_count_in_s:
+			return 0
+		return int((track_position + _count_in_s) / (60.0 / current_song.bpm)) + 1
 
 ## The [member song_position] compensated for audio latency, which is what the [member track] shows.
 var track_position: float:
@@ -74,11 +85,16 @@ func play(part: SongPart, difficulty: Difficulty.Level):
 		part_player.queue_free()
 	part_players.clear()
 	
-	player.stream = load(song.audio_path)
+	# Every stream starts with one bar: the count-in clicks on the backing track, silence on the parts.
+	# They play as one playlist each, so the song itself starts on the same sample in all of them.
+	var clicks := CountIn.make_clicks(song)
+	var silence := CountIn.make_silence(song)
+	_count_in_s = clicks.get_length()
+	player.stream = _after_count_in(clicks, load(song.audio_path))
 	for song_part: SongPart in song.parts:
 		var part_player := AudioStreamPlayer.new()
 		part_player.playback_type = player.playback_type
-		part_player.stream = load(song_part.audio_path)
+		part_player.stream = _after_count_in(silence, load(song_part.audio_path))
 		part_player.finished.connect(_on_player_finished)
 		add_child(part_player)
 		part_players[song_part] = part_player
@@ -89,6 +105,17 @@ func play(part: SongPart, difficulty: Difficulty.Level):
 	for part_player: AudioStreamPlayer in part_players.values():
 		part_player.play()
 	AudioServer.unlock()
+
+
+## [param stream] preceded by [param count_in], with no crossfade between them.
+func _after_count_in(count_in: AudioStream, stream: AudioStream) -> AudioStreamPlaylist:
+	var playlist := AudioStreamPlaylist.new()
+	playlist.loop = false
+	playlist.fade_time = 0.0
+	playlist.stream_count = 2
+	playlist.set_list_stream(0, count_in)
+	playlist.set_list_stream(1, stream)
+	return playlist
 
 
 func _get_configuration_warnings() -> PackedStringArray:
