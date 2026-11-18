@@ -2,8 +2,8 @@
 class_name SongManager extends Node2D
 ## A node responsible for playing a song.
 ##
-## It collects the results from all players, makes sure the audio is in sync with the visuals,
-## and updates the playback and score when the players hit or miss notes.
+## It owns the [Judge] that judges the player's presses, makes sure the audio is in sync with the
+## visuals, and fades a part's audio when its player misses.
 ## TODO: This script should also handle syncing between players when implementing multiplayer
 
 ## Emitted when a [param song] has finished playing.
@@ -36,6 +36,12 @@ var current_song: Song
 
 ## The statistics of the current playthough of the [member current_song].
 var current_stats: PerformanceStats
+
+## Judges the player's presses during the [member current_song].
+var judge: Judge
+
+## Reports when the player's lanes go down and up.
+var lane_input: LaneInput
 
 ## Whether a song is currently being played
 var playing: bool:
@@ -71,10 +77,17 @@ var track_position: float:
 ## [param difficulty]. If [param is_adaptive], the difficulty then adapts to how the player does.
 func play(part: SongPart, difficulty: Difficulty.Level, is_adaptive := false):
 	var song := part.song
-	track.load_song(part, difficulty)
+	track.load_song(part)
 	
 	current_song = song
 	current_stats = PerformanceStats.new(part, difficulty, is_adaptive)
+	judge = Judge.new(current_stats, track.beats * track.beat_duration)
+	judge.note_entered.connect(track.add_note)
+	judge.note_hit.connect(_on_judge_note_hit)
+	judge.note_missed.connect(_on_judge_note_missed)
+	judge.hold_finished.connect(track.show_hold_finished)
+	judge.hold_released.connect(_on_judge_hold_released)
+	judge.wrong_note.connect(_on_judge_wrong_note)
 	_max_song_position = -INF
 	
 	# Prepare audio
@@ -128,20 +141,21 @@ func _get_configuration_warnings() -> PackedStringArray:
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
 	
-	track.note_hit.connect(_on_part_track_note_hit)
-	track.note_missed.connect(_on_part_track_note_missed)
-	track.hold_finished.connect(_on_part_track_hold_finished)
-	track.hold_released.connect(_on_part_track_hold_released)
-	track.wrong_note.connect(_on_part_track_wrong_note)
-	track.position_source = func(): return track_position
+	lane_input = LaneInput.new()
+	add_child(lane_input)
+	# Presses are timed with the live position rather than the one from the last frame.
+	lane_input.lane_pressed.connect(func(lane): if judge != null: judge.press(lane, track_position))
+	lane_input.lane_released.connect(func(lane): if judge != null: judge.release(lane, track_position))
 
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	
 	if player.playing:
+		var position := track_position
+		judge.advance(position)
 		track.visible = true
-		track.update(track_position)
+		track.update(position)
 	else:
 		track.visible = false
 
@@ -159,35 +173,24 @@ func _fade_part(part: SongPart, gain: float) -> void:
 	_part_fades[part] = fade
 
 
-func _on_part_track_note_hit(note: NoteData, offset_s: float) -> void:
-	var judgement := current_stats.record_hit(note, offset_s)
-	_fade_part(track.part, 0.0 if judgement == Scoring.Judgement.MISS else 1.0)
-	_follow_difficulty()
+func _on_judge_note_hit(note: NoteData, judgement: Scoring.Judgement) -> void:
+	track.show_hit(note)
+	_fade_part(current_stats.part, 0.0 if judgement == Scoring.Judgement.MISS else 1.0)
 
 
-func _on_part_track_note_missed(note: NoteData) -> void:
-	current_stats.record_miss(note)
-	_fade_part(track.part, 0.0)
-	_follow_difficulty()
+func _on_judge_note_missed(note: NoteData) -> void:
+	track.show_miss(note)
+	_fade_part(current_stats.part, 0.0)
 
 
-## Show the [member track] the level the player's stats are at, which changes on Auto.
-func _follow_difficulty() -> void:
-	if track.difficulty != current_stats.difficulty:
-		track.difficulty = current_stats.difficulty
+func _on_judge_hold_released(note: NoteData) -> void:
+	track.show_hold_released(note)
+	_fade_part(current_stats.part, 0.0)
 
 
-func _on_part_track_hold_finished(note: NoteData) -> void:
-	current_stats.record_hold_finished(note)
-
-
-func _on_part_track_hold_released(note: NoteData) -> void:
-	_fade_part(track.part, 0.0)
-
-
-func _on_part_track_wrong_note(beat: float, track: int) -> void:
-	current_stats.record_wrong_note(beat, track)
+func _on_judge_wrong_note(_lane: int, _time_s: float) -> void:
 	# A sound for pressing when no note is there would play here.
+	pass
 
 
 ## Called when any of the song's audio players finishes; the song ends when all of them have.
@@ -199,5 +202,5 @@ func _on_player_finished() -> void:
 		return
 	song_finished.emit(current_song)
 	current_song = null
-	track.unload()
+	judge = null
 	# TODO: Save stats

@@ -24,6 +24,8 @@ bring your guitar!
 - **Each player plays their own part.**
 - **Multiplayer:** couch co-op first. Players are separate from their input devices, and song state has one
   authoritative owner, so online play can be added without a rewrite.
+- **Players:** 1–4 in a band. One keyboard is one player; further players use gamepads. Two players may play
+  the same part in free play.
 - **Adaptive difficulty:** the difficulty can adapt during a song, adding or removing note-priority layers as
   the player's short-term accuracy rises or falls, with a margin and a cool-down so it doesn't flicker. A change
   only affects notes that haven't appeared yet. It's invisible: the player isn't told when the level changes.
@@ -49,4 +51,3 @@ The plan lives on the Critterbug GitHub project, grouped by its Release field.
 - How does the 2D note track sit over the 3D world during a performance?
 - How does free play outside a song work, and how are cues recognised in it?
 - What does the knowledge journal look like?
-- How many players: is it 1–4?
