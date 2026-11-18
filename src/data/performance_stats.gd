@@ -5,6 +5,20 @@ class_name PerformanceStats extends Resource
 ## The part that was played.
 var part: SongPart
 
+## The difficulty being played. If [member is_adaptive], it changes during the song.
+var difficulty: Difficulty.Level
+
+## Whether the [member difficulty] adapts to how well the player does, following the rules in
+## [Difficulty].
+var is_adaptive := false
+
+## The lowest and highest [member difficulty] played during the song.
+var lowest_difficulty: Difficulty.Level
+var highest_difficulty: Difficulty.Level
+
+## How many notes have been judged since the [member difficulty] last changed.
+var _judgements_since_change := 0
+
 ## Notes that the user hit.
 var hit_notes: Array[NoteData] = []
 
@@ -61,8 +75,12 @@ var recent_accuracy: float:
 		return float(hits) / recent_judgements.size()
 
 
-func _init(part: SongPart):
+func _init(part: SongPart, difficulty := Difficulty.Level.EXPERT, is_adaptive := false):
 	self.part = part
+	self.difficulty = difficulty
+	self.is_adaptive = is_adaptive
+	lowest_difficulty = difficulty
+	highest_difficulty = difficulty
 
 
 ## Record that [param note] was hit [param offset_s] seconds from its time, and return its judgement.
@@ -103,6 +121,26 @@ func _record_judgement(judgement: Scoring.Judgement) -> void:
 	recent_judgements.append(judgement)
 	if recent_judgements.size() > Scoring.RECENT_JUDGEMENTS:
 		recent_judgements.pop_front()
+	_adapt_difficulty()
+
+
+func _adapt_difficulty() -> void:
+	if not is_adaptive:
+		return
+	_judgements_since_change += 1
+	if _judgements_since_change < Difficulty.ADAPTIVE_COOLDOWN or recent_judgements.size() < Scoring.RECENT_JUDGEMENTS:
+		return
+	var level := difficulty
+	if recent_accuracy >= Difficulty.RAISE_ACCURACY:
+		level = mini(difficulty + 1, Difficulty.Level.EXPERT) as Difficulty.Level
+	elif recent_accuracy < Difficulty.LOWER_ACCURACY:
+		level = maxi(difficulty - 1, Difficulty.Level.EASY) as Difficulty.Level
+	if level == difficulty:
+		return
+	difficulty = level
+	_judgements_since_change = 0
+	lowest_difficulty = mini(lowest_difficulty, level) as Difficulty.Level
+	highest_difficulty = maxi(highest_difficulty, level) as Difficulty.Level
 
 
 func _to_string() -> String:

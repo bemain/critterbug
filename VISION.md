@@ -24,6 +24,11 @@ bring your guitar!
 - **Each player plays their own part.**
 - **Multiplayer:** couch co-op first. Players are separate from their input devices, and song state has one
   authoritative owner, so online play can be added without a rewrite.
+- **Adaptive difficulty:** the difficulty can adapt during a song, adding or removing note-priority layers as
+  the player's short-term accuracy rises or falls, with a margin and a cool-down so it doesn't flicker. A change
+  only affects notes that haven't appeared yet. It's invisible: the player isn't told when the level changes.
+  In co-op, each player adapts on their own. Story mode is adaptive and hides the score, since scores from
+  different levels aren't comparable; free play keeps a manual choice plus an "Auto" option, and shows the score.
 - **Cues:** in Story mode you can start any song you know at any time by playing its first few notes. This still
   needs exploring.
 

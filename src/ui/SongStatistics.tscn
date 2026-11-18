@@ -38,6 +38,11 @@ layout_mode = 2
 text = "Instrument"
 horizontal_alignment = 1
 
+[node name="Difficulty" type="Label" parent="VBoxContainer" unique_id=1726530148]
+layout_mode = 2
+text = "Normal"
+horizontal_alignment = 1
+
 [node name="PercentageHit" type="Label" parent="VBoxContainer" unique_id=459535989]
 layout_mode = 2
 text = "74%"

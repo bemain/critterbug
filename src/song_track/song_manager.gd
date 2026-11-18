@@ -67,13 +67,14 @@ var count_in_beat: int:
 var track_position: float:
 	get: return song_position - Songs.audio_latency_ms / 1000
 
-## Begin playing the song that [param part] belongs to, with [param part] on the [member track] at [param difficulty].
-func play(part: SongPart, difficulty: Difficulty.Level):
+## Begin playing the song that [param part] belongs to, with [param part] on the [member track] at
+## [param difficulty]. If [param is_adaptive], the difficulty then adapts to how the player does.
+func play(part: SongPart, difficulty: Difficulty.Level, is_adaptive := false):
 	var song := part.song
 	track.load_song(part, difficulty)
 	
 	current_song = song
-	current_stats = PerformanceStats.new(part)
+	current_stats = PerformanceStats.new(part, difficulty, is_adaptive)
 	_max_song_position = -INF
 	
 	# Prepare audio
@@ -161,11 +162,19 @@ func _fade_part(part: SongPart, gain: float) -> void:
 func _on_part_track_note_hit(note: NoteData, offset_s: float) -> void:
 	var judgement := current_stats.record_hit(note, offset_s)
 	_fade_part(track.part, 0.0 if judgement == Scoring.Judgement.MISS else 1.0)
+	_follow_difficulty()
 
 
 func _on_part_track_note_missed(note: NoteData) -> void:
 	current_stats.record_miss(note)
 	_fade_part(track.part, 0.0)
+	_follow_difficulty()
+
+
+## Show the [member track] the level the player's stats are at, which changes on Auto.
+func _follow_difficulty() -> void:
+	if track.difficulty != current_stats.difficulty:
+		track.difficulty = current_stats.difficulty
 
 
 func _on_part_track_hold_finished(note: NoteData) -> void:
