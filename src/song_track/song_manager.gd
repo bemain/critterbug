@@ -2,8 +2,9 @@
 class_name SongManager extends Node2D
 ## A node responsible for playing a song.
 ##
-## It plays a song for a band of [Player]s: it routes each player's presses to their [Judge], makes
-## sure the audio is in sync with the visuals, and fades a part's audio when its player misses.
+## It plays a song for a band of [Player]s: it shows each player's notes on their own [PartTrack],
+## routes each player's presses to their [Judge], makes sure the audio is in sync with the visuals,
+## and fades a part's audio while its players miss.
 ## TODO: This script should also handle syncing between players when implementing multiplayer
 
 ## Emitted when a [param song] has finished playing.
@@ -12,11 +13,16 @@ signal song_finished(song: Song)
 ## How long a part's audio takes to fade out after a miss, or back in after a hit, in seconds.
 const MUTE_FADE_S := 0.05
 
-## The track that shows the first player's notes
-@export var track: PartTrack:
-	set(value):
-		track = value
-		update_configuration_warnings()
+const _PART_TRACK: PackedScene = preload("res://src/song_track/PartTrack.tscn")
+
+## How wide a track is drawn at full size, including its hit marker, in pixels.
+const TRACK_WIDTH := 340.0
+## Where a track's origin sits: across, relative to its middle at full size; down, from the top of
+## the layout. Its top starts above the screen, so notes come in from off screen.
+const TRACK_ORIGIN := Vector2(-28, -27)
+
+## The tracks of the current song, one per player, in the order of [member players].
+var tracks: Array[PartTrack] = []
 
 ## Audio player for the [member current_song]'s backing track. The song's time follows it.
 @onready var backing_player: AudioStreamPlayer = $AudioStreamPlayer
@@ -25,7 +31,8 @@ const MUTE_FADE_S := 0.05
 ## An audio player's volume is ramped per sample within each mix step, which keeps the fades free of clicks.
 var part_players: Dictionary[SongPart, AudioStreamPlayer] = {}
 
-## The linear gain each part's audio is at or fading towards: 1 when playing, 0 when muted after a miss.
+## The linear gain each part's audio is at or fading towards: 1 when playing, 0 when muted because
+## all of its players are missing.
 var _part_gains: Dictionary[SongPart, float] = {}
 ## The running fade for each part, if any.
 var _part_fades: Dictionary[SongPart, Tween] = {}
@@ -36,6 +43,9 @@ var current_song: Song
 
 ## The players of the current or last song.
 var players: Array[Player] = []
+
+## Whether each player's last note was missed, or let go of before its end.
+var _is_missing: Dictionary[Player, bool] = {}
 
 ## The statistics of the first player's current playthough of the [member current_song].
 var current_stats: PerformanceStats:
@@ -70,30 +80,38 @@ var count_in_beat: int:
 			return 0
 		return int((track_position + _count_in_s) / (60.0 / current_song.bpm)) + 1
 
-## The [member song_position] compensated for audio latency, which is what the [member track] shows.
+## The [member song_position] compensated for audio latency, which is what the [member tracks] show.
 var track_position: float:
 	get: return song_position - Songs.audio_latency_ms / 1000
 
-## Begin playing the song that the [param players]' parts belong to. The [member track] shows the
-## first player's notes.
+## Begin playing the song that the [param players]' parts belong to.
 func play(players: Array[Player]):
 	var song := players[0].part.song
-	track.load_song(players[0].part)
-	
 	current_song = song
 	self.players = players
-	for p: Player in players:
+	_is_missing.clear()
+	_remove_tracks()
+	for i in players.size():
+		var p := players[i]
+		var track: PartTrack = _PART_TRACK.instantiate()
+		add_child(track)
+		_place(track, i, players.size())
+		track.load_song(p.part)
+		track.show_player(p, i + 1)
+		tracks.append(track)
 		p.start(track.beats * track.beat_duration)
-		p.judge.note_hit.connect(func(_note, judgement): _fade_part(p.part, 0.0 if judgement == Scoring.Judgement.MISS else 1.0))
-		p.judge.note_missed.connect(func(_note): _fade_part(p.part, 0.0))
-		p.judge.hold_released.connect(func(_note): _fade_part(p.part, 0.0))
+		p.judge.note_entered.connect(track.add_note)
+		p.judge.note_hit.connect(func(note, judgement):
+			track.show_hit(note)
+			_set_missing(p, judgement == Scoring.Judgement.MISS))
+		p.judge.note_missed.connect(func(note):
+			track.show_miss(note)
+			_set_missing(p, true))
+		p.judge.hold_finished.connect(track.show_hold_finished)
+		p.judge.hold_released.connect(func(note):
+			track.show_hold_released(note)
+			_set_missing(p, true))
 		p.judge.wrong_note.connect(_on_judge_wrong_note)
-	var judge := players[0].judge
-	judge.note_entered.connect(track.add_note)
-	judge.note_hit.connect(func(note, _judgement): track.show_hit(note))
-	judge.note_missed.connect(track.show_miss)
-	judge.hold_finished.connect(track.show_hold_finished)
-	judge.hold_released.connect(track.show_hold_released)
 	_max_song_position = -INF
 	
 	# Prepare audio
@@ -138,10 +156,19 @@ func _after_count_in(count_in: AudioStream, stream: AudioStream) -> AudioStreamP
 	return playlist
 
 
-func _get_configuration_warnings() -> PackedStringArray:
-	if track == null:
-		return ["No PartTrack has been assigned."]
-	return []
+## Place [param track] as track [param index] of [param count], side by side across the layout, and
+## shrink it if they wouldn't fit at full size.
+func _place(track: PartTrack, index: int, count: int) -> void:
+	var slot_width: float = ProjectSettings.get_setting("display/window/size/viewport_width") / float(count)
+	var scale := minf(1.0, slot_width / TRACK_WIDTH)
+	track.scale = Vector2(scale, scale)
+	track.position = Vector2(slot_width * (index + 0.5) + TRACK_ORIGIN.x * scale, TRACK_ORIGIN.y)
+
+
+func _remove_tracks() -> void:
+	for track: PartTrack in tracks:
+		track.queue_free()
+	tracks.clear()
 
 
 func _ready() -> void:
@@ -161,13 +188,17 @@ func _process(delta: float) -> void:
 	
 	if backing_player.playing:
 		var position := track_position
-		for p: Player in players:
-			p.judge.advance(position)
-		track.visible = true
-		track.update(position)
-	else:
-		track.visible = false
+		for i in players.size():
+			players[i].judge.advance(position)
+			tracks[i].update(position)
 
+
+
+## Record whether [param player] [param is_missing], and mute their part while all of its players are.
+func _set_missing(player: Player, is_missing: bool) -> void:
+	_is_missing[player] = is_missing
+	var is_part_missing := players.all(func(p: Player): return p.part != player.part or _is_missing.get(p, false))
+	_fade_part(player.part, 0.0 if is_part_missing else 1.0)
 
 
 ## Fade the audio of [param part] to [param gain] (linear, 0 to 1) over [constant MUTE_FADE_S].
@@ -203,4 +234,5 @@ func _on_player_finished() -> void:
 		return
 	song_finished.emit(current_song)
 	current_song = null
+	_remove_tracks()
 	# TODO: Save stats

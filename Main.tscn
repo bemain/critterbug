@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://dkbrj50v8x84m" path="res://main.gd" id="1_glv2v"]
 [ext_resource type="Script" uid="uid://c4lkw8dnke71s" path="res://src/ui/ui.gd" id="2_fos0i"]
 [ext_resource type="PackedScene" uid="uid://bfmmn3ld35j0y" path="res://src/song_track/SongManager.tscn" id="2_uu6xs"]
-[ext_resource type="PackedScene" uid="uid://cr1rtnsd7tpad" path="res://src/song_track/PartTrack.tscn" id="3_r0du0"]
 [ext_resource type="PackedScene" uid="uid://cdm8v1sbt8pmw" path="res://src/ui/MainMenu.tscn" id="4_lgr22"]
 [ext_resource type="PackedScene" uid="uid://g6pxma0xmhnl" path="res://src/ui/SongSelectionMenu.tscn" id="5_trn2v"]
 [ext_resource type="PackedScene" uid="uid://daqsevubmvm3i" path="res://src/ui/SongStatistics.tscn" id="6_trn2v"]
@@ -22,24 +21,6 @@ offset_bottom = 648.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_fos0i")
-
-[node name="Score" type="Label" parent="UI" unique_id=1820463157]
-visible = false
-layout_mode = 0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 216.0
-offset_bottom = 39.0
-text = "Score: 0"
-
-[node name="Combo" type="Label" parent="UI" unique_id=1376520894]
-visible = false
-layout_mode = 0
-offset_left = 16.0
-offset_top = 40.0
-offset_right = 216.0
-offset_bottom = 63.0
-text = "Combo: 0"
 
 [node name="CountIn" type="Label" parent="UI" unique_id=1093475128]
 visible = false
@@ -103,11 +84,7 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SongManager" parent="." unique_id=1343633690 node_paths=PackedStringArray("track") instance=ExtResource("2_uu6xs")]
-track = NodePath("PartTrack")
-
-[node name="PartTrack" parent="SongManager" unique_id=2093186276 instance=ExtResource("3_r0du0")]
-position = Vector2(548, -27)
+[node name="SongManager" parent="." unique_id=1343633690 instance=ExtResource("2_uu6xs")]
 
 [connection signal="freeplay_pressed" from="UI/MainMenu" to="UI" method="_on_main_menu_freeplay_pressed"]
 [connection signal="back_pressed" from="UI/SongSelectionMenu" to="UI" method="_on_song_selection_menu_back_pressed"]
