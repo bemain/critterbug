@@ -35,8 +35,21 @@ var beat_length: float:
 var beat_duration: float:
 	get: return 60.0/song.bpm
 
+## Where the label under the track goes, and how wide it is, in pixels.
+const LABEL_POSITION := Vector2(-80, 490)
+const LABEL_WIDTH := 200.0
+
 ## The most recent position in the song reported.
 var last_position: float = -INF
+
+## The player whose notes this track shows, if any.
+var player: Player
+
+## The player's number, from 1, shown with their part, score and combo.
+var player_number: int
+
+## Shows who plays this track, with their score and combo.
+var _label: Label
 
 ## The node showing each note on the track.
 var _nodes: Dictionary[NoteData, NoteNode] = {}
@@ -54,6 +67,20 @@ func _ready() -> void:
 		var line := Line2D.new()
 		line.width = 1.0
 		$Beats.add_child(line)
+	
+	_label = Label.new()
+	_label.position = LABEL_POSITION
+	_label.size = Vector2(LABEL_WIDTH, 0)
+	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	add_child(_label)
+
+
+func _process(_delta: float) -> void:
+	if player == null or player.stats == null:
+		_label.text = ""
+		return
+	var stats := player.stats
+	_label.text = "P%d  %s\nScore: %d\nCombo: %d  x%d" % [player_number, part.name.capitalize(), stats.score, stats.combo, Scoring.multiplier(stats.combo)]
 
 
 ## Reset the track to show [param part].
@@ -63,6 +90,12 @@ func load_song(part: SongPart):
 	for node: NoteNode in $Notes.get_children():
 		node.queue_free()
 	_nodes.clear()
+
+
+## Show that [param player], number [param number], plays this track.
+func show_player(player: Player, number: int) -> void:
+	self.player = player
+	player_number = number
 
 
 ## Show [param note], which has just come into play.
