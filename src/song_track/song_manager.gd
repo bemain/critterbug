@@ -47,6 +47,9 @@ var players: Array[Player] = []
 ## Whether each player's last note was missed, or let go of before its end.
 var _is_missing: Dictionary[Player, bool] = {}
 
+## How the [member players] did together in the current or last song.
+var band: BandStats
+
 ## The statistics of the first player's current playthough of the [member current_song].
 var current_stats: PerformanceStats:
 	get: return players[0].stats if not players.is_empty() else null
@@ -103,15 +106,18 @@ func play(players: Array[Player]):
 		p.judge.note_entered.connect(track.add_note)
 		p.judge.note_hit.connect(func(note, judgement):
 			track.show_hit(note)
-			_set_missing(p, judgement == Scoring.Judgement.MISS))
+			_on_player_judged(p, judgement == Scoring.Judgement.MISS))
 		p.judge.note_missed.connect(func(note):
 			track.show_miss(note)
-			_set_missing(p, true))
+			_on_player_judged(p, true))
 		p.judge.hold_finished.connect(track.show_hold_finished)
 		p.judge.hold_released.connect(func(note):
 			track.show_hold_released(note)
-			_set_missing(p, true))
+			_on_player_judged(p, true))
 		p.judge.wrong_note.connect(_on_judge_wrong_note)
+	var player_stats: Array[PerformanceStats] = []
+	player_stats.assign(players.map(func(p: Player): return p.stats))
+	band = BandStats.new(player_stats)
 	_max_song_position = -INF
 	
 	# Prepare audio
@@ -194,8 +200,14 @@ func _process(delta: float) -> void:
 
 
 
-## Record whether [param player] [param is_missing], and mute their part while all of its players are.
-func _set_missing(player: Player, is_missing: bool) -> void:
+## A note of [param player]'s was judged: hit, or missed if [param is_missing], which also counts
+## letting go of a hold early. Count it for the band, and mute the player's part while all of its
+## players are missing.
+func _on_player_judged(player: Player, is_missing: bool) -> void:
+	if is_missing:
+		band.record_miss()
+	else:
+		band.record_hit()
 	_is_missing[player] = is_missing
 	var is_part_missing := players.all(func(p: Player): return p.part != player.part or _is_missing.get(p, false))
 	_fade_part(player.part, 0.0 if is_part_missing else 1.0)

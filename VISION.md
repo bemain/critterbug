@@ -26,6 +26,10 @@ bring your guitar!
   authoritative owner, so online play can be added without a rewrite.
 - **Players:** 1–4 in a band. One keyboard is one player; further players use gamepads. Two players may play
   the same part in free play.
+- **Band results:** with two or more players, the band shares a combo that counts every note hit by any player
+  and breaks when any player misses or lets go of a hold early; wrong presses don't break it. It doesn't
+  multiply scores: each player keeps their own combo multiplier. The band total is the sum of the players'
+  scores.
 - **Adaptive difficulty:** the difficulty can adapt during a song, adding or removing note-priority layers as
   the player's short-term accuracy rises or falls, with a margin and a cool-down so it doesn't flicker. A change
   only affects notes that haven't appeared yet. It's invisible: the player isn't told when the level changes.
