@@ -2,8 +2,8 @@
 class_name SongManager extends Node2D
 ## A node responsible for playing a song.
 ##
-## It owns the [Judge] that judges the player's presses, makes sure the audio is in sync with the
-## visuals, and fades a part's audio when its player misses.
+## It plays a song for a band of [Player]s: it routes each player's presses to their [Judge], makes
+## sure the audio is in sync with the visuals, and fades a part's audio when its player misses.
 ## TODO: This script should also handle syncing between players when implementing multiplayer
 
 ## Emitted when a [param song] has finished playing.
@@ -12,17 +12,17 @@ signal song_finished(song: Song)
 ## How long a part's audio takes to fade out after a miss, or back in after a hit, in seconds.
 const MUTE_FADE_S := 0.05
 
-## The track for the part that is controlled by the local player
+## The track that shows the first player's notes
 @export var track: PartTrack:
 	set(value):
 		track = value
 		update_configuration_warnings()
 
 ## Audio player for the [member current_song]'s backing track. The song's time follows it.
-@onready var player: AudioStreamPlayer = $AudioStreamPlayer
+@onready var backing_player: AudioStreamPlayer = $AudioStreamPlayer
 
 ## One audio player per part of the [member current_song], so each part can be faded on its own.
-## A player's volume is ramped per sample within each mix step, which keeps the fades free of clicks.
+## An audio player's volume is ramped per sample within each mix step, which keeps the fades free of clicks.
 var part_players: Dictionary[SongPart, AudioStreamPlayer] = {}
 
 ## The linear gain each part's audio is at or fading towards: 1 when playing, 0 when muted after a miss.
@@ -34,13 +34,14 @@ var _part_fades: Dictionary[SongPart, Tween] = {}
 ## The song currently played, if any
 var current_song: Song
 
-## The statistics of the current playthough of the [member current_song].
-var current_stats: PerformanceStats
+## The players of the current or last song.
+var players: Array[Player] = []
 
-## Judges the player's presses during the [member current_song].
-var judge: Judge
+## The statistics of the first player's current playthough of the [member current_song].
+var current_stats: PerformanceStats:
+	get: return players[0].stats if not players.is_empty() else null
 
-## Reports when the player's lanes go down and up.
+## Reports when the players' lanes go down and up.
 var lane_input: LaneInput
 
 ## Whether a song is currently being played
@@ -51,7 +52,7 @@ var playing: bool:
 ## It never decreases within a song, although the audio clock it follows can briefly read backwards.
 var song_position: float:
 	get:
-		var audio_position := player.get_playback_position() + AudioServer.get_time_since_last_mix() - _count_in_s
+		var audio_position := backing_player.get_playback_position() + AudioServer.get_time_since_last_mix() - _count_in_s
 		_max_song_position = maxf(_max_song_position, audio_position)
 		return _max_song_position
 
@@ -73,21 +74,26 @@ var count_in_beat: int:
 var track_position: float:
 	get: return song_position - Songs.audio_latency_ms / 1000
 
-## Begin playing the song that [param part] belongs to, with [param part] on the [member track] at
-## [param difficulty]. If [param is_adaptive], the difficulty then adapts to how the player does.
-func play(part: SongPart, difficulty: Difficulty.Level, is_adaptive := false):
-	var song := part.song
-	track.load_song(part)
+## Begin playing the song that the [param players]' parts belong to. The [member track] shows the
+## first player's notes.
+func play(players: Array[Player]):
+	var song := players[0].part.song
+	track.load_song(players[0].part)
 	
 	current_song = song
-	current_stats = PerformanceStats.new(part, difficulty, is_adaptive)
-	judge = Judge.new(current_stats, track.beats * track.beat_duration)
+	self.players = players
+	for p: Player in players:
+		p.start(track.beats * track.beat_duration)
+		p.judge.note_hit.connect(func(_note, judgement): _fade_part(p.part, 0.0 if judgement == Scoring.Judgement.MISS else 1.0))
+		p.judge.note_missed.connect(func(_note): _fade_part(p.part, 0.0))
+		p.judge.hold_released.connect(func(_note): _fade_part(p.part, 0.0))
+		p.judge.wrong_note.connect(_on_judge_wrong_note)
+	var judge := players[0].judge
 	judge.note_entered.connect(track.add_note)
-	judge.note_hit.connect(_on_judge_note_hit)
-	judge.note_missed.connect(_on_judge_note_missed)
+	judge.note_hit.connect(func(note, _judgement): track.show_hit(note))
+	judge.note_missed.connect(track.show_miss)
 	judge.hold_finished.connect(track.show_hold_finished)
-	judge.hold_released.connect(_on_judge_hold_released)
-	judge.wrong_note.connect(_on_judge_wrong_note)
+	judge.hold_released.connect(track.show_hold_released)
 	_max_song_position = -INF
 	
 	# Prepare audio
@@ -104,10 +110,10 @@ func play(part: SongPart, difficulty: Difficulty.Level, is_adaptive := false):
 	var clicks := CountIn.make_clicks(song)
 	var silence := CountIn.make_silence(song)
 	_count_in_s = clicks.get_length()
-	player.stream = _after_count_in(clicks, load(song.audio_path))
+	backing_player.stream = _after_count_in(clicks, load(song.audio_path))
 	for song_part: SongPart in song.parts:
 		var part_player := AudioStreamPlayer.new()
-		part_player.playback_type = player.playback_type
+		part_player.playback_type = backing_player.playback_type
 		part_player.stream = _after_count_in(silence, load(song_part.audio_path))
 		part_player.finished.connect(_on_player_finished)
 		add_child(part_player)
@@ -115,7 +121,7 @@ func play(part: SongPart, difficulty: Difficulty.Level, is_adaptive := false):
 	
 	# Start every stream within the same mix step, so they play sample-aligned.
 	AudioServer.lock()
-	player.play()
+	backing_player.play()
 	for part_player: AudioStreamPlayer in part_players.values():
 		part_player.play()
 	AudioServer.unlock()
@@ -144,16 +150,19 @@ func _ready() -> void:
 	lane_input = LaneInput.new()
 	add_child(lane_input)
 	# Presses are timed with the live position rather than the one from the last frame.
-	lane_input.lane_pressed.connect(func(lane): if judge != null: judge.press(lane, track_position))
-	lane_input.lane_released.connect(func(lane): if judge != null: judge.release(lane, track_position))
+	lane_input.lane_pressed.connect(func(device, lane):
+		for p: Player in _players_of(device): p.judge.press(lane, track_position))
+	lane_input.lane_released.connect(func(device, lane):
+		for p: Player in _players_of(device): p.judge.release(lane, track_position))
 
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	
-	if player.playing:
+	if backing_player.playing:
 		var position := track_position
-		judge.advance(position)
+		for p: Player in players:
+			p.judge.advance(position)
 		track.visible = true
 		track.update(position)
 	else:
@@ -173,19 +182,11 @@ func _fade_part(part: SongPart, gain: float) -> void:
 	_part_fades[part] = fade
 
 
-func _on_judge_note_hit(note: NoteData, judgement: Scoring.Judgement) -> void:
-	track.show_hit(note)
-	_fade_part(current_stats.part, 0.0 if judgement == Scoring.Judgement.MISS else 1.0)
-
-
-func _on_judge_note_missed(note: NoteData) -> void:
-	track.show_miss(note)
-	_fade_part(current_stats.part, 0.0)
-
-
-func _on_judge_hold_released(note: NoteData) -> void:
-	track.show_hold_released(note)
-	_fade_part(current_stats.part, 0.0)
+## The players of the current song that play with [param device].
+func _players_of(device: int) -> Array[Player]:
+	if not playing:
+		return []
+	return players.filter(func(p: Player): return p.accepts(device))
 
 
 func _on_judge_wrong_note(_lane: int, _time_s: float) -> void:
@@ -198,9 +199,8 @@ func _on_player_finished() -> void:
 	# Players that end in the same mix step each get here; only the first of them ends the song.
 	if current_song == null:
 		return
-	if player.playing or part_players.values().any(func(p: AudioStreamPlayer): return p.playing):
+	if backing_player.playing or part_players.values().any(func(p: AudioStreamPlayer): return p.playing):
 		return
 	song_finished.emit(current_song)
 	current_song = null
-	judge = null
 	# TODO: Save stats
