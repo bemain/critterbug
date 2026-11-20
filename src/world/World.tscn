@@ -1,261 +1,423 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" uid="uid://c8b4go8b56y3n" path="res://addons/proton_scatter/src/scatter.gd" id="2_ic0uy"]
-[ext_resource type="Script" uid="uid://cd2vv4fpbr2kb" path="res://addons/proton_scatter/src/stack/modifier_stack.gd" id="3_k3n1d"]
-[ext_resource type="Script" uid="uid://c8ybjmom2sxhw" path="res://addons/proton_scatter/src/modifiers/base_modifier.gd" id="4_2o6r5"]
-[ext_resource type="Script" uid="uid://bvn6vb4jlntyh" path="res://addons/proton_scatter/src/modifiers/create_inside_random.gd" id="5_70uel"]
-[ext_resource type="Script" uid="uid://17kco1gn0u8y" path="res://addons/proton_scatter/src/modifiers/randomize_transforms.gd" id="6_hiqwa"]
-[ext_resource type="Script" uid="uid://4gifimuy56a2" path="res://addons/proton_scatter/src/modifiers/relax.gd" id="7_2u3nc"]
-[ext_resource type="Script" uid="uid://wb02hxqyhhcv" path="res://addons/proton_scatter/src/modifiers/project_on_geometry.gd" id="8_udxuc"]
-[ext_resource type="Script" uid="uid://q5087d8uw4v6" path="res://addons/proton_scatter/src/modifiers/offset_scale.gd" id="9_hiqwa"]
-[ext_resource type="Script" uid="uid://b5o5857yp7umk" path="res://addons/proton_scatter/src/scatter_item.gd" id="9_ikiii"]
-[ext_resource type="Script" uid="uid://bglbmejqp3xpx" path="res://addons/proton_scatter/src/scatter_shape.gd" id="10_cbp6q"]
-[ext_resource type="Script" uid="uid://m1xgjqb30jgd" path="res://addons/proton_scatter/src/shapes/sphere_shape.gd" id="11_26xuy"]
-[ext_resource type="PackedScene" uid="uid://b5y0crw32uw03" path="res://assets/Stylized Nature Megakit/CommonTree_1.gltf" id="14_hiqwa"]
-[ext_resource type="PackedScene" uid="uid://bfyemfud8x5ki" path="res://assets/Stylized Nature Megakit/CommonTree_5.gltf" id="15_2u3nc"]
-[ext_resource type="PackedScene" uid="uid://b4wexx70lnv4p" path="res://assets/Stylized Nature Megakit/Flower_3_Single.gltf" id="16_2u3nc"]
-[ext_resource type="PackedScene" uid="uid://carvm2lwhbalu" path="res://assets/Stylized Nature Megakit/Pebble_Round_5.gltf" id="17_cbp6q"]
-[ext_resource type="PackedScene" uid="uid://coc4uvuha7vre" path="res://assets/Stylized Nature Megakit/RockPath_Round_Small_1.gltf" id="18_26xuy"]
-[ext_resource type="PackedScene" uid="uid://db6dex6vb5vyb" path="res://assets/Stylized Nature Megakit/RockPath_Round_Small_2.gltf" id="19_bc84e"]
-[ext_resource type="PackedScene" uid="uid://cu4pnvl0bebke" path="res://assets/Stylized Nature Megakit/Rock_Medium_3.gltf" id="19_cbp6q"]
-[ext_resource type="PackedScene" uid="uid://7ecjh8kcrgpg" path="res://assets/Stylized Nature Megakit/Pine_2.gltf" id="20_pine"]
-[ext_resource type="PackedScene" uid="uid://dqpew3lnl6jkq" path="res://assets/Stylized Nature Megakit/CommonTree_3.gltf" id="21_tree"]
-[ext_resource type="PackedScene" uid="uid://c1d2h2hojp4en" path="res://assets/Stylized Nature Megakit/Bush_Common_Flowers.gltf" id="22_bush"]
-[ext_resource type="PackedScene" uid="uid://buld8oytqwydr" path="res://assets/Stylized Nature Megakit/Rock_Medium_1.gltf" id="23_rock"]
-[ext_resource type="PackedScene" uid="uid://b38yu63sr8x3m" path="res://assets/Stylized Nature Megakit/Mushroom_Common.gltf" id="24_mush"]
-[ext_resource type="PackedScene" uid="uid://ca3q8liaif6n8" path="res://assets/Stylized Nature Megakit/Fern_1.gltf" id="25_fern"]
-[ext_resource type="PackedScene" uid="uid://bmd7k8m2arpq1" path="res://assets/Stylized Nature Megakit/Flower_4_Group.gltf" id="26_flow"]
-[ext_resource type="PackedScene" uid="uid://cbl87tg3qskhk" path="res://assets/Stylized Nature Megakit/Plant_1_Big.gltf" id="27_plant"]
+[ext_resource type="Script" uid="uid://c8b4go8b56y3n" path="res://addons/proton_scatter/src/scatter.gd" id="1_r"]
+[ext_resource type="Script" uid="uid://cd2vv4fpbr2kb" path="res://addons/proton_scatter/src/stack/modifier_stack.gd" id="2_r"]
+[ext_resource type="Script" uid="uid://c8ybjmom2sxhw" path="res://addons/proton_scatter/src/modifiers/base_modifier.gd" id="3_r"]
+[ext_resource type="Script" uid="uid://bvn6vb4jlntyh" path="res://addons/proton_scatter/src/modifiers/create_inside_random.gd" id="4_r"]
+[ext_resource type="Script" uid="uid://17kco1gn0u8y" path="res://addons/proton_scatter/src/modifiers/randomize_transforms.gd" id="5_r"]
+[ext_resource type="Script" uid="uid://4gifimuy56a2" path="res://addons/proton_scatter/src/modifiers/relax.gd" id="6_r"]
+[ext_resource type="Script" uid="uid://wb02hxqyhhcv" path="res://addons/proton_scatter/src/modifiers/project_on_geometry.gd" id="7_r"]
+[ext_resource type="Script" uid="uid://q5087d8uw4v6" path="res://addons/proton_scatter/src/modifiers/offset_scale.gd" id="8_r"]
+[ext_resource type="Script" uid="uid://b5o5857yp7umk" path="res://addons/proton_scatter/src/scatter_item.gd" id="9_r"]
+[ext_resource type="Script" uid="uid://bglbmejqp3xpx" path="res://addons/proton_scatter/src/scatter_shape.gd" id="10_r"]
+[ext_resource type="Script" uid="uid://m1xgjqb30jgd" path="res://addons/proton_scatter/src/shapes/sphere_shape.gd" id="11_r"]
+[ext_resource type="PackedScene" uid="uid://b4wexx70lnv4p" path="res://assets/Stylized Nature Megakit/Flower_3_Single.gltf" id="12_r"]
+[ext_resource type="PackedScene" uid="uid://c7heqt3jtci51" path="res://assets/Stylized Nature Megakit/Flower_4_Single.gltf" id="13_r"]
+[ext_resource type="PackedScene" uid="uid://carvm2lwhbalu" path="res://assets/Stylized Nature Megakit/Pebble_Round_5.gltf" id="14_r"]
+[ext_resource type="PackedScene" uid="uid://rkjvhrm4ns6o" path="res://assets/Stylized Nature Megakit/Pebble_Square_4.gltf" id="15_r"]
+[ext_resource type="PackedScene" uid="uid://3ao08rh2ef6y" path="res://assets/Stylized Nature Megakit/Pebble_Round_2.gltf" id="16_r"]
+[ext_resource type="PackedScene" uid="uid://b38yu63sr8x3m" path="res://assets/Stylized Nature Megakit/Mushroom_Common.gltf" id="17_r"]
+[ext_resource type="PackedScene" uid="uid://ca3q8liaif6n8" path="res://assets/Stylized Nature Megakit/Fern_1.gltf" id="18_r"]
+[ext_resource type="PackedScene" uid="uid://ejkf5nh3fmsv" path="res://assets/Stylized Nature Megakit/Clover_1.gltf" id="19_r"]
+[ext_resource type="PackedScene" uid="uid://coc4uvuha7vre" path="res://assets/Stylized Nature Megakit/RockPath_Round_Small_1.gltf" id="20_r"]
+[ext_resource type="PackedScene" uid="uid://db6dex6vb5vyb" path="res://assets/Stylized Nature Megakit/RockPath_Round_Small_2.gltf" id="21_r"]
+[ext_resource type="PackedScene" uid="uid://bfwdv88ydxnqw" path="res://assets/Stylized Nature Megakit/RockPath_Round_Small_3.gltf" id="22_r"]
+[ext_resource type="PackedScene" uid="uid://cu4pnvl0bebke" path="res://assets/Stylized Nature Megakit/Rock_Medium_3.gltf" id="23_r"]
+[ext_resource type="PackedScene" uid="uid://b5y0crw32uw03" path="res://assets/Stylized Nature Megakit/CommonTree_1.gltf" id="24_r"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cbp6q"]
+[sub_resource type="ProceduralSkyMaterial" id="Sky_material"]
 ground_bottom_color = Color(0.11, 0.16, 0.03, 1)
 ground_horizon_color = Color(0.36, 0.42, 0.3, 1)
 
-[sub_resource type="Sky" id="Sky_2u3nc"]
-sky_material = SubResource("ProceduralSkyMaterial_cbp6q")
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("Sky_material")
 
-[sub_resource type="Environment" id="Environment_hiqwa"]
+[sub_resource type="Environment" id="Environment"]
 background_mode = 2
-sky = SubResource("Sky_2u3nc")
+sky = SubResource("Sky")
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.0
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_036b0"]
-size = Vector2(24, 24)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dwbse"]
-albedo_color = Color(0.24705882, 0.3764706, 0, 1)
-metallic_specular = 0.2
-
-[sub_resource type="Resource" id="Resource_cbp6q"]
-script = ExtResource("5_70uel")
-amount = 2400
-restrict_height = true
-reference_frame = 1
-
-[sub_resource type="Resource" id="Resource_26xuy"]
-script = ExtResource("6_hiqwa")
-position = Vector3(0.15, 0, 0.15)
-rotation = Vector3(10, 360, 10)
-scale = Vector3(0.1, 0.1, 0.1)
-reference_frame = 2
-
-[sub_resource type="Resource" id="Resource_4h6ng"]
-script = ExtResource("7_2u3nc")
-offset_step = 0.2
-consecutive_step_multiplier = 0.75
-restrict_height = true
-
-[sub_resource type="Resource" id="Resource_o3ebs"]
-script = ExtResource("8_udxuc")
-ray_length = 5.0
-ray_offset = 5.0
-remove_points_on_miss = false
-
-[sub_resource type="Resource" id="Resource_k83mh"]
-script = ExtResource("9_hiqwa")
-scale = Vector3(0.3, 0.3, 0.3)
-reference_frame = 2
-
-[sub_resource type="Resource" id="Resource_qktwf"]
-script = ExtResource("3_k3n1d")
-stack = Array[ExtResource("4_2o6r5")]([SubResource("Resource_cbp6q"), SubResource("Resource_26xuy"), SubResource("Resource_4h6ng"), SubResource("Resource_o3ebs"), SubResource("Resource_k83mh")])
-
-[sub_resource type="Resource" id="Resource_bh8nc"]
-script = ExtResource("11_26xuy")
-radius = 11.0
-
-[sub_resource type="Resource" id="Resource_bc84e"]
-script = ExtResource("5_70uel")
-amount = 300
-restrict_height = true
-reference_frame = 1
-
-[sub_resource type="Resource" id="Resource_wukud"]
-script = ExtResource("6_hiqwa")
-position = Vector3(0.15, 0, 0.15)
-rotation = Vector3(10, 360, 10)
-scale = Vector3(0.1, 0.1, 0.1)
-reference_frame = 2
-
-[sub_resource type="Resource" id="Resource_il2jm"]
-script = ExtResource("7_2u3nc")
-offset_step = 0.2
-consecutive_step_multiplier = 0.75
-restrict_height = true
-
-[sub_resource type="Resource" id="Resource_wjb0r"]
-script = ExtResource("8_udxuc")
-ray_length = 5.0
-ray_offset = 5.0
-remove_points_on_miss = false
-
-[sub_resource type="Resource" id="Resource_mc2jv"]
-script = ExtResource("3_k3n1d")
-stack = Array[ExtResource("4_2o6r5")]([SubResource("Resource_bc84e"), SubResource("Resource_wukud"), SubResource("Resource_il2jm"), SubResource("Resource_wjb0r")])
-
-[sub_resource type="Resource" id="Resource_bo7i5"]
-script = ExtResource("11_26xuy")
-radius = 11.0
-metadata/_custom_type_script = "uid://m1xgjqb30jgd"
-
-[sub_resource type="Resource" id="Resource_clearing"]
-script = ExtResource("11_26xuy")
-radius = 4.5
-
-[sub_resource type="FogMaterial" id="FogMaterial_hiqwa"]
-density = 0.06
+[sub_resource type="FogMaterial" id="Fog"]
+density = 0.02
 edge_fade = 0.4
 emission = Color(0.3328807, 0.33288068, 0.33288068, 1)
 
+[sub_resource type="PlaneMesh" id="Ground_mesh"]
+size = Vector2(12, 12)
+
+[sub_resource type="StandardMaterial3D" id="Ground_material"]
+albedo_color = Color(0.24705882, 0.3764706, 0, 1)
+metallic_specular = 0.2
+
+[sub_resource type="Resource" id="TallGrass_inside"]
+script = ExtResource("4_r")
+amount = 220
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="TallGrass_rand"]
+script = ExtResource("5_r")
+position = Vector3(0.15, 0, 0.15)
+rotation = Vector3(10, 360, 10)
+scale = Vector3(0.15, 0.15, 0.15)
+reference_frame = 2
+
+[sub_resource type="Resource" id="TallGrass_relax"]
+script = ExtResource("6_r")
+offset_step = 0.2
+consecutive_step_multiplier = 0.75
+restrict_height = true
+
+[sub_resource type="Resource" id="TallGrass_project"]
+script = ExtResource("7_r")
+ray_length = 5.0
+ray_offset = 5.0
+remove_points_on_miss = false
+
+[sub_resource type="Resource" id="TallGrass_stack"]
+script = ExtResource("2_r")
+stack = Array[ExtResource("3_r")]([SubResource("TallGrass_inside"), SubResource("TallGrass_rand"), SubResource("TallGrass_relax"), SubResource("TallGrass_project")])
+
+[sub_resource type="Resource" id="TallGrass_shape0"]
+script = ExtResource("11_r")
+radius = 6.0
+
+[sub_resource type="Resource" id="TallGrass_shape1"]
+script = ExtResource("11_r")
+radius = 2.6
+
+[sub_resource type="Resource" id="LowGrass_inside"]
+script = ExtResource("4_r")
+amount = 900
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="LowGrass_rand"]
+script = ExtResource("5_r")
+position = Vector3(0.15, 0, 0.15)
+rotation = Vector3(10, 360, 10)
+scale = Vector3(0.1, 0.1, 0.1)
+reference_frame = 2
+
+[sub_resource type="Resource" id="LowGrass_relax"]
+script = ExtResource("6_r")
+offset_step = 0.2
+consecutive_step_multiplier = 0.75
+restrict_height = true
+
+[sub_resource type="Resource" id="LowGrass_project"]
+script = ExtResource("7_r")
+ray_length = 5.0
+ray_offset = 5.0
+remove_points_on_miss = false
+
+[sub_resource type="Resource" id="LowGrass_scale"]
+script = ExtResource("8_r")
+scale = Vector3(0.3, 0.3, 0.3)
+reference_frame = 2
+
+[sub_resource type="Resource" id="LowGrass_stack"]
+script = ExtResource("2_r")
+stack = Array[ExtResource("3_r")]([SubResource("LowGrass_inside"), SubResource("LowGrass_rand"), SubResource("LowGrass_relax"), SubResource("LowGrass_project"), SubResource("LowGrass_scale")])
+
+[sub_resource type="Resource" id="LowGrass_shape0"]
+script = ExtResource("11_r")
+radius = 6.0
+
+[sub_resource type="Resource" id="LowGrass_shape1"]
+script = ExtResource("11_r")
+radius = 2.0
+
+[sub_resource type="Resource" id="Tufts_inside"]
+script = ExtResource("4_r")
+amount = 45
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="Tufts_rand"]
+script = ExtResource("5_r")
+position = Vector3(0.15, 0, 0.15)
+rotation = Vector3(10, 360, 10)
+scale = Vector3(0.05, 0.05, 0.05)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Tufts_project"]
+script = ExtResource("7_r")
+ray_length = 5.0
+ray_offset = 5.0
+remove_points_on_miss = false
+
+[sub_resource type="Resource" id="Tufts_scale"]
+script = ExtResource("8_r")
+scale = Vector3(0.2, 0.2, 0.2)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Tufts_stack"]
+script = ExtResource("2_r")
+stack = Array[ExtResource("3_r")]([SubResource("Tufts_inside"), SubResource("Tufts_rand"), SubResource("Tufts_project"), SubResource("Tufts_scale")])
+
+[sub_resource type="Resource" id="Tufts_shape0"]
+script = ExtResource("11_r")
+radius = 2.0
+
+[sub_resource type="Resource" id="GroundCover_inside"]
+script = ExtResource("4_r")
+amount = 10
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="GroundCover_rand"]
+script = ExtResource("5_r")
+position = Vector3(0.15, 0, 0.15)
+rotation = Vector3(10, 360, 10)
+scale = Vector3(0.1, 0.1, 0.1)
+reference_frame = 2
+
+[sub_resource type="Resource" id="GroundCover_project"]
+script = ExtResource("7_r")
+ray_length = 5.0
+ray_offset = 5.0
+remove_points_on_miss = false
+
+[sub_resource type="Resource" id="GroundCover_scale"]
+script = ExtResource("8_r")
+scale = Vector3(0.4, 0.4, 0.4)
+reference_frame = 2
+
+[sub_resource type="Resource" id="GroundCover_stack"]
+script = ExtResource("2_r")
+stack = Array[ExtResource("3_r")]([SubResource("GroundCover_inside"), SubResource("GroundCover_rand"), SubResource("GroundCover_project"), SubResource("GroundCover_scale")])
+
+[sub_resource type="Resource" id="GroundCover_shape0"]
+script = ExtResource("11_r")
+radius = 2.4
+
+[sub_resource type="Resource" id="Gravel_inside"]
+script = ExtResource("4_r")
+amount = 40
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="Gravel_rand"]
+script = ExtResource("5_r")
+position = Vector3(0.15, 0, 0.15)
+rotation = Vector3(10, 360, 10)
+scale = Vector3(0.1, 0.1, 0.1)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Gravel_project"]
+script = ExtResource("7_r")
+ray_length = 5.0
+ray_offset = 5.0
+remove_points_on_miss = false
+
+[sub_resource type="Resource" id="Gravel_scale"]
+script = ExtResource("8_r")
+scale = Vector3(0.35, 0.35, 0.35)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Gravel_stack"]
+script = ExtResource("2_r")
+stack = Array[ExtResource("3_r")]([SubResource("Gravel_inside"), SubResource("Gravel_rand"), SubResource("Gravel_project"), SubResource("Gravel_scale")])
+
+[sub_resource type="Resource" id="Gravel_shape0"]
+script = ExtResource("11_r")
+radius = 2.5
+
 [node name="World" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_hiqwa")
+[node name="WorldEnvironment" parent="." type="WorldEnvironment"]
+environment = SubResource("Environment")
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
+[node name="Sun" parent="." type="DirectionalLight3D"]
 transform = Transform3D(0.7952123, -0.080398284, -0.600977, -0.045415293, 0.98048776, -0.19126247, 0.6046278, 0.17938778, 0.77604467, 0, 0, 0)
 shadow_enabled = true
+directional_shadow_max_distance = 200.0
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.27897426, 0, 0.9602986, 0, 1, 0, -0.9602986, 0, -0.27897426, 1.9151142, 0.4691676, -0.95385206)
+[node name="FogVolume" parent="." type="FogVolume"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+size = Vector3(96, 8, 96)
+material = SubResource("Fog")
+
+[node name="Camera3D" parent="." type="Camera3D"]
+transform = Transform3D(0.75926, -0.17032, 0.62811, 0, 0.96515, 0.26171, -0.65079, -0.19871, 0.73279, 6, 3.5, 8)
 current = true
 
-[node name="Ground" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_036b0")
-surface_material_override/0 = SubResource("StandardMaterial3D_dwbse")
+[node name="Nature" parent="." type="Node3D"]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
 
-[node name="LowGrass" type="Node3D" parent="."]
-script = ExtResource("2_ic0uy")
-global_seed = 2
-modifier_stack = SubResource("Resource_qktwf")
+[node name="Ground" parent="Nature" type="MeshInstance3D"]
+mesh = SubResource("Ground_mesh")
+surface_material_override/0 = SubResource("Ground_material")
+
+[node name="TallGrass" parent="Nature" type="Node3D"]
+script = ExtResource("1_r")
+global_seed = 3
+modifier_stack = SubResource("TallGrass_stack")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
-metadata/_custom_type_script = "uid://c8b4go8b56y3n"
 
-[node name="ScatterItem" type="Node3D" parent="LowGrass"]
-script = ExtResource("9_ikiii")
+[node name="Item1" parent="Nature/TallGrass" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://c3nd3wdj267u"
+
+[node name="Item2" parent="Nature/TallGrass" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 50
+path = "uid://b207buw28dtce"
+
+[node name="Shape1" parent="Nature/TallGrass" type="Node3D"]
+visible = false
+script = ExtResource("10_r")
+shape = SubResource("TallGrass_shape0")
+
+[node name="Shape2" parent="Nature/TallGrass" type="Node3D"]
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("TallGrass_shape1")
+
+[node name="LowGrass" parent="Nature" type="Node3D"]
+script = ExtResource("1_r")
+global_seed = 2
+modifier_stack = SubResource("LowGrass_stack")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
+
+[node name="Item1" parent="Nature/LowGrass" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 100
 path = "uid://bx2285c888vpk"
 
-[node name="ScatterItem2" type="Node3D" parent="LowGrass"]
-script = ExtResource("9_ikiii")
+[node name="Item2" parent="Nature/LowGrass" type="Node3D"]
+script = ExtResource("9_r")
 proportion = 50
 path = "uid://ck1gi5dnose6q"
 
-[node name="ScatterShape" type="Node3D" parent="LowGrass"]
-script = ExtResource("10_cbp6q")
-shape = SubResource("Resource_bh8nc")
+[node name="Shape1" parent="Nature/LowGrass" type="Node3D"]
+visible = false
+script = ExtResource("10_r")
+shape = SubResource("LowGrass_shape0")
 
-[node name="TallGrass" type="Node3D" parent="."]
-script = ExtResource("2_ic0uy")
-modifier_stack = SubResource("Resource_mc2jv")
+[node name="Shape2" parent="Nature/LowGrass" type="Node3D"]
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("LowGrass_shape1")
+
+[node name="Tufts" parent="Nature" type="Node3D"]
+script = ExtResource("1_r")
+global_seed = 5
+modifier_stack = SubResource("Tufts_stack")
 Performance/use_chunks = true
 Performance/chunk_dimensions = Vector3(15, 15, 15)
-metadata/_custom_type_script = "uid://c8b4go8b56y3n"
 
-[node name="ScatterItem" type="Node3D" parent="TallGrass"]
-script = ExtResource("9_ikiii")
-path = "uid://c3nd3wdj267u"
+[node name="Item1" parent="Nature/Tufts" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://bx2285c888vpk"
 
-[node name="ScatterItem2" type="Node3D" parent="TallGrass"]
-script = ExtResource("9_ikiii")
-proportion = 50
-path = "uid://b207buw28dtce"
-metadata/_custom_type_script = "uid://b5o5857yp7umk"
+[node name="Item2" parent="Nature/Tufts" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://ck1gi5dnose6q"
 
-[node name="ScatterShape" type="Node3D" parent="TallGrass"]
+[node name="Shape1" parent="Nature/Tufts" type="Node3D"]
 visible = false
-script = ExtResource("10_cbp6q")
-shape = SubResource("Resource_bo7i5")
+script = ExtResource("10_r")
+shape = SubResource("Tufts_shape0")
 
-[node name="Clearing" type="Node3D" parent="TallGrass"]
+[node name="GroundCover" parent="Nature" type="Node3D"]
+script = ExtResource("1_r")
+global_seed = 7
+modifier_stack = SubResource("GroundCover_stack")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
+
+[node name="Item1" parent="Nature/GroundCover" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 30
+path = "uid://cxmb4s0unxpkv"
+
+[node name="Item2" parent="Nature/GroundCover" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://boebrwppeuco"
+
+[node name="Item3" parent="Nature/GroundCover" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://nnghdf1sxex6"
+
+[node name="Shape1" parent="Nature/GroundCover" type="Node3D"]
 visible = false
-script = ExtResource("10_cbp6q")
-negative = true
-shape = SubResource("Resource_clearing")
+script = ExtResource("10_r")
+shape = SubResource("GroundCover_shape0")
 
-[node name="FogVolume" type="FogVolume" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-size = Vector3(24, 2, 24)
-material = SubResource("FogMaterial_hiqwa")
+[node name="Gravel" parent="Nature" type="Node3D"]
+script = ExtResource("1_r")
+global_seed = 11
+modifier_stack = SubResource("Gravel_stack")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
 
-[node name="CommonTree_12" parent="." instance=ExtResource("14_hiqwa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.21640563, 0, -1.472056)
+[node name="Item1" parent="Nature/Gravel" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://c1c2erp0mmwei"
 
-[node name="CommonTree_52" parent="." instance=ExtResource("15_2u3nc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6267414, 0, 3.0551271)
+[node name="Item2" parent="Nature/Gravel" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://lvhouplpmakr"
 
-[node name="Flower_3_Single2" parent="." instance=ExtResource("16_2u3nc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8867861, 0, 0.5097712)
+[node name="Item3" parent="Nature/Gravel" type="Node3D"]
+script = ExtResource("9_r")
+proportion = 60
+path = "uid://lttbewkc02xu"
 
-[node name="Pebble_Round_52" parent="." instance=ExtResource("17_cbp6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2184392, 0, 0.43375063)
+[node name="Shape1" parent="Nature/Gravel" type="Node3D"]
+visible = false
+script = ExtResource("10_r")
+shape = SubResource("Gravel_shape0")
 
-[node name="RockPath_Round_Small_12" parent="." instance=ExtResource("18_26xuy")]
-transform = Transform3D(0.41114852, 0, -0.91156834, 0, 1, 0, 0.91156834, 0, 0.41114852, 0.8357402, 0, -0.56337166)
+[node name="FlowerTree" parent="Nature" instance=ExtResource("12_r")]
+transform = Transform3D(0.66874, 0, -0.20686, 0, 0.7, 0, 0.20686, 0, 0.66874, 1.5, 0.0, -1.3)
 
-[node name="RockPath_Round_Small_22" parent="." instance=ExtResource("19_bc84e")]
-transform = Transform3D(0.6841526, 0, -0.7293389, 0, 1, 0, 0.7293389, 0, 0.6841526, -0.38042927, 0, 0.25844526)
+[node name="FlowerTree2" parent="Nature" instance=ExtResource("13_r")]
+transform = Transform3D(-0.17781, 0, -0.52047, 0, 0.55, 0, 0.52047, 0, -0.17781, -1.7, 0.0, -0.6)
 
-[node name="Rock_Medium_32" parent="." instance=ExtResource("19_cbp6q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4833548, 0, -1.8498366)
+[node name="Boulder" parent="Nature" instance=ExtResource("14_r")]
+transform = Transform3D(1.1053, 0, -0.4673, 0, 1.2, 0, 0.4673, 0, 1.1053, 0.8, 0.0, 0.4)
 
+[node name="Boulder2" parent="Nature" instance=ExtResource("15_r")]
+transform = Transform3D(0.4536, 0, -0.89121, 0, 1, 0, 0.89121, 0, 0.4536, -0.5, 0.0, -1.7)
 
-[node name="Pine_2" parent="." instance=ExtResource("20_pine")]
-transform = Transform3D(0.921061, 0, -0.389418, 0, 1, 0, 0.389418, 0, 0.921061, -9, 0, -7)
+[node name="Boulder3" parent="Nature" instance=ExtResource("16_r")]
+transform = Transform3D(-0.88275, 0, -1.2127, 0, 1.5, 0, 1.2127, 0, -0.88275, -1.9, 0.0, 1.2)
 
-[node name="CommonTree_3" parent="." instance=ExtResource("21_tree")]
-transform = Transform3D(0.362358, 0, -0.932039, 0, 1, 0, 0.932039, 0, 0.362358, 8, 0, -8)
+[node name="Mushroom" parent="Nature" instance=ExtResource("17_r")]
+transform = Transform3D(0.52655, 0, -0.28766, 0, 0.6, 0, 0.28766, 0, 0.52655, -0.9, 0.0, 0.9)
 
-[node name="Pine_2b" parent="." instance=ExtResource("20_pine")]
-transform = Transform3D(-0.801144, 0, -0.598472, 0, 1, 0, 0.598472, 0, -0.801144, 9.5, 0, 6)
+[node name="Fern" parent="Nature" instance=ExtResource("18_r")]
+transform = Transform3D(0.12037, 0, -0.4336, 0, 0.45, 0, 0.4336, 0, 0.12037, 2.2, 0.0, 0.8)
 
-[node name="CommonTree_3b" parent="." instance=ExtResource("21_tree")]
-transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -8.5, 0, 8)
+[node name="Clover" parent="Nature" instance=ExtResource("19_r")]
+transform = Transform3D(0.4, 0, -0, 0, 0.4, 0, 0, 0, 0.4, 0.2, 0.0, -2.4)
 
-[node name="Bush_Common_Flowers" parent="." instance=ExtResource("22_bush")]
-transform = Transform3D(0.696707, 0, -0.717356, 0, 1, 0, 0.717356, 0, 0.696707, 5, 0, -4.5)
+[node name="Stone" parent="Nature" instance=ExtResource("20_r")]
+transform = Transform3D(0.64474, 0, -0.27259, 0, 0.7, 0, 0.27259, 0, 0.64474, 0.2, 0.0, 1.9)
 
-[node name="Bush_Common_Flowers2" parent="." instance=ExtResource("22_bush")]
-transform = Transform3D(-0.416147, 0, -0.909297, 0, 1, 0, 0.909297, 0, -0.416147, -6, 0, 2)
+[node name="Stone2" parent="Nature" instance=ExtResource("21_r")]
+transform = Transform3D(0.25365, 0, -0.65243, 0, 0.7, 0, 0.65243, 0, 0.25365, 0.5, 0.0, 2.7)
 
-[node name="Rock_Medium_1" parent="." instance=ExtResource("23_rock")]
-transform = Transform3D(0.955336, 0, -0.29552, 0, 1, 0, 0.29552, 0, 0.955336, 6.5, 0, 3)
+[node name="Stone3" parent="Nature" instance=ExtResource("22_r")]
+transform = Transform3D(-0.2913, 0, -0.63651, 0, 0.7, 0, 0.63651, 0, -0.2913, 0.9, 0.0, 3.5)
 
-[node name="Mushroom_Common" parent="." instance=ExtResource("24_mush")]
-transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -3, 0, -2.2)
+[node name="Cliff" parent="Nature" instance=ExtResource("23_r")]
+transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -4.5, 0.0, -3.8)
 
-[node name="Fern_1" parent="." instance=ExtResource("25_fern")]
-transform = Transform3D(0.540302, 0, -0.841471, 0, 1, 0, 0.841471, 0, 0.540302, 4, 0, 7)
-
-[node name="Fern_2" parent="." instance=ExtResource("25_fern")]
-transform = Transform3D(-0.588501, 0, -0.808496, 0, 1, 0, 0.808496, 0, -0.588501, -7, 0, -3)
-
-[node name="Flower_4_Group" parent="." instance=ExtResource("26_flow")]
-transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, 2.5, 0, 2.8)
-
-[node name="Flower_4_Group2" parent="." instance=ExtResource("26_flow")]
-transform = Transform3D(0.0707372, 0, -0.997495, 0, 1, 0, 0.997495, 0, 0.0707372, -2, 0, -5.5)
-
-[node name="Plant_1_Big" parent="." instance=ExtResource("27_plant")]
-transform = Transform3D(0.825336, 0, -0.564642, 0, 1, 0, 0.564642, 0, 0.825336, 10, 0, -1)
+[node name="GiantTree" parent="Nature" instance=ExtResource("24_r")]
+transform = Transform3D(0.82534, 0, -0.56464, 0, 1, 0, 0.56464, 0, 0.82534, 4.5, 0.0, -6.5)
