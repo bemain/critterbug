@@ -187,6 +187,8 @@ func _on_joy_connection_changed(device: int, connected: bool) -> void:
 	if not connected and index != -1:
 		_slots[index] = null
 		_refresh()
+		# Everyone left may already be Ready.
+		_start_if_ready()
 
 
 func _refresh() -> void:
