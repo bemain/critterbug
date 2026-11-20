@@ -58,7 +58,7 @@ modifier_stack = SubResource("Resource_mv17r")
 
 [node name="Grass" type="Node3D" parent="."]
 script = ExtResource("6_11eqr")
-path = "res://addons/proton_scatter/demos/assets/grass_2.tscn"
+path = "res://assets/Stylized Nature Megakit/Grass_Common_Short.gltf"
 
 [node name="ScatterShape" type="Node3D" parent="."]
 script = ExtResource("7_vk3gk")
