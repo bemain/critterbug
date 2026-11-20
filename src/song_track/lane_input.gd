@@ -34,8 +34,14 @@ static func device_of(event: InputEvent) -> int:
 
 ## How far [param lane] is pressed on [param device], from 0 to 1, over all its bindings.
 static func strength(device: int, lane: int) -> float:
+	return action_strength(device, "play_%d" % lane)
+
+
+## How far [param action] is pressed on [param device], from 0 to 1, over all its bindings: keys for
+## the keyboard, buttons and axes for a joypad.
+static func action_strength(device: int, action: StringName) -> float:
 	var result := 0.0
-	for binding: InputEvent in InputMap.action_get_events("play_%d" % lane):
+	for binding: InputEvent in InputMap.action_get_events(action):
 		if device == KEYBOARD and binding is InputEventKey:
 			if Input.is_physical_key_pressed(binding.physical_keycode) or Input.is_key_pressed(binding.keycode):
 				result = 1.0
