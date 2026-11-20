@@ -50,7 +50,7 @@ func load_results(players: Array[Player], band: BandStats) -> void:
 	for column in _columns.get_children():
 		column.queue_free()
 	for i in players.size():
-		_columns.add_child(_player_column(i + 1, players[i].stats))
+		_columns.add_child(_player_column(players[i].number, players[i].stats))
 	_band.text = "Band total: %d\nLongest band combo: %d" % [band.total_score, band.longest_combo]
 
 

@@ -3,12 +3,12 @@ class_name Player extends RefCounted
 ## how they are doing.
 
 
-## In [member devices], stands for every device, including ones connected later.
-const ANY_DEVICE := -2
-
-## The devices this player plays with: [constant LaneInput.KEYBOARD], joypad device ids, or
-## [constant ANY_DEVICE].
+## The devices this player plays with: [constant LaneInput.KEYBOARD] or joypad device ids.
 var devices: Array[int]
+
+## The player's number, from 1: the join slot they sit in. 0 until they have one;
+## [method SongManager.play] numbers such players by their order.
+var number := 0
 
 ## The part this player plays.
 var part: SongPart
@@ -35,7 +35,7 @@ func _init(devices: Array[int], part: SongPart, difficulty: Difficulty.Level, is
 
 ## Whether presses on [param device] are this player's.
 func accepts(device: int) -> bool:
-	return ANY_DEVICE in devices or device in devices
+	return device in devices
 
 
 ## Start a new playthrough of the [member part], with notes coming into play [param lead_time_s]
