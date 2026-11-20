@@ -6,6 +6,9 @@ extends Control
 ## Shows the band combo during a song with two or more players.
 var _band_combo: Label
 
+## Where the players join and choose their parts, after the song is chosen.
+var _join_screen: JoinScreen
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -20,6 +23,11 @@ func _ready() -> void:
 	_band_combo.add_theme_font_size_override("font_size", 24)
 	_band_combo.hide()
 	add_child(_band_combo)
+	_join_screen = JoinScreen.new()
+	_join_screen.hide()
+	add_child(_join_screen)
+	_join_screen.started.connect(_on_join_screen_started)
+	_join_screen.back_pressed.connect(_on_join_screen_back_pressed)
 
 
 func _process(_delta: float) -> void:
@@ -46,14 +54,26 @@ func _on_main_menu_freeplay_pressed() -> void:
 	$SongSelectionMenu.show()
 
 
+## Leaving Free play: everyone who joined leaves too.
 func _on_song_selection_menu_back_pressed() -> void:
 	$SongSelectionMenu.hide()
+	_join_screen.clear()
 	$MainMenu.show()
 
 
-func _on_song_selection_menu_part_selected(part: SongPart, difficulty: Difficulty.Level, is_adaptive: bool) -> void:
-	$MainMenu.hide()
+func _on_song_selection_menu_song_selected(song: Song) -> void:
 	$SongSelectionMenu.hide()
+	_join_screen.open(song)
+
+
+func _on_join_screen_back_pressed() -> void:
+	_join_screen.hide()
+	$SongSelectionMenu.show()
+
+
+func _on_join_screen_started(players: Array[Player]) -> void:
+	_join_screen.hide()
+	song_manager.play(players)
 
 
 func _on_song_manager_song_finished(song: Song) -> void:
@@ -61,6 +81,7 @@ func _on_song_manager_song_finished(song: Song) -> void:
 	$SongStatistics.show()
 
 
+## Back to the join screen for the same song, so the band can play again or change parts.
 func _on_song_statistics_back_pressed() -> void:
 	$SongStatistics.hide()
-	$SongSelectionMenu.show()
+	_join_screen.open(_join_screen.song)

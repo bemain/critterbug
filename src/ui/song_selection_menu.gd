@@ -1,50 +1,26 @@
 extends Control
-## Lets the player pick a song, then the part of it they want to play.
+## Lets the players pick a song.
 
 signal back_pressed()
-signal part_selected(part: SongPart, difficulty: Difficulty.Level, is_adaptive: bool)
-
-## The difficulty dropdown's id for "Auto", which adapts during the song.
-const AUTO_ID := 100
+signal song_selected(song: Song)
 
 @onready var title_label: Label = $VBoxContainer/Label
 @onready var item_list: ItemList = $VBoxContainer/ItemList
-@onready var difficulty_row: Control = $VBoxContainer/Difficulty
-@onready var difficulty_button: OptionButton = $VBoxContainer/Difficulty/DifficultyButton
-
-## The song whose parts are listed, or null while the songs are listed.
-var selected_song: Song
 
 ## Whether the event the list is handling is the second press of a double-click.
 var _is_double_click := false
 
 
 func _ready() -> void:
-	for level_name: String in Difficulty.Level.keys():
-		difficulty_button.add_item(level_name.capitalize(), Difficulty.Level[level_name])
-	difficulty_button.add_item("Auto", AUTO_ID)
-	difficulty_button.select(difficulty_button.get_item_index(Difficulty.Level.NORMAL))
 	visibility_changed.connect(_focus_list)
 	_show_songs()
 
 
 func _show_songs() -> void:
-	selected_song = null
 	title_label.text = "Select a song"
-	difficulty_row.hide()
 	item_list.clear()
 	for song: Song in Songs.songs:
 		item_list.add_item(song.title)
-	_focus_list()
-
-
-func _show_parts(song: Song) -> void:
-	selected_song = song
-	title_label.text = "Select a part"
-	difficulty_row.show()
-	item_list.clear()
-	for part: SongPart in song.parts:
-		item_list.add_item(part.name)
 	_focus_list()
 
 
@@ -57,10 +33,7 @@ func _focus_list() -> void:
 
 
 func _on_back_button_pressed() -> void:
-	if selected_song == null:
-		back_pressed.emit()
-	else:
-		_show_songs()
+	back_pressed.emit()
 
 
 func _on_item_list_gui_input(event: InputEvent) -> void:
@@ -82,14 +55,4 @@ func _on_item_list_item_activated(index: int) -> void:
 
 
 func _choose(index: int) -> void:
-	if selected_song == null:
-		_show_parts(Songs.songs[index])
-		return
-
-	var part := selected_song.parts[index]
-	_show_songs()
-	var id := difficulty_button.get_selected_id()
-	if id == AUTO_ID:
-		part_selected.emit(part, Difficulty.ADAPTIVE_START, true)
-	else:
-		part_selected.emit(part, id as Difficulty.Level, false)
+	song_selected.emit(Songs.songs[index])
