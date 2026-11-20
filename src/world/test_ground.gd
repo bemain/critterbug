@@ -2,10 +2,11 @@ extends Node3D
 ## A plain test ground with one obstacle, for walking the band around until the real world scene
 ## exists. Run on its own, it spawns one keyboard player and one per connected gamepad.
 
-## Where the obstacle box stands, and its size, in metres.
-const OBSTACLE_POSITION := Vector3(0, 1, -6)
-const OBSTACLE_SIZE := Vector3(4, 2, 1)
-const GROUND_SIZE := Vector3(80, 1, 80)
+## Where the obstacle box stands, and its size, in units. It is taller than a character, like a
+## rock in giant grass, so it can hide one from the camera.
+const OBSTACLE_POSITION := Vector3(0, 1, -3)
+const OBSTACLE_SIZE := Vector3(2, 2, 0.5)
+const GROUND_SIZE := Vector3(40, 1, 40)
 
 var band: Band
 

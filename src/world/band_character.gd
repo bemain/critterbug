@@ -1,15 +1,33 @@
 class_name BandCharacter extends CharacterBody3D
 ## A band member walking in the world: a placeholder shape in their player's colour, moved by
-## their player's device.
+## their player's device. The band are bug-sized critters in a world of giant grass, so a
+## character is about 1 unit tall.
+##
+## Where grass or a rock hides a character from the camera, a see-through silhouette in their
+## colour is drawn over whatever is in front, so every player can find themselves.
 
 ## The colour of each player number, P1 to P4.
 const COLORS: Array[Color] = [Color("e74c3c"), Color("3498db"), Color("2ecc71"), Color("f1c40f")]
 
-## How fast a character walks, in metres per second.
-const SPEED := 4.0
+## How fast a character walks, in units per second.
+const SPEED := 2.5
 
-const HEIGHT := 1.6
-const RADIUS := 0.4
+const HEIGHT := 1.0
+const RADIUS := 0.25
+
+## How opaque the silhouette of a hidden character is.
+const SILHOUETTE_ALPHA := 0.45
+
+## Draws only the parts of a character that something else is in front of.
+const _SILHOUETTE_SHADER := """
+shader_type spatial;
+render_mode unshaded, depth_test_inverted, depth_draw_never, cull_back;
+uniform vec4 color : source_color;
+void fragment() {
+	ALBEDO = color.rgb;
+	ALPHA = color.a;
+}
+"""
 
 ## The player this character belongs to.
 var player: Player
@@ -33,8 +51,16 @@ func _init(player: Player) -> void:
 	var capsule_mesh := CapsuleMesh.new()
 	capsule_mesh.height = HEIGHT
 	capsule_mesh.radius = RADIUS
+	var color := COLORS[(player.number - 1) % COLORS.size()]
 	var material := StandardMaterial3D.new()
-	material.albedo_color = COLORS[(player.number - 1) % COLORS.size()]
+	material.albedo_color = color
+	var shader := Shader.new()
+	shader.code = _SILHOUETTE_SHADER
+	var silhouette := ShaderMaterial.new()
+	silhouette.shader = shader
+	silhouette.set_shader_parameter("color", Color(color, SILHOUETTE_ALPHA))
+	silhouette.render_priority = 1
+	material.next_pass = silhouette
 	capsule_mesh.material = material
 	mesh.mesh = capsule_mesh
 	mesh.position.y = HEIGHT / 2

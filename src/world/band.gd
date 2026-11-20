@@ -7,19 +7,22 @@ class_name Band extends Node3D
 ## would take them out of the frame is dropped, so they stop at the edge and can still walk along
 ## it or back.
 
-## The camera's pitch, looking down, in degrees.
-const CAMERA_PITCH := 50.0
-## How far the camera is from the middle of the band when everyone is together, in metres.
-const MIN_DISTANCE := 10.0
-## How far the camera pulls back at most, in metres.
-const MAX_DISTANCE := 20.0
-## How much further back the camera goes for each metre the band spreads out.
+## The camera's pitch, looking down, in degrees. It is low, so the giant grass reads as a forest.
+const CAMERA_PITCH := 35.0
+## How far the camera is from the middle of the band when everyone is together, in units.
+const MIN_DISTANCE := 5.0
+## How far the camera pulls back at most, in units.
+const MAX_DISTANCE := 10.0
+## How much further back the camera goes for each unit the band spreads out.
 const DISTANCE_PER_SPREAD := 1.2
-## How far any player may be from the middle of the band, across (x) and in depth (z), in metres.
+## How far any player may be from the middle of the band, across (x) and in depth (z), in units.
 ## With the camera at [constant MAX_DISTANCE] this keeps everyone inside the frame.
-const MAX_SPREAD := Vector2(8.5, 5.0)
+const MAX_SPREAD := Vector2(4.5, 2.5)
 ## How quickly the camera follows the band, per second.
 const CAMERA_FOLLOW := 5.0
+
+## How far apart the characters stand when they appear, in units.
+const SPAWN_SPACING := 0.8
 
 var characters: Array[BandCharacter] = []
 var camera: Camera3D
@@ -38,7 +41,7 @@ func spawn(players: Array[Player], at := Vector3.ZERO) -> void:
 	characters.clear()
 	for i in players.size():
 		var character := BandCharacter.new(players[i])
-		character.position = at + Vector3((i - (players.size() - 1) / 2.0) * 1.5, 0, 0)
+		character.position = at + Vector3((i - (players.size() - 1) / 2.0) * SPAWN_SPACING, 0, 0)
 		add_child(character)
 		characters.append(character)
 	_frame(1.0)
