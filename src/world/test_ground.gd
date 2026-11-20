@@ -28,13 +28,7 @@ func _ready() -> void:
 	band = Band.new()
 	add_child(band)
 	if get_tree().current_scene == self:
-		var players: Array[Player] = [Player.new([LaneInput.KEYBOARD], null, Difficulty.Level.NORMAL)]
-		for pad in Input.get_connected_joypads():
-			if players.size() < 4:
-				players.append(Player.new([pad], null, Difficulty.Level.NORMAL))
-		for i in players.size():
-			players[i].number = i + 1
-		band.spawn(players)
+		band.spawn(Band.local_players())
 
 
 func _box(box_name: String, at: Vector3, size: Vector3, color: Color) -> StaticBody3D:

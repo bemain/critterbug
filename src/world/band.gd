@@ -32,6 +32,19 @@ func _ready() -> void:
 	camera = Camera3D.new()
 	camera.rotation_degrees.x = -CAMERA_PITCH
 	add_child(camera)
+	camera.make_current()
+
+
+## A player for the keyboard and for each connected gamepad, up to four, for running a world scene
+## on its own before the join screen leads into it.
+static func local_players() -> Array[Player]:
+	var players: Array[Player] = [Player.new([LaneInput.KEYBOARD], null, Difficulty.Level.NORMAL)]
+	for pad in Input.get_connected_joypads():
+		if players.size() < 4:
+			players.append(Player.new([pad], null, Difficulty.Level.NORMAL))
+	for i in players.size():
+		players[i].number = i + 1
+	return players
 
 
 ## Put a character for each of [param players] in a row around [param at], and point the camera at them.
