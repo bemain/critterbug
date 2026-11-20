@@ -100,7 +100,9 @@ func play(players: Array[Player]):
 		add_child(track)
 		_place(track, i, players.size())
 		track.load_song(p.part)
-		track.show_player(p, i + 1)
+		if p.number == 0:
+			p.number = i + 1
+		track.show_player(p, p.number)
 		tracks.append(track)
 		p.start(track.beats * track.beat_duration)
 		p.judge.note_entered.connect(track.add_note)

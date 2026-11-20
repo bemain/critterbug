@@ -7,7 +7,8 @@ class_name JoinScreen extends Control
 ## Cancel on a device that hasn't joined goes back to the song list; the players stay joined.
 ## The song starts as soon as everyone who joined is Ready.
 
-## Emitted when everyone who joined is Ready, with a player for each of them in slot order.
+## Emitted when everyone who joined is Ready, with a player for each of them in slot order, numbered
+## by their slot.
 signal started(players: Array[Player])
 
 ## Emitted when a device that hasn't joined presses cancel.
@@ -42,6 +43,10 @@ var song: Song
 ## The slot at each position, or null where no one has joined.
 var _slots: Array = []
 
+## Pads that disconnected while the screen was hidden, such as during a song. Their slots are
+## removed when the screen opens again, unless they reconnect first.
+var _disconnected: Dictionary[int, bool] = {}
+
 var _title: Label
 var _slot_labels: Array[Label] = []
 
@@ -75,6 +80,11 @@ func _ready() -> void:
 ## Show the screen for [param song], with everyone who already joined not Ready.
 func open(song: Song) -> void:
 	self.song = song
+	for device: int in _disconnected:
+		var index := _slot_of(device)
+		if index != -1:
+			_slots[index] = null
+	_disconnected.clear()
 	for slot in _slots:
 		if slot != null:
 			slot.is_ready = false
@@ -86,6 +96,7 @@ func open(song: Song) -> void:
 ## Remove everyone who joined.
 func clear() -> void:
 	_slots.fill(null)
+	_disconnected.clear()
 	_refresh()
 
 
@@ -102,6 +113,7 @@ func _input(event: InputEvent) -> void:
 			back_pressed.emit()
 		elif event.is_action("ui_accept") or _is_lane(event):
 			_join(device)
+			_refresh()
 		return
 	var slot: Slot = _slots[index]
 	if event.is_action("ui_cancel"):
@@ -154,18 +166,25 @@ func _start_if_ready() -> void:
 		var level = DIFFICULTIES[slot.difficulty_index]
 		var is_adaptive: bool = level == null
 		var difficulty: Difficulty.Level = Difficulty.ADAPTIVE_START if is_adaptive else level
-		players.append(Player.new([slot.device], song.parts[slot.part_index], difficulty, is_adaptive))
+		var player := Player.new([slot.device], song.parts[slot.part_index], difficulty, is_adaptive)
+		player.number = _slots.find(slot) + 1
+		players.append(player)
 		slot.is_ready = false
 	_refresh()
 	started.emit(players)
 
 
 func _on_joy_connection_changed(device: int, connected: bool) -> void:
-	# A pad that goes away mid-song keeps its player, whose notes then miss until it comes back.
-	if connected or not is_visible_in_tree():
+	if not is_visible_in_tree():
+		# A pad that goes away mid-song keeps its player, whose notes then miss until it comes back.
+		# If it is still gone when the screen opens again, its slot is removed then.
+		if connected:
+			_disconnected.erase(device)
+		else:
+			_disconnected[device] = true
 		return
 	var index := _slot_of(device)
-	if index != -1:
+	if not connected and index != -1:
 		_slots[index] = null
 		_refresh()
 

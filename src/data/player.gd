@@ -6,6 +6,10 @@ class_name Player extends RefCounted
 ## The devices this player plays with: [constant LaneInput.KEYBOARD] or joypad device ids.
 var devices: Array[int]
 
+## The player's number, from 1: the join slot they sit in. 0 until they have one;
+## [method SongManager.play] numbers such players by their order.
+var number := 0
+
 ## The part this player plays.
 var part: SongPart
 
