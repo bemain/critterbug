@@ -15,6 +15,12 @@ The MegaKit excludes five textures that no model uses (`Leaf_Pine.png`, `Leaves_
 `demos/` and `tests/` folders and the unused Godot 3 preset dialogs in `src/stack/inspector_plugin/ui/presets/`. Its
 two presets point at Megakit models instead of the removed demo assets.
 
+## Made in-house
+
+| Asset | Path | How | Added |
+|---|---|---|---|
+| Placeholder snail critter | `assets/critters/snail/snail.glb`, scene `src/world/critters/Snail.tscn` | Built by `assets/critters/snail/build_snail.py` in Blender 5.3. No AI-generated parts. | 2026-11-23 |
+
 ## AI-generated
 
 | File | Model | Date | Notes |

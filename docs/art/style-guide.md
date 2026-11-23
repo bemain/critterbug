@@ -103,6 +103,13 @@ Not designed yet. Player placeholders are simple shapes in P1–P4 colours (rele
 troubadours are designed, they follow the shapes and palette above, and each gets one accent colour that reads
 against the greens.
 
+- Critters live in `src/world/critters/`, one scene per critter, with a `StaticBody3D` root, the model as `Model`
+  and a collision shape. Models come from Blender scripts kept next to the exported `.glb` in
+  `assets/critters/<name>/`, so they can be rebuilt.
+- A critter faces +Z in Godot (Blender -Y), so its face shows when it isn't rotated.
+- The placeholder snail is 1.74 units tall, so it stands taller than a band member without dwarfing the clearing.
+  Its orange shell is its accent colour.
+
 ## Asset records
 
 Every third-party or AI-generated asset is listed in [`../assets.md`](../assets.md) with its source, licence or model,

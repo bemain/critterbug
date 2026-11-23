@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/critters/snail/snail.glb" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="Body"]
+size = Vector3(1.2, 1.5, 2.5)
+
+[node name="Snail" type="StaticBody3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0.15)
+shape = SubResource("Body")
