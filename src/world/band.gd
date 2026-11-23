@@ -65,6 +65,15 @@ func spawn(players: Array[Player], at := Vector3.ZERO) -> void:
 	_frame(1.0)
 
 
+## Put the characters in a row around [param at], standing still, and point the camera at them.
+func move_to(at: Vector3) -> void:
+	for i in characters.size():
+		var character := characters[i]
+		character.global_position = at + Vector3((i - (characters.size() - 1) / 2.0) * SPAWN_SPACING, 0, 0)
+		character.velocity = Vector3.ZERO
+	_frame(1.0)
+
+
 ## The middle of the band on the ground: the middle of the box around everyone.
 func centre() -> Vector3:
 	var box := _box(characters)

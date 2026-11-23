@@ -1,0 +1,93 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/world/area_exit.gd" id="exit_r"]
+[ext_resource type="PackedScene" path="res://assets/Stylized Nature Megakit/Rock_Medium_3.gltf" id="rock_r"]
+[ext_resource type="PackedScene" path="res://assets/Stylized Nature Megakit/Mushroom_Common.gltf" id="mushroom_r"]
+[ext_resource type="PackedScene" path="res://assets/Stylized Nature Megakit/Fern_1.gltf" id="fern_r"]
+[ext_resource type="PackedScene" path="res://assets/Stylized Nature Megakit/Clover_1.gltf" id="clover_r"]
+
+[sub_resource type="ProceduralSkyMaterial" id="Sky_material"]
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("Sky_material")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+tonemap_mode = 2
+
+[sub_resource type="PlaneMesh" id="Ground_mesh"]
+size = Vector2(24, 24)
+
+[sub_resource type="StandardMaterial3D" id="Ground_material"]
+albedo_color = Color(0.3, 0.42, 0.12, 1)
+
+[sub_resource type="BoxShape3D" id="Ground_shape"]
+size = Vector3(24, 0.2, 24)
+
+[sub_resource type="BoxShape3D" id="Edge_x_shape"]
+size = Vector3(0.4, 4, 24)
+
+[sub_resource type="BoxShape3D" id="Edge_z_shape"]
+size = Vector3(24, 4, 0.4)
+
+[node name="Hollow" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 10, 0)
+shadow_enabled = true
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("Ground_mesh")
+surface_material_override/0 = SubResource("Ground_material")
+
+[node name="Body" type="StaticBody3D" parent="Ground"]
+
+[node name="Shape" type="CollisionShape3D" parent="Ground/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("Ground_shape")
+
+[node name="EdgeWest" type="CollisionShape3D" parent="Ground/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2, 0)
+shape = SubResource("Edge_x_shape")
+
+[node name="EdgeEast" type="CollisionShape3D" parent="Ground/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2, 0)
+shape = SubResource("Edge_x_shape")
+
+[node name="EdgeNorth" type="CollisionShape3D" parent="Ground/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -12)
+shape = SubResource("Edge_z_shape")
+
+[node name="EdgeSouth" type="CollisionShape3D" parent="Ground/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 12)
+shape = SubResource("Edge_z_shape")
+
+[node name="Props" type="Node3D" parent="."]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
+
+[node name="Rock" parent="Props" instance=ExtResource("rock_r")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -1, 0, 0.7)
+
+[node name="Mushroom" parent="Props" instance=ExtResource("mushroom_r")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0.9, 0, -0.2)
+
+[node name="Fern" parent="Props" instance=ExtResource("fern_r")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 1, 0, 0.8)
+
+[node name="Clover" parent="Props" instance=ExtResource("clover_r")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -0.8, 0, -0.6)
+
+[node name="NorthExit" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.65)
+script = ExtResource("exit_r")
+to_area = "res://src/world/World.tscn"
+to_entrance = &"FromHollow"
+size = Vector3(6, 2, 4.3)
+
+[node name="FromClearing" type="Marker3D" parent="." groups=["area_entrances"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)
