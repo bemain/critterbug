@@ -83,11 +83,11 @@ transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 1, 0, 0.8)
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -0.8, 0, -0.6)
 
 [node name="NorthExit" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.65)
 script = ExtResource("exit_r")
 to_area = "res://src/world/World.tscn"
 to_entrance = &"FromHollow"
-size = Vector3(6, 2, 4)
+size = Vector3(6, 2, 4.3)
 
 [node name="FromClearing" type="Marker3D" parent="." groups=["area_entrances"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.5)

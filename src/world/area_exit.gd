@@ -9,7 +9,8 @@ class_name AreaExit extends Area3D
 @export_file("*.tscn") var to_area: String
 ## The name of the entrance in that area where the band arrives.
 @export var to_entrance: StringName
-## The size of the exit, in units: across, up and in depth.
+## The size of the exit, in units: across, up and in depth. It should reach the edge wall behind
+## it, so a player who walks until the wall stops them is still inside it.
 @export var size := Vector3(8, 2, 4)
 
 ## The glow's opacity with nobody in the exit, and with everyone in it.
