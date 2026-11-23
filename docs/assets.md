@@ -12,7 +12,8 @@ third-party assets must allow use in a commercial game.
 
 The MegaKit excludes five textures that no model uses (`Leaf_Pine.png`, `Leaves_GiantPine_C.png`,
 `Leaves_NormalTree.png`, `Leaves_TwistedTree.png` and `Rocks_Desert_Diffuse.png`). ProtonScatter excludes its
-`demos/` folder.
+`demos/` and `tests/` folders and the unused Godot 3 preset dialogs in `src/stack/inspector_plugin/ui/presets/`. Its
+two presets point at Megakit models instead of the removed demo assets.
 
 ## AI-generated
 

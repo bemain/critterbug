@@ -70,7 +70,7 @@ modifier_stack = SubResource("Resource_xqhqc")
 
 [node name="ScatterItem" type="Node3D" parent="."]
 script = ExtResource("6_3iwkw")
-path = "res://addons/proton_scatter/demos/assets/brick.tscn"
+path = "res://assets/Stylized Nature Megakit/Pebble_Round_1.gltf"
 
 [node name="ScatterShape" type="Node3D" parent="."]
 transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0)
