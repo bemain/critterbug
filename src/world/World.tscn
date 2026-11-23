@@ -238,6 +238,33 @@ stack = Array[ExtResource("3_r")]([SubResource("Gravel_inside"), SubResource("Gr
 script = ExtResource("11_r")
 radius = 2.5
 
+[sub_resource type="BoxShape3D" id="Boulder_collision"]
+size = Vector3(0.3767, 0.1008, 0.3116)
+
+[sub_resource type="BoxShape3D" id="Boulder2_collision"]
+size = Vector3(0.3059, 0.1683, 0.2617)
+
+[sub_resource type="BoxShape3D" id="Boulder3_collision"]
+size = Vector3(0.4045, 0.0942, 0.3700)
+
+[sub_resource type="BoxShape3D" id="Mushroom_collision"]
+size = Vector3(0.5073, 0.4635, 0.7012)
+
+[sub_resource type="BoxShape3D" id="Cliff_collision"]
+size = Vector3(3.0781, 2.3163, 3.1285)
+
+[sub_resource type="CylinderShape3D" id="FlowerTree_collision"]
+height = 2.0700
+radius = 0.0500
+
+[sub_resource type="CylinderShape3D" id="FlowerTree2_collision"]
+height = 2.4200
+radius = 0.0500
+
+[sub_resource type="CylinderShape3D" id="GiantTree_collision"]
+height = 3.0000
+radius = 0.2500
+
 [node name="World" type="Node3D"]
 
 [node name="WorldEnvironment" parent="." type="WorldEnvironment"]
@@ -459,3 +486,51 @@ transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -4.5, 0.0, -3.8)
 
 [node name="GiantTree" parent="Nature" instance=ExtResource("24_r")]
 transform = Transform3D(0.82534, 0, -0.56464, 0, 1, 0, 0.56464, 0, 0.82534, 4.5, 0.0, -6.5)
+
+[node name="Body" type="StaticBody3D" parent="Nature/Boulder"]
+
+[node name="Shape" type="CollisionShape3D" parent="Nature/Boulder/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0073, 0.0463, -0.0279)
+shape = SubResource("Boulder_collision")
+
+[node name="Body" type="StaticBody3D" parent="Nature/Boulder2"]
+
+[node name="Shape" type="CollisionShape3D" parent="Nature/Boulder2/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0012, 0.0814, -0.0123)
+shape = SubResource("Boulder2_collision")
+
+[node name="Body" type="StaticBody3D" parent="Nature/Boulder3"]
+
+[node name="Shape" type="CollisionShape3D" parent="Nature/Boulder3/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0095, 0.0441, -0.0167)
+shape = SubResource("Boulder3_collision")
+
+[node name="Body" type="StaticBody3D" parent="Nature/Mushroom"]
+
+[node name="Shape" type="CollisionShape3D" parent="Nature/Mushroom/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0515, 0.2143, -0.0557)
+shape = SubResource("Mushroom_collision")
+
+[node name="Body" type="StaticBody3D" parent="Nature/Cliff"]
+
+[node name="Shape" type="CollisionShape3D" parent="Nature/Cliff/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1142, 0.8425, 0.8476)
+shape = SubResource("Cliff_collision")
+
+[node name="Body" type="StaticBody3D" parent="Nature/FlowerTree"]
+
+[node name="Shape" type="CollisionShape3D" parent="Nature/FlowerTree/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0000, 1.0350, 0.0000)
+shape = SubResource("FlowerTree_collision")
+
+[node name="Body" type="StaticBody3D" parent="Nature/FlowerTree2"]
+
+[node name="Shape" type="CollisionShape3D" parent="Nature/FlowerTree2/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0000, 1.2100, 0.0000)
+shape = SubResource("FlowerTree2_collision")
+
+[node name="Body" type="StaticBody3D" parent="Nature/GiantTree"]
+
+[node name="Shape" type="CollisionShape3D" parent="Nature/GiantTree/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0000, 1.5000, 0.0000)
+shape = SubResource("GiantTree_collision")
