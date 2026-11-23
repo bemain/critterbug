@@ -46,6 +46,15 @@ emission = Color(0.3328807, 0.33288068, 0.33288068, 1)
 [sub_resource type="PlaneMesh" id="Ground_mesh"]
 size = Vector2(12, 12)
 
+[sub_resource type="BoxShape3D" id="Ground_shape"]
+size = Vector3(12, 0.1, 12)
+
+[sub_resource type="BoxShape3D" id="Edge_x_shape"]
+size = Vector3(0.1, 2, 12)
+
+[sub_resource type="BoxShape3D" id="Edge_z_shape"]
+size = Vector3(12, 2, 0.1)
+
 [sub_resource type="StandardMaterial3D" id="Ground_material"]
 albedo_color = Color(0.24705882, 0.3764706, 0, 1)
 metallic_specular = 0.2
@@ -250,6 +259,28 @@ transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
 [node name="Ground" parent="Nature" type="MeshInstance3D"]
 mesh = SubResource("Ground_mesh")
 surface_material_override/0 = SubResource("Ground_material")
+
+[node name="Body" parent="Nature/Ground" type="StaticBody3D"]
+
+[node name="Shape" parent="Nature/Ground/Body" type="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("Ground_shape")
+
+[node name="EdgeLeft" parent="Nature/Ground/Body" type="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, 0)
+shape = SubResource("Edge_x_shape")
+
+[node name="EdgeRight" parent="Nature/Ground/Body" type="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1, 0)
+shape = SubResource("Edge_x_shape")
+
+[node name="EdgeFar" parent="Nature/Ground/Body" type="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -6)
+shape = SubResource("Edge_z_shape")
+
+[node name="EdgeNear" parent="Nature/Ground/Body" type="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 6)
+shape = SubResource("Edge_z_shape")
 
 [node name="TallGrass" parent="Nature" type="Node3D"]
 script = ExtResource("1_r")

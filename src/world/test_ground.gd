@@ -1,0 +1,68 @@
+extends Node3D
+## A plain test ground with one obstacle, for walking the band around until the real world scene
+## exists. Run on its own, it spawns one keyboard player and one per connected gamepad.
+
+## Where the obstacle box stands, and its size, in units. It is taller than a character, like a
+## rock in giant grass, so it can hide one from the camera.
+const OBSTACLE_POSITION := Vector3(0, 1, -3)
+const OBSTACLE_SIZE := Vector3(2, 2, 0.5)
+const GROUND_SIZE := Vector3(40, 1, 40)
+
+var band: Band
+
+
+func _ready() -> void:
+	var sun := DirectionalLight3D.new()
+	sun.rotation_degrees = Vector3(-55, 30, 0)
+	sun.shadow_enabled = true
+	add_child(sun)
+	var environment := WorldEnvironment.new()
+	environment.environment = Environment.new()
+	environment.environment.background_mode = Environment.BG_COLOR
+	environment.environment.background_color = Color("87a8c4")
+	environment.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	environment.environment.ambient_light_color = Color(0.6, 0.6, 0.6)
+	add_child(environment)
+	add_child(_box("Ground", Vector3(0, -GROUND_SIZE.y / 2, 0), GROUND_SIZE, Color("6b8e4e")))
+	add_child(_box("Obstacle", OBSTACLE_POSITION, OBSTACLE_SIZE, Color("8d7b68")))
+	add_child(_edges())
+	band = Band.new()
+	add_child(band)
+	if get_tree().current_scene == self:
+		band.spawn(Band.local_players())
+
+
+## Invisible walls round the ground's edge, so the band can't walk off it.
+func _edges() -> StaticBody3D:
+	var body := StaticBody3D.new()
+	body.name = "Edges"
+	var half := GROUND_SIZE / 2
+	for edge in [[Vector3(-half.x, 1, 0), Vector3(0.1, 2, GROUND_SIZE.z)], [Vector3(half.x, 1, 0), Vector3(0.1, 2, GROUND_SIZE.z)],
+			[Vector3(0, 1, -half.z), Vector3(GROUND_SIZE.x, 2, 0.1)], [Vector3(0, 1, half.z), Vector3(GROUND_SIZE.x, 2, 0.1)]]:
+		var shape := CollisionShape3D.new()
+		var box := BoxShape3D.new()
+		box.size = edge[1]
+		shape.shape = box
+		shape.position = edge[0]
+		body.add_child(shape)
+	return body
+
+
+func _box(box_name: String, at: Vector3, size: Vector3, color: Color) -> StaticBody3D:
+	var body := StaticBody3D.new()
+	body.name = box_name
+	body.position = at
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = size
+	shape.shape = box
+	body.add_child(shape)
+	var mesh := MeshInstance3D.new()
+	var box_mesh := BoxMesh.new()
+	box_mesh.size = size
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	box_mesh.material = material
+	mesh.mesh = box_mesh
+	body.add_child(mesh)
+	return body
