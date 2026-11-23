@@ -1,8 +1,12 @@
 # Critterbug style guide
 
 The world is built from Quaternius's [Stylized Nature MegaKit](https://quaternius.com/packs/stylizednaturemegakit.html)
-(`assets/Stylized Nature Megakit/`). Everything we make, from critters and props to UI and effects, should look like it
-belongs in that kit. Check new work against this page and against `world-bug-scale.jpg`.
+(`assets/Stylized Nature Megakit/`). Check new work against this page and against `world-bug-scale.jpg`.
+
+> **Provisional.** The Megakit textures are placeholders. A complete art direction and texture overhaul is planned
+> (#58). Until then, the palette, shapes and texture density below describe the Megakit so new work doesn't clash
+> with it, but don't polish or extend the Megakit look. The **Scale** and **Lighting** rules are about how the
+> world reads, and they carry over to the new art.
 
 ![The world at bug scale, with four 1-unit placeholder capsules](world-bug-scale.jpg)
 
@@ -78,9 +82,19 @@ Colours sampled from the kit's textures and the world scene. Note that `Plant_7`
 
 ## Lighting and atmosphere
 
-- One directional sun with shadows (shadow distance 200) and a procedural sky (`src/world/World.tscn`).
-- A low, light ground fog (FogVolume, 8 units high, density 0.02) softens the distance. From the 3/4 game camera it must stay
-  thin; thick fog washes the scene grey.
+The goal is that the band and the clearing read clearly from the low 3/4 camera, while the grass wall still feels
+like a forest. All values are in `src/world/World.tscn`.
+
+- **Sun:** one directional light, about 45° above the horizon, shining from behind and to the right of the camera
+  (from +x, +z toward the origin). Warm white (`#FFEDCC`), energy 1.3, shadows on (2 splits, distance 60; the camera is close, and 4 splits at 200 cost about 20 fps). A sun at or
+  below the horizon leaves the ground unlit: keep it high.
+- **Shadows** from the giant grass fall across the clearing and give it depth. The band should stand in mixed sun
+  and shade, never in a uniformly dark clearing.
+- **Ambient:** from the procedural sky, energy 1.0, so shaded sides stay readable.
+- **Tonemap:** Filmic. SSAO on, which grounds props and characters where they touch the ground.
+- No glow and no extra exposure: both haze the scene and lower the contrast between the band and the grass.
+- **Fog:** a low, light ground fog (FogVolume, 8 units high, density 0.02) softens the distance. From the 3/4 game
+  camera it must stay thin; thick fog washes the scene grey.
 - The sky's ground colour is dark olive, so the edge of the world reads as distant ground, not a void.
 
 ## Characters and critters
