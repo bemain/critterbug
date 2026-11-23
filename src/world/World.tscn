@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://bfwdv88ydxnqw" path="res://assets/Stylized Nature Megakit/RockPath_Round_Small_3.gltf" id="22_r"]
 [ext_resource type="PackedScene" uid="uid://cu4pnvl0bebke" path="res://assets/Stylized Nature Megakit/Rock_Medium_3.gltf" id="23_r"]
 [ext_resource type="PackedScene" uid="uid://b5y0crw32uw03" path="res://assets/Stylized Nature Megakit/CommonTree_1.gltf" id="24_r"]
+[ext_resource type="Script" path="res://src/world/area_exit.gd" id="exit_r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="Sky_material"]
 ground_bottom_color = Color(0.11, 0.16, 0.03, 1)
@@ -534,3 +535,12 @@ shape = SubResource("FlowerTree2_collision")
 [node name="Shape" type="CollisionShape3D" parent="Nature/GiantTree/Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0000, 1.5000, 0.0000)
 shape = SubResource("GiantTree_collision")
+
+[node name="SouthExit" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 44)
+script = ExtResource("exit_r")
+to_area = "res://src/world/Hollow.tscn"
+to_entrance = &"FromClearing"
+
+[node name="FromHollow" type="Marker3D" parent="." groups=["area_entrances"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 38)
