@@ -23,7 +23,6 @@ grow_vertical = 2
 
 [node name="StoryButton" type="Button" parent="VBoxContainer" unique_id=930496495]
 layout_mode = 2
-disabled = true
 text = "Story"
 
 [node name="FreeplayButton" type="Button" parent="VBoxContainer" unique_id=1581893203]

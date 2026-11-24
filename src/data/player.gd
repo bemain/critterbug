@@ -10,7 +10,7 @@ var devices: Array[int]
 ## [method SongManager.play] numbers such players by their order.
 var number := 0
 
-## The part this player plays.
+## The part this player plays, or null in the world, where no song has been chosen.
 var part: SongPart
 
 ## The difficulty the player starts at.

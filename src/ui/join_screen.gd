@@ -1,11 +1,12 @@
 class_name JoinScreen extends Control
-## Lets each person join the band with their own device, pick a part and a difficulty, and get ready.
+## Lets each person join the band with their own device and get ready. For a song, each also picks a
+## part and a difficulty; for Story there is no song, so there is nothing to pick.
 ##
 ## A device that hasn't joined joins by pressing confirm or a lane key or button, in the next free
 ## slot. A joined player changes only their own slot, with their own device: up and down choose a
 ## field, left and right change it, confirm toggles Ready, and cancel un-readies and then leaves.
-## Cancel on a device that hasn't joined goes back to the song list; the players stay joined.
-## The song starts as soon as everyone who joined is Ready.
+## Cancel on a device that hasn't joined goes back; the players stay joined.
+## The band starts as soon as everyone who joined is Ready.
 
 ## Emitted when everyone who joined is Ready, with a player for each of them in slot order, numbered
 ## by their slot.
@@ -37,7 +38,7 @@ class Slot:
 		self.device = device
 
 
-## The song the players are joining.
+## The song the players are joining, or null for Story.
 var song: Song
 
 ## The slot at each position, or null where no one has joined.
@@ -77,7 +78,8 @@ func _ready() -> void:
 	_refresh()
 
 
-## Show the screen for [param song], with everyone who already joined not Ready.
+## Show the screen for [param song], or for Story if it is null, with everyone who already joined
+## not Ready.
 func open(song: Song) -> void:
 	self.song = song
 	for device: int in _disconnected:
@@ -88,7 +90,8 @@ func open(song: Song) -> void:
 	for slot in _slots:
 		if slot != null:
 			slot.is_ready = false
-			slot.part_index = mini(slot.part_index, song.parts.size() - 1)
+			if song != null:
+				slot.part_index = mini(slot.part_index, song.parts.size() - 1)
 	_refresh()
 	show()
 
@@ -123,8 +126,8 @@ func _input(event: InputEvent) -> void:
 			_slots[index] = null
 	elif event.is_action("ui_accept"):
 		slot.is_ready = not slot.is_ready
-	elif slot.is_ready:
-		pass  # A Ready player's choices stay as they are until they un-ready.
+	elif slot.is_ready or song == null:
+		pass  # A Ready player's choices stay as they are until they un-ready, and Story has none.
 	elif event.is_action("ui_up") or event.is_action("ui_down"):
 		slot.field = Field.DIFFICULTY if slot.field == Field.PART else Field.PART
 	elif event.is_action("ui_left") or event.is_action("ui_right"):
@@ -166,7 +169,8 @@ func _start_if_ready() -> void:
 		var level = DIFFICULTIES[slot.difficulty_index]
 		var is_adaptive: bool = level == null
 		var difficulty: Difficulty.Level = Difficulty.ADAPTIVE_START if is_adaptive else level
-		var player := Player.new([slot.device], song.parts[slot.part_index], difficulty, is_adaptive)
+		var part: SongPart = song.parts[slot.part_index] if song != null else null
+		var player := Player.new([slot.device], part, difficulty, is_adaptive)
 		player.number = _slots.find(slot) + 1
 		players.append(player)
 		slot.is_ready = false
@@ -194,22 +198,25 @@ func _on_joy_connection_changed(device: int, connected: bool) -> void:
 func _refresh() -> void:
 	if _title == null:
 		return
-	_title.text = "%s\nPress a button on your keyboard or gamepad to join" % (song.title if song else "")
+	_title.text = "%s\nPress a button on your keyboard or gamepad to join" % (song.title if song else "Story")
 	for i in MAX_PLAYERS:
 		var slot: Slot = _slots[i]
 		if slot == null:
 			_slot_labels[i].text = "P%d\n\nPress to join" % (i + 1)
 			continue
-		var part: String = song.parts[slot.part_index].name.capitalize() if song else ""
-		var level = DIFFICULTIES[slot.difficulty_index]
-		var difficulty: String = "Auto" if level == null else Difficulty.Level.keys()[level].capitalize()
-		_slot_labels[i].text = "P%d\n%s\n\n%s\n%s\n\n%s" % [
-			i + 1,
+		var lines: Array[String] = [
+			"P%d" % (i + 1),
 			"Keyboard" if slot.device == LaneInput.KEYBOARD else "Gamepad %d" % (slot.device + 1),
-			_field_text(part, slot, Field.PART),
-			_field_text(difficulty, slot, Field.DIFFICULTY),
-			"READY" if slot.is_ready else "Not ready",
+			"",
 		]
+		if song != null:
+			var level = DIFFICULTIES[slot.difficulty_index]
+			var difficulty: String = "Auto" if level == null else Difficulty.Level.keys()[level].capitalize()
+			lines.append(_field_text(song.parts[slot.part_index].name.capitalize(), slot, Field.PART))
+			lines.append(_field_text(difficulty, slot, Field.DIFFICULTY))
+			lines.append("")
+		lines.append("READY" if slot.is_ready else "Not ready")
+		_slot_labels[i].text = "\n".join(lines)
 
 
 ## [param text] with arrows around it if it is the [param slot]'s current field.

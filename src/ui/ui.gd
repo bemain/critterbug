@@ -1,12 +1,15 @@
 extends Control
 
 
+## Emitted when everyone who joined for Story is Ready.
+signal story_started(players: Array[Player])
+
 @onready var song_manager: SongManager = $"../SongManager"
 
 ## Shows the band combo during a song with two or more players.
 var _band_combo: Label
 
-## Where the players join and choose their parts, after the song is chosen.
+## Where the players join: for a song, after it is chosen, or for Story.
 var _join_screen: JoinScreen
 
 
@@ -67,13 +70,31 @@ func _on_song_selection_menu_song_selected(song: Song) -> void:
 
 
 func _on_join_screen_back_pressed() -> void:
+	if _join_screen.song == null:
+		leave_story()
+		return
 	_join_screen.hide()
 	$SongSelectionMenu.show()
 
 
 func _on_join_screen_started(players: Array[Player]) -> void:
 	_join_screen.hide()
-	song_manager.play(players)
+	if _join_screen.song == null:
+		story_started.emit(players)
+	else:
+		song_manager.play(players)
+
+
+func _on_main_menu_story_pressed() -> void:
+	$MainMenu.hide()
+	_join_screen.open(null)
+
+
+## Back to the main menu from Story: everyone who joined leaves too.
+func leave_story() -> void:
+	_join_screen.hide()
+	_join_screen.clear()
+	$MainMenu.show()
 
 
 func _on_song_manager_song_finished(song: Song) -> void:

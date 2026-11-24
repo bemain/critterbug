@@ -91,5 +91,7 @@ grow_vertical = 2
 [connection signal="song_selected" from="UI/SongSelectionMenu" to="UI" method="_on_song_selection_menu_song_selected"]
 [connection signal="back_pressed" from="UI/SongStatistics" to="UI" method="_on_song_statistics_back_pressed"]
 [connection signal="song_finished" from="SongManager" to="UI" method="_on_song_manager_song_finished"]
+[connection signal="story_pressed" from="UI/MainMenu" to="UI" method="_on_main_menu_story_pressed"]
+[connection signal="story_started" from="UI" to="." method="_on_ui_story_started"]
 [connection signal="settings_pressed" from="UI/MainMenu" to="UI" method="_on_main_menu_settings_pressed"]
 [connection signal="back_pressed" from="UI/SettingsMenu" to="UI" method="_on_settings_menu_back_pressed"]
