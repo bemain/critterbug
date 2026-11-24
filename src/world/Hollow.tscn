@@ -1,12 +1,33 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://src/world/area_exit.gd" id="exit_r"]
-[ext_resource type="PackedScene" path="res://assets/Stylized Nature Megakit/Rock_Medium_3.gltf" id="rock_r"]
-[ext_resource type="PackedScene" path="res://assets/Stylized Nature Megakit/Mushroom_Common.gltf" id="mushroom_r"]
-[ext_resource type="PackedScene" path="res://assets/Stylized Nature Megakit/Fern_1.gltf" id="fern_r"]
-[ext_resource type="PackedScene" path="res://assets/Stylized Nature Megakit/Clover_1.gltf" id="clover_r"]
+[ext_resource type="Script" uid="uid://c8b4go8b56y3n" path="res://addons/proton_scatter/src/scatter.gd" id="1_r"]
+[ext_resource type="Script" uid="uid://cd2vv4fpbr2kb" path="res://addons/proton_scatter/src/stack/modifier_stack.gd" id="2_r"]
+[ext_resource type="Script" uid="uid://c8ybjmom2sxhw" path="res://addons/proton_scatter/src/modifiers/base_modifier.gd" id="3_r"]
+[ext_resource type="Script" uid="uid://bvn6vb4jlntyh" path="res://addons/proton_scatter/src/modifiers/create_inside_random.gd" id="4_r"]
+[ext_resource type="Script" uid="uid://17kco1gn0u8y" path="res://addons/proton_scatter/src/modifiers/randomize_transforms.gd" id="5_r"]
+[ext_resource type="Script" uid="uid://4gifimuy56a2" path="res://addons/proton_scatter/src/modifiers/relax.gd" id="6_r"]
+[ext_resource type="Script" uid="uid://wb02hxqyhhcv" path="res://addons/proton_scatter/src/modifiers/project_on_geometry.gd" id="7_r"]
+[ext_resource type="Script" uid="uid://q5087d8uw4v6" path="res://addons/proton_scatter/src/modifiers/offset_scale.gd" id="8_r"]
+[ext_resource type="Script" uid="uid://b5o5857yp7umk" path="res://addons/proton_scatter/src/scatter_item.gd" id="9_r"]
+[ext_resource type="Script" uid="uid://bglbmejqp3xpx" path="res://addons/proton_scatter/src/scatter_shape.gd" id="10_r"]
+[ext_resource type="Script" uid="uid://m1xgjqb30jgd" path="res://addons/proton_scatter/src/shapes/sphere_shape.gd" id="11_r"]
+[ext_resource type="Script" path="res://src/world/area_exit.gd" id="12_r"]
+[ext_resource type="PackedScene" uid="uid://buld8oytqwydr" path="res://assets/Stylized Nature Megakit/Rock_Medium_1.gltf" id="13_r"]
+[ext_resource type="PackedScene" uid="uid://dqd7c4tuhbenr" path="res://assets/Stylized Nature Megakit/Rock_Medium_2.gltf" id="14_r"]
+[ext_resource type="PackedScene" uid="uid://cu4pnvl0bebke" path="res://assets/Stylized Nature Megakit/Rock_Medium_3.gltf" id="15_r"]
+[ext_resource type="PackedScene" uid="uid://lvhouplpmakr" path="res://assets/Stylized Nature Megakit/Pebble_Round_3.gltf" id="16_r"]
+[ext_resource type="PackedScene" uid="uid://dbhf0kw1j2kiy" path="res://assets/Stylized Nature Megakit/Pebble_Square_5.gltf" id="17_r"]
+[ext_resource type="PackedScene" uid="uid://b38yu63sr8x3m" path="res://assets/Stylized Nature Megakit/Mushroom_Common.gltf" id="18_r"]
+[ext_resource type="PackedScene" uid="uid://dghmo5rascody" path="res://assets/Stylized Nature Megakit/Mushroom_Laetiporus.gltf" id="19_r"]
+[ext_resource type="PackedScene" uid="uid://ca3q8liaif6n8" path="res://assets/Stylized Nature Megakit/Fern_1.gltf" id="20_r"]
+[ext_resource type="PackedScene" uid="uid://ejkf5nh3fmsv" path="res://assets/Stylized Nature Megakit/Clover_1.gltf" id="21_r"]
+[ext_resource type="PackedScene" uid="uid://carvm2lwhbalu" path="res://assets/Stylized Nature Megakit/Pebble_Round_5.gltf" id="22_r"]
+[ext_resource type="PackedScene" uid="uid://nnghdf1sxex6" path="res://assets/Stylized Nature Megakit/Petal_5.gltf" id="23_r"]
+[ext_resource type="PackedScene" uid="uid://boebrwppeuco" path="res://assets/Stylized Nature Megakit/Petal_2.gltf" id="24_r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="Sky_material"]
+ground_bottom_color = Color(0.11, 0.16, 0.03, 1)
+ground_horizon_color = Color(0.36, 0.42, 0.3, 1)
 
 [sub_resource type="Sky" id="Sky"]
 sky_material = SubResource("Sky_material")
@@ -14,14 +35,23 @@ sky_material = SubResource("Sky_material")
 [sub_resource type="Environment" id="Environment"]
 background_mode = 2
 sky = SubResource("Sky")
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
 ambient_light_source = 3
+ambient_light_energy = 1.0
 tonemap_mode = 2
+ssao_enabled = true
+
+[sub_resource type="FogMaterial" id="Fog"]
+density = 0.012
+edge_fade = 0.4
+emission = Color(0.3, 0.33, 0.3, 1)
 
 [sub_resource type="PlaneMesh" id="Ground_mesh"]
 size = Vector2(24, 24)
 
 [sub_resource type="StandardMaterial3D" id="Ground_material"]
-albedo_color = Color(0.3, 0.42, 0.12, 1)
+albedo_color = Color(0.27, 0.31, 0.12, 1)
 
 [sub_resource type="BoxShape3D" id="Ground_shape"]
 size = Vector3(24, 0.2, 24)
@@ -32,14 +62,186 @@ size = Vector3(0.4, 4, 24)
 [sub_resource type="BoxShape3D" id="Edge_z_shape"]
 size = Vector3(24, 4, 0.4)
 
+[sub_resource type="CylinderMesh" id="Puddle_mesh"]
+top_radius = 2.4
+bottom_radius = 2.4
+height = 0.04
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="Puddle_material"]
+albedo_color = Color(0.16, 0.23, 0.22, 1)
+metallic_specular = 0.8
+roughness = 0.08
+
+[sub_resource type="BoxShape3D" id="Rock_Medium_1_box"]
+size = Vector3(2.903, 2.26, 2.69)
+
+[sub_resource type="BoxShape3D" id="Rock_Medium_2_box"]
+size = Vector3(2.744, 1.899, 2.231)
+
+[sub_resource type="BoxShape3D" id="Rock_Medium_3_box"]
+size = Vector3(3.078, 2.316, 3.128)
+
+[sub_resource type="BoxShape3D" id="Pebble_Round_3_box"]
+size = Vector3(0.4047, 0.09862, 0.4363)
+
+[sub_resource type="BoxShape3D" id="Pebble_Square_5_box"]
+size = Vector3(0.3168, 0.1522, 0.4054)
+
+[sub_resource type="BoxShape3D" id="Pebble_Round_5_box"]
+size = Vector3(0.3767, 0.1008, 0.3116)
+
+[sub_resource type="BoxShape3D" id="Mushroom_Common_box"]
+size = Vector3(0.5073, 0.4635, 0.7012)
+
+[sub_resource type="BoxShape3D" id="Mushroom_Laetiporus_box"]
+size = Vector3(1.229, 0.767, 0.9929)
+
+[sub_resource type="Resource" id="TallGrass_inside"]
+script = ExtResource("4_r")
+amount = 40
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="TallGrass_rand"]
+script = ExtResource("5_r")
+position = Vector3(0.05, 0, 0.05)
+rotation = Vector3(10, 360, 10)
+scale = Vector3(0.15, 0.15, 0.15)
+reference_frame = 2
+
+[sub_resource type="Resource" id="TallGrass_relax"]
+script = ExtResource("6_r")
+offset_step = 0.05
+consecutive_step_multiplier = 0.75
+restrict_height = true
+
+[sub_resource type="Resource" id="TallGrass_project"]
+script = ExtResource("7_r")
+ray_length = 5.0
+ray_offset = 5.0
+remove_points_on_miss = false
+
+[sub_resource type="Resource" id="TallGrass_stack"]
+script = ExtResource("2_r")
+stack = Array[ExtResource("3_r")]([SubResource("TallGrass_inside"), SubResource("TallGrass_rand"), SubResource("TallGrass_relax"), SubResource("TallGrass_project")])
+
+[sub_resource type="Resource" id="TallGrass_shape0"]
+script = ExtResource("11_r")
+radius = 2.125
+
+[sub_resource type="Resource" id="TallGrass_shape1"]
+script = ExtResource("11_r")
+radius = 1.625
+
+[sub_resource type="Resource" id="TallGrass_shape2"]
+script = ExtResource("11_r")
+radius = 0.625
+
+[sub_resource type="Resource" id="TallGrass_shape3"]
+script = ExtResource("11_r")
+radius = 1.125
+
+[sub_resource type="Resource" id="Tufts_inside"]
+script = ExtResource("4_r")
+amount = 40
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="Tufts_rand"]
+script = ExtResource("5_r")
+position = Vector3(0.05, 0, 0.05)
+rotation = Vector3(10, 360, 10)
+scale = Vector3(0.05, 0.05, 0.05)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Tufts_relax"]
+script = ExtResource("6_r")
+offset_step = 0.05
+consecutive_step_multiplier = 0.75
+restrict_height = true
+
+[sub_resource type="Resource" id="Tufts_project"]
+script = ExtResource("7_r")
+ray_length = 5.0
+ray_offset = 5.0
+remove_points_on_miss = false
+
+[sub_resource type="Resource" id="Tufts_scale"]
+script = ExtResource("8_r")
+scale = Vector3(0.22, 0.22, 0.22)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Tufts_stack"]
+script = ExtResource("2_r")
+stack = Array[ExtResource("3_r")]([SubResource("Tufts_inside"), SubResource("Tufts_rand"), SubResource("Tufts_relax"), SubResource("Tufts_project"), SubResource("Tufts_scale")])
+
+[sub_resource type="Resource" id="Tufts_shape0"]
+script = ExtResource("11_r")
+radius = 1.5
+
+[sub_resource type="Resource" id="Tufts_shape1"]
+script = ExtResource("11_r")
+radius = 0.4
+
+[sub_resource type="Resource" id="Tufts_shape2"]
+script = ExtResource("11_r")
+radius = 0.425
+
+[sub_resource type="Resource" id="Moss_inside"]
+script = ExtResource("4_r")
+amount = 45
+restrict_height = true
+reference_frame = 1
+
+[sub_resource type="Resource" id="Moss_rand"]
+script = ExtResource("5_r")
+position = Vector3(0.05, 0, 0.05)
+rotation = Vector3(10, 360, 10)
+scale = Vector3(0.04, 0.04, 0.04)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Moss_project"]
+script = ExtResource("7_r")
+ray_length = 5.0
+ray_offset = 5.0
+remove_points_on_miss = false
+
+[sub_resource type="Resource" id="Moss_scale"]
+script = ExtResource("8_r")
+scale = Vector3(0.12, 0.12, 0.12)
+reference_frame = 2
+
+[sub_resource type="Resource" id="Moss_stack"]
+script = ExtResource("2_r")
+stack = Array[ExtResource("3_r")]([SubResource("Moss_inside"), SubResource("Moss_rand"), SubResource("Moss_project"), SubResource("Moss_scale")])
+
+[sub_resource type="Resource" id="Moss_shape0"]
+script = ExtResource("11_r")
+radius = 1.375
+
+[sub_resource type="Resource" id="Moss_shape1"]
+script = ExtResource("11_r")
+radius = 0.425
+
 [node name="Hollow" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 10, 0)
+transform = Transform3D(0.6, -0.56569, 0.56569, 0, 0.70711, 0.70711, -0.8, -0.42426, 0.42426, 0, 0, 0)
+light_color = Color(1, 0.93, 0.8, 1)
+light_energy = 1.3
 shadow_enabled = true
+directional_shadow_max_distance = 60.0
+directional_shadow_mode = 1
+
+[node name="FogVolume" type="FogVolume" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+size = Vector3(28, 6, 28)
+material = SubResource("Fog")
 
 [node name="Ground" type="MeshInstance3D" parent="."]
 mesh = SubResource("Ground_mesh")
@@ -67,24 +269,234 @@ shape = SubResource("Edge_z_shape")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 12)
 shape = SubResource("Edge_z_shape")
 
+[node name="Puddle" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.02, 4.5)
+mesh = SubResource("Puddle_mesh")
+surface_material_override/0 = SubResource("Puddle_material")
+
 [node name="Props" type="Node3D" parent="."]
 transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
 
-[node name="Rock" parent="Props" instance=ExtResource("rock_r")]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -1, 0, 0.7)
+[node name="CliffNW" parent="Props" instance=ExtResource("13_r")]
+transform = Transform3D(0.23948, 0, 0.10125, 0, 0.26, 0, -0.10125, 0, 0.23948, -1.125, 0.0, -1.25)
 
-[node name="Mushroom" parent="Props" instance=ExtResource("mushroom_r")]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0.9, 0, -0.2)
+[node name="CliffNE" parent="Props" instance=ExtResource("14_r")]
+transform = Transform3D(0.10146, 0, 0.26097, 0, 0.28, 0, -0.26097, 0, 0.10146, 1.125, 0.0, -1.25)
 
-[node name="Fern" parent="Props" instance=ExtResource("fern_r")]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 1, 0, 0.8)
+[node name="CliffW" parent="Props" instance=ExtResource("15_r")]
+transform = Transform3D(-0.10404, 0, 0.22732, 0, 0.25, 0, -0.22732, 0, -0.10404, -1.375, 0.0, -0.125)
 
-[node name="Clover" parent="Props" instance=ExtResource("clover_r")]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -0.8, 0, -0.6)
+[node name="CliffE" parent="Props" instance=ExtResource("13_r")]
+transform = Transform3D(-0.22613, 0, 0.080397, 0, 0.24, 0, -0.080397, 0, -0.22613, 1.375, 0.0, 0.5)
+
+[node name="BoulderS" parent="Props" instance=ExtResource("16_r")]
+transform = Transform3D(1.3205, 0, 0.90343, 0, 1.6, 0, -0.90343, 0, 1.3205, -0.8125, 0.0, 1.3125)
+
+[node name="BoulderS2" parent="Props" instance=ExtResource("17_r")]
+transform = Transform3D(-0.45261, 0, 1.3248, 0, 1.4, 0, -1.3248, 0, -0.45261, 0.75, 0.0, 1.25)
+
+[node name="Mushroom" parent="Props" instance=ExtResource("18_r")]
+transform = Transform3D(0.8598, 0, 0.26597, 0, 0.9, 0, -0.26597, 0, 0.8598, 0.8125, 0.0, 0.125)
+
+[node name="Mushroom2" parent="Props" instance=ExtResource("18_r")]
+transform = Transform3D(-0.32815, 0, 0.56109, 0, 0.65, 0, -0.56109, 0, -0.32815, 1.0, 0.0, 0.5625)
+
+[node name="Mushroom3" parent="Props" instance=ExtResource("18_r")]
+transform = Transform3D(-0.29414, 0, -0.34056, 0, 0.45, 0, 0.34056, 0, -0.29414, 0.5625, 0.0, 0.5)
+
+[node name="ShelfFungus" parent="Props" instance=ExtResource("19_r")]
+transform = Transform3D(-0.44838, 0, -0.22126, 0, 0.5, 0, 0.22126, 0, -0.44838, 1.1875, 0.0, -0.625)
+
+[node name="Fern" parent="Props" instance=ExtResource("20_r")]
+transform = Transform3D(0.38242, 0, 0.32211, 0, 0.5, 0, -0.32211, 0, 0.38242, -1.0, 0.0, 0.0625)
+
+[node name="Clover" parent="Props" instance=ExtResource("21_r")]
+transform = Transform3D(0.24314, 0, 0.37866, 0, 0.45, 0, -0.37866, 0, 0.24314, -0.9375, 0.0, 0.8125)
+
+[node name="Boulder" parent="Props" instance=ExtResource("22_r")]
+transform = Transform3D(-0.95861, 0, 0.8781, 0, 1.3, 0, -0.8781, 0, -0.95861, -0.1875, 0.0, 0.1875)
+
+[node name="Petal" parent="Props" instance=ExtResource("23_r")]
+transform = Transform3D(0.18648, 0, 0.235, 0, 0.3, 0, -0.235, 0, 0.18648, 0.25, 0.0, 0.9375)
+
+[node name="Petal2" parent="Props" instance=ExtResource("24_r")]
+transform = Transform3D(-0.2354, 0, 0.3234, 0, 0.4, 0, -0.3234, 0, -0.2354, -0.25, 0.0, -0.875)
+
+[node name="Body" type="StaticBody3D" parent="Props/CliffNW"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/CliffNW/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1147, 0.8588, 0.3447)
+shape = SubResource("Rock_Medium_1_box")
+
+[node name="Body" type="StaticBody3D" parent="Props/CliffNE"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/CliffNE/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1893, 0.8986, 0.08041)
+shape = SubResource("Rock_Medium_2_box")
+
+[node name="Body" type="StaticBody3D" parent="Props/CliffW"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/CliffW/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1142, 0.8425, 0.8476)
+shape = SubResource("Rock_Medium_3_box")
+
+[node name="Body" type="StaticBody3D" parent="Props/CliffE"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/CliffE/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1147, 0.8588, 0.3447)
+shape = SubResource("Rock_Medium_1_box")
+
+[node name="Body" type="StaticBody3D" parent="Props/BoulderS"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/BoulderS/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002252, 0.04756, 0.02092)
+shape = SubResource("Pebble_Round_3_box")
+
+[node name="Body" type="StaticBody3D" parent="Props/BoulderS2"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/BoulderS2/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.007453, 0.06812, -0.002312)
+shape = SubResource("Pebble_Square_5_box")
+
+[node name="Body" type="StaticBody3D" parent="Props/Boulder"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/Boulder/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.007277, 0.04627, -0.02787)
+shape = SubResource("Pebble_Round_5_box")
+
+[node name="Body" type="StaticBody3D" parent="Props/Mushroom"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/Mushroom/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05153, 0.2143, -0.05565)
+shape = SubResource("Mushroom_Common_box")
+
+[node name="Body" type="StaticBody3D" parent="Props/Mushroom2"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/Mushroom2/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05153, 0.2143, -0.05565)
+shape = SubResource("Mushroom_Common_box")
+
+[node name="Body" type="StaticBody3D" parent="Props/Mushroom3"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/Mushroom3/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05153, 0.2143, -0.05565)
+shape = SubResource("Mushroom_Common_box")
+
+[node name="Body" type="StaticBody3D" parent="Props/ShelfFungus"]
+
+[node name="Shape" type="CollisionShape3D" parent="Props/ShelfFungus/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0332, 0.2233, 0.2233)
+shape = SubResource("Mushroom_Laetiporus_box")
+
+[node name="TallGrass" type="Node3D" parent="Props"]
+script = ExtResource("1_r")
+global_seed = 13
+modifier_stack = SubResource("TallGrass_stack")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
+
+[node name="Item1" type="Node3D" parent="Props/TallGrass"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://c3nd3wdj267u"
+
+[node name="Item2" type="Node3D" parent="Props/TallGrass"]
+script = ExtResource("9_r")
+proportion = 60
+path = "uid://b207buw28dtce"
+
+[node name="Shape1" type="Node3D" parent="Props/TallGrass"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0, 0.0)
+visible = false
+script = ExtResource("10_r")
+shape = SubResource("TallGrass_shape0")
+
+[node name="Shape2" type="Node3D" parent="Props/TallGrass"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0, 0.0)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("TallGrass_shape1")
+
+[node name="Shape3" type="Node3D" parent="Props/TallGrass"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0, -1.5)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("TallGrass_shape2")
+
+[node name="Shape4" type="Node3D" parent="Props/TallGrass"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0, 1.75)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("TallGrass_shape3")
+
+[node name="Tufts" type="Node3D" parent="Props"]
+script = ExtResource("1_r")
+global_seed = 17
+modifier_stack = SubResource("Tufts_stack")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
+
+[node name="Item1" type="Node3D" parent="Props/Tufts"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://bx2285c888vpk"
+
+[node name="Item2" type="Node3D" parent="Props/Tufts"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://ck1gi5dnose6q"
+
+[node name="Shape1" type="Node3D" parent="Props/Tufts"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0, 0.0)
+visible = false
+script = ExtResource("10_r")
+shape = SubResource("Tufts_shape0")
+
+[node name="Shape2" type="Node3D" parent="Props/Tufts"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0, -0.9375)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("Tufts_shape1")
+
+[node name="Shape3" type="Node3D" parent="Props/Tufts"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4375, 0, 0.5625)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("Tufts_shape2")
+
+[node name="Moss" type="Node3D" parent="Props"]
+script = ExtResource("1_r")
+global_seed = 19
+modifier_stack = SubResource("Moss_stack")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
+
+[node name="Item1" type="Node3D" parent="Props/Moss"]
+script = ExtResource("9_r")
+proportion = 100
+path = "uid://dbgmyvu2m5a07"
+
+[node name="Shape1" type="Node3D" parent="Props/Moss"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0, 0.0)
+visible = false
+script = ExtResource("10_r")
+shape = SubResource("Moss_shape0")
+
+[node name="Shape2" type="Node3D" parent="Props/Moss"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4375, 0, 0.5625)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("Moss_shape1")
 
 [node name="NorthExit" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.65)
-script = ExtResource("exit_r")
+script = ExtResource("12_r")
 to_area = "res://src/world/World.tscn"
 to_entrance = &"FromHollow"
 size = Vector3(6, 2, 4.3)

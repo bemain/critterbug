@@ -266,6 +266,46 @@ radius = 0.0500
 height = 3.0000
 radius = 0.2500
 
+[sub_resource type="Resource" id="TallGrass_lane0"]
+script = ExtResource("11_r")
+radius = 0.85
+
+[sub_resource type="Resource" id="TallGrass_lane1"]
+script = ExtResource("11_r")
+radius = 0.85
+
+[sub_resource type="Resource" id="TallGrass_lane2"]
+script = ExtResource("11_r")
+radius = 0.85
+
+[sub_resource type="Resource" id="TallGrass_lane3"]
+script = ExtResource("11_r")
+radius = 1.05
+
+[sub_resource type="Resource" id="TallGrass_lane4"]
+script = ExtResource("11_r")
+radius = 1.05
+
+[sub_resource type="Resource" id="LowGrass_lane0"]
+script = ExtResource("11_r")
+radius = 0.4
+
+[sub_resource type="Resource" id="LowGrass_lane1"]
+script = ExtResource("11_r")
+radius = 0.4
+
+[sub_resource type="Resource" id="LowGrass_lane2"]
+script = ExtResource("11_r")
+radius = 0.4
+
+[sub_resource type="Resource" id="LowGrass_lane3"]
+script = ExtResource("11_r")
+radius = 0.4
+
+[sub_resource type="Resource" id="LowGrass_lane4"]
+script = ExtResource("11_r")
+radius = 0.4
+
 [node name="World" type="Node3D"]
 
 [node name="WorldEnvironment" parent="." type="WorldEnvironment"]
@@ -481,6 +521,82 @@ transform = Transform3D(0.25365, 0, -0.65243, 0, 0.7, 0, 0.65243, 0, 0.25365, 0.
 
 [node name="Stone3" parent="Nature" instance=ExtResource("22_r")]
 transform = Transform3D(-0.2913, 0, -0.63651, 0, 0.7, 0, 0.63651, 0, -0.2913, 0.9, 0.0, 3.5)
+
+[node name="Stone4" parent="Nature" instance=ExtResource("20_r")]
+transform = Transform3D(-0.59982, 0, -0.36085, 0, 0.7, 0, 0.36085, 0, -0.59982, 1.15, 0.0, 4.3)
+
+[node name="Stone5" parent="Nature" instance=ExtResource("21_r")]
+transform = Transform3D(0.43513, 0, -0.54833, 0, 0.7, 0, 0.54833, 0, 0.43513, 1.35, 0.0, 5.1)
+
+[node name="Lane1" parent="Nature/TallGrass" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 2.4)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("TallGrass_lane0")
+
+[node name="Lane2" parent="Nature/TallGrass" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.83, 0, 3.47)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("TallGrass_lane1")
+
+[node name="Lane3" parent="Nature/TallGrass" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.17, 0, 4.53)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("TallGrass_lane2")
+
+[node name="Lane4" parent="Nature/TallGrass" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 5.6)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("TallGrass_lane3")
+
+[node name="Lane5" parent="Nature/TallGrass" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, 6.4)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("TallGrass_lane4")
+
+[node name="Lane1" parent="Nature/LowGrass" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 2.4)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("LowGrass_lane0")
+
+[node name="Lane2" parent="Nature/LowGrass" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.83, 0, 3.47)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("LowGrass_lane1")
+
+[node name="Lane3" parent="Nature/LowGrass" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.17, 0, 4.53)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("LowGrass_lane2")
+
+[node name="Lane4" parent="Nature/LowGrass" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 5.6)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("LowGrass_lane3")
+
+[node name="Lane5" parent="Nature/LowGrass" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, 6.4)
+visible = false
+script = ExtResource("10_r")
+negative = true
+shape = SubResource("LowGrass_lane4")
 
 [node name="Cliff" parent="Nature" instance=ExtResource("23_r")]
 transform = Transform3D(1, 0, -0, 0, 1, 0, 0, 0, 1, -4.5, 0.0, -3.8)
