@@ -6,12 +6,18 @@ extends Node3D
 ## in an exit, the screen fades out, the next area replaces this one, the band appears at the
 ## matching entrance, and the screen fades back in. The players and their characters stay the same.
 ##
+## [Critter]s in an area can be talked to: a player close to one presses confirm on their own
+## device, and the conversation shows in a [DialogueBalloon]. Any player's confirm moves it on and
+## any player picks a choice. The band stands still while it lasts, and doesn't travel.
+##
 ## Run on its own, it spawns one keyboard player and one per connected gamepad.
 
 ## The area the band starts in.
 const FIRST_AREA := "res://src/world/World.tscn"
 ## How long the fade out, and the fade back in, take, in seconds.
 const FADE_S := 0.4
+
+const _BALLOON: PackedScene = preload("res://src/ui/dialogue/DialogueBalloon.tscn")
 
 ## Emitted when the band has arrived in a new area and the screen has faded back in.
 signal arrived(area: Node3D)
@@ -22,6 +28,12 @@ var band: Band
 ## Covers the screen while the band travels.
 var _fade: ColorRect
 var _is_travelling := false
+## The balloon of the conversation going on, if any.
+var _balloon: DialogueBalloon
+
+## Whether the band is in a conversation.
+var is_talking: bool:
+	get: return _balloon != null
 
 
 func _ready() -> void:
@@ -43,10 +55,50 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	if _is_travelling or band.characters.is_empty():
 		return
+	for critter in _critters():
+		critter.show_prompt(not is_talking and band.characters.any(critter.can_talk_to))
+	if is_talking:
+		return
 	for exit: AreaExit in get_tree().get_nodes_in_group("area_exits"):
 		if area.is_ancestor_of(exit) and exit.holds(band.characters):
 			_travel(exit.to_area, exit.to_entrance)
 			return
+
+
+func _input(event: InputEvent) -> void:
+	if is_talking or _is_travelling or not event.is_action_pressed("ui_accept") or event.is_echo():
+		return
+	if not (event is InputEventKey or event is InputEventJoypadButton):
+		return
+	var device := LaneInput.device_of(event)
+	for character in band.characters:
+		if not character.player.accepts(device):
+			continue
+		for critter in _critters():
+			if critter.can_talk_to(character):
+				get_viewport().set_input_as_handled()
+				_talk(critter)
+				return
+
+
+## The critters in the current area.
+func _critters() -> Array[Critter]:
+	var found: Array[Critter] = []
+	for critter: Critter in get_tree().get_nodes_in_group("critters"):
+		if area.is_ancestor_of(critter):
+			found.append(critter)
+	return found
+
+
+## Start [param critter]'s conversation; the band stands still until it ends.
+func _talk(critter: Critter) -> void:
+	band.set_physics_process(false)
+	_balloon = _BALLOON.instantiate()
+	add_child(_balloon)
+	_balloon.tree_exited.connect(func():
+		_balloon = null
+		band.set_physics_process(true))
+	_balloon.start(critter.dialogue, critter.title, [Story])
 
 
 ## Fade out, swap to [param scene]'s area, put the band at [param entrance], and fade back in.

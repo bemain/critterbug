@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/world/critter.gd" id="1_critter"]
+[ext_resource type="PackedScene" path="res://src/world/critters/Snail.tscn" id="2_model"]
+
+[node name="Critter" type="Node3D"]
+script = ExtResource("1_critter")
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+
+[node name="Prompt" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+billboard = 1
+no_depth_test = true
+pixel_size = 0.004
+outline_size = 12
+text = "Talk: Enter / A"
+font_size = 64
