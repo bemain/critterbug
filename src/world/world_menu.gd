@@ -1,5 +1,5 @@
 class_name WorldMenu extends CanvasLayer
-## The small menu in the world: Continue, or Leave.
+## The small menu in the world: Continue, or Leave. It shows above everything else, also a conversation.
 ##
 ## Only the device that opened it drives it: up and down choose, confirm picks, and cancel or the
 ## button that opened it continues. It swallows every other device's presses while it is open. If
@@ -21,7 +21,7 @@ var _labels: Array[Label] = []
 
 func _init(device: int) -> void:
 	self.device = device
-	layer = 20
+	layer = 110  # The dialogue balloon is at 100.
 
 
 func _ready() -> void:

@@ -11,7 +11,9 @@ extends Node3D
 ## any player picks a choice. The band stands still while it lasts, and doesn't travel.
 ##
 ## Any player can open the [WorldMenu], except while the band travels or talks. The band stands still
-## while it is open. Devices that no player has are ignored.
+## while it is open. Devices that no player has are ignored, with one exception: while every player's
+## gamepad is disconnected, any device can open the menu and leave, also from a conversation, so
+## nobody is stuck. Leaving drops the conversation where it is.
 ##
 ## Run on its own, it spawns one keyboard player and one per connected gamepad, and leaving quits.
 
@@ -41,6 +43,9 @@ var _balloon: DialogueBalloon
 var is_talking: bool:
 	get: return _balloon != null
 
+## The gamepads that have disconnected and not come back.
+var _disconnected: Dictionary[int, bool] = {}
+
 ## The open menu, if any.
 var _menu: WorldMenu
 
@@ -50,6 +55,7 @@ var is_menu_open: bool:
 
 
 func _ready() -> void:
+	Input.joy_connection_changed.connect(_on_joy_connection_changed)
 	var layer := CanvasLayer.new()
 	layer.layer = 10
 	add_child(layer)
@@ -81,16 +87,19 @@ func _physics_process(_delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	var device := LaneInput.device_of(event)
-	if is_talking:
-		# The balloon takes input from every device, so keep those outside the band from reaching it.
-		if not _is_in_band(device):
-			get_viewport().set_input_as_handled()
-		return
-	if is_menu_open or _is_travelling or not (event is InputEventKey or event is InputEventJoypadButton):
-		return
-	if event.is_action_pressed("world_menu") and _is_in_band(device):
+	var is_press := event is InputEventKey or event is InputEventJoypadButton
+	if is_press and not is_menu_open and not _is_travelling and event.is_action_pressed("world_menu") \
+			and (_is_everyone_gone() or _is_in_band(device) and not is_talking):
 		get_viewport().set_input_as_handled()
 		_open_menu(device)
+		return
+	if is_talking:
+		# The balloon takes input from every device, so keep those outside the band from reaching it,
+		# and every device while the menu is over it.
+		if is_menu_open or not _is_in_band(device):
+			get_viewport().set_input_as_handled()
+		return
+	if is_menu_open or _is_travelling or not is_press:
 		return
 	if not event.is_action_pressed("ui_accept"):
 		return
@@ -109,14 +118,33 @@ func _is_in_band(device: int) -> bool:
 	return band.characters.any(func(c: BandCharacter): return c.player.accepts(device))
 
 
-## Open the menu for [param device]; the band stands still until it closes.
+## Whether every player's device has disconnected. The keyboard never does.
+func _is_everyone_gone() -> bool:
+	return not band.characters.is_empty() and band.characters.all(func(c: BandCharacter):
+		return c.player.devices.all(func(device: int): return _disconnected.has(device)))
+
+
+func _on_joy_connection_changed(device: int, connected: bool) -> void:
+	if connected:
+		_disconnected.erase(device)
+	else:
+		_disconnected[device] = true
+
+
+## Let the band walk, unless it talks, travels or has the menu open.
+func _hold_or_release_band() -> void:
+	band.set_physics_process(not (is_talking or is_menu_open or _is_travelling))
+
+
+## Open the menu for [param device]; the band stands still until it closes. That device keeps it, also
+## if a player's gamepad comes back meanwhile.
 func _open_menu(device: int) -> void:
-	band.set_physics_process(false)
 	_menu = WorldMenu.new(device)
+	_hold_or_release_band()
 	_menu.continued.connect(func():
 		_menu.queue_free()
 		_menu = null
-		band.set_physics_process(true))
+		_hold_or_release_band())
 	_menu.leave_chosen.connect(left.emit)
 	add_child(_menu)
 
@@ -132,19 +160,19 @@ func _critters() -> Array[Critter]:
 
 ## Start [param critter]'s conversation; the band stands still until it ends.
 func _talk(critter: Critter) -> void:
-	band.set_physics_process(false)
 	_balloon = _BALLOON.instantiate()
+	_hold_or_release_band()
 	add_child(_balloon)
 	_balloon.tree_exited.connect(func():
 		_balloon = null
-		band.set_physics_process(true))
+		_hold_or_release_band())
 	_balloon.start(critter.dialogue, critter.title, [Story])
 
 
 ## Fade out, swap to [param scene]'s area, put the band at [param entrance], and fade back in.
 func _travel(scene: String, entrance: StringName) -> void:
 	_is_travelling = true
-	band.set_physics_process(false)
+	_hold_or_release_band()
 	await create_tween().tween_property(_fade, "color:a", 1.0, FADE_S).finished
 	_load_area(scene)
 	var marker := _entrance(entrance)
