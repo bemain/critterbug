@@ -10,7 +10,7 @@ func _ready() -> void:
 	_focus_first()
 
 
-## Focus the first button, so a gamepad or the keyboard can drive the menu.
+## Focus Free play, so a gamepad or the keyboard can drive the menu.
 func _focus_first() -> void:
 	if is_visible_in_tree():
 		$VBoxContainer/FreeplayButton.grab_focus()

@@ -10,7 +10,10 @@ extends Node3D
 ## device, and the conversation shows in a [DialogueBalloon]. Any player's confirm moves it on and
 ## any player picks a choice. The band stands still while it lasts, and doesn't travel.
 ##
-## Run on its own, it spawns one keyboard player and one per connected gamepad.
+## Any player can open the [WorldMenu], except while the band travels or talks. The band stands still
+## while it is open. Devices that no player has are ignored.
+##
+## Run on its own, it spawns one keyboard player and one per connected gamepad, and leaving quits.
 
 ## The area the band starts in.
 const FIRST_AREA := "res://src/world/World.tscn"
@@ -21,6 +24,9 @@ const _BALLOON: PackedScene = preload("res://src/ui/dialogue/DialogueBalloon.tsc
 
 ## Emitted when the band has arrived in a new area and the screen has faded back in.
 signal arrived(area: Node3D)
+
+## Emitted when the band leaves the world from the [WorldMenu].
+signal left()
 
 var area: Node3D
 var band: Band
@@ -34,6 +40,13 @@ var _balloon: DialogueBalloon
 ## Whether the band is in a conversation.
 var is_talking: bool:
 	get: return _balloon != null
+
+## The open menu, if any.
+var _menu: WorldMenu
+
+## Whether the menu is open.
+var is_menu_open: bool:
+	get: return _menu != null
 
 
 func _ready() -> void:
@@ -50,14 +63,15 @@ func _ready() -> void:
 	_load_area(FIRST_AREA)
 	if get_tree().current_scene == self:
 		band.spawn(Band.local_players())
+		left.connect(get_tree().quit)
 
 
 func _physics_process(_delta: float) -> void:
 	if _is_travelling or band.characters.is_empty():
 		return
 	for critter in _critters():
-		critter.show_prompt(not is_talking and band.characters.any(critter.can_talk_to))
-	if is_talking:
+		critter.show_prompt(not is_talking and not is_menu_open and band.characters.any(critter.can_talk_to))
+	if is_talking or is_menu_open:
 		return
 	for exit: AreaExit in get_tree().get_nodes_in_group("area_exits"):
 		if area.is_ancestor_of(exit) and exit.holds(band.characters):
@@ -66,11 +80,20 @@ func _physics_process(_delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if is_talking or _is_travelling or not event.is_action_pressed("ui_accept") or event.is_echo():
-		return
-	if not (event is InputEventKey or event is InputEventJoypadButton):
-		return
 	var device := LaneInput.device_of(event)
+	if is_talking:
+		# The balloon takes input from every device, so keep those outside the band from reaching it.
+		if not _is_in_band(device):
+			get_viewport().set_input_as_handled()
+		return
+	if is_menu_open or _is_travelling or not (event is InputEventKey or event is InputEventJoypadButton):
+		return
+	if event.is_action_pressed("world_menu") and _is_in_band(device):
+		get_viewport().set_input_as_handled()
+		_open_menu(device)
+		return
+	if not event.is_action_pressed("ui_accept"):
+		return
 	for character in band.characters:
 		if not character.player.accepts(device):
 			continue
@@ -79,6 +102,23 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 				_talk(critter)
 				return
+
+
+## Whether a player in the band has [param device].
+func _is_in_band(device: int) -> bool:
+	return band.characters.any(func(c: BandCharacter): return c.player.accepts(device))
+
+
+## Open the menu for [param device]; the band stands still until it closes.
+func _open_menu(device: int) -> void:
+	band.set_physics_process(false)
+	_menu = WorldMenu.new(device)
+	_menu.continued.connect(func():
+		_menu.queue_free()
+		_menu = null
+		band.set_physics_process(true))
+	_menu.leave_chosen.connect(left.emit)
+	add_child(_menu)
 
 
 ## The critters in the current area.
