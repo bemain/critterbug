@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://drjno63q102cb" path="res://src/song_track/part_track.gd" id="1_b4ncs"]
 [ext_resource type="Script" uid="uid://ceojiltv1m375" path="res://src/song_track/track_drawer.gd" id="2_vud8d"]
+[ext_resource type="PackedScene" uid="uid://cmxj6673inu4p" path="res://src/song_track/Note.tscn" id="3_note"]
 
 [sub_resource type="Curve2D" id="Curve2D_nrapc"]
 _data = {
@@ -11,6 +12,7 @@ point_count = 3
 
 [node name="PartTrack" type="Node2D" unique_id=2093186276]
 script = ExtResource("1_b4ncs")
+note_scene = ExtResource("3_note")
 
 [node name="Path2D" type="Path2D" parent="." unique_id=1974247426]
 curve = SubResource("Curve2D_nrapc")

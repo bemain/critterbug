@@ -4,13 +4,9 @@ class_name NoteNode extends Node2D
 # TODO: Rename
 
 
-## The scene that uses this script. Used for the [instantiate] method. It is loaded when first
-## needed, not preloaded: the scene refers to this script, so a preload here would be a cycle.
-const _SCENE_PATH := "res://src/song_track/Note.tscn"
-
-## Create an instance of this scene, with the given parameters.
+## Create a node showing [param note] on [param track], from the track's [member PartTrack.note_scene].
 static func instantiate(note: NoteData, track: PartTrack):
-	var node = load(_SCENE_PATH).instantiate()
+	var node = track.note_scene.instantiate()
 	node.note = note
 	node.track = track
 	return node

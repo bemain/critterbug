@@ -26,6 +26,10 @@ var active_length: float:
 var width: float:
 	get: return $Visuals.width
 
+## The scene of a [NoteNode]. PartTrack.tscn sets it, so it is loaded with the track and stays
+## loaded. A script can't preload it: the scene uses note.gd, which refers to this script.
+@export var note_scene: PackedScene
+
 ## The number of beats shown on the track, above the hit marker.
 @export var beats: int = 4
 ## The number of pixels each note moves per beat.
