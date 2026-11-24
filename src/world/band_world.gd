@@ -33,9 +33,9 @@ func _ready() -> void:
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	layer.add_child(_fade)
-	_load_area(FIRST_AREA)
 	band = Band.new()
 	add_child(band)
+	_load_area(FIRST_AREA)
 	if get_tree().current_scene == self:
 		band.spawn(Band.local_players())
 
@@ -70,6 +70,8 @@ func _load_area(scene: String) -> void:
 	area = load(scene).instantiate()
 	add_child(area)
 	move_child(area, 0)
+	# An area can have a camera of its own, which takes over the view when it enters the tree.
+	band.camera.make_current()
 
 
 func _entrance(entrance_name: StringName) -> Node3D:
