@@ -1,0 +1,18 @@
+~ start
+
+if flag("met_snail")
+	Snail: Back again? The grass hasn't got any shorter.
+	- Have you seen any crumbs?
+		Snail: Only the ones I ate.
+	- See you later!
+		Snail: Mind your antennae.
+else
+	Snail: Oh! A band, and such a small one. Hello!
+	Snail: Have you come all this way to play for me?
+	- Yes, we're musicians!
+		Snail: Then come back when you know a song.
+	- We're only passing through.
+		Snail: Follow the stepping stones south, then.
+	do set_flag("met_snail")
+
+=> END

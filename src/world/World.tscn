@@ -25,6 +25,8 @@
 [ext_resource type="PackedScene" uid="uid://cu4pnvl0bebke" path="res://assets/Stylized Nature Megakit/Rock_Medium_3.gltf" id="23_r"]
 [ext_resource type="PackedScene" uid="uid://b5y0crw32uw03" path="res://assets/Stylized Nature Megakit/CommonTree_1.gltf" id="24_r"]
 [ext_resource type="Script" path="res://src/world/area_exit.gd" id="exit_r"]
+[ext_resource type="PackedScene" path="res://src/world/Critter.tscn" id="critter_r"]
+[ext_resource type="Resource" path="res://dialogue/snail.dialogue" id="snail_dialogue_r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="Sky_material"]
 ground_bottom_color = Color(0.11, 0.16, 0.03, 1)
@@ -545,3 +547,7 @@ size = Vector3(8, 2, 5.6)
 
 [node name="FromHollow" type="Marker3D" parent="." groups=["area_entrances"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 38)
+
+[node name="Snail" parent="." instance=ExtResource("critter_r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+dialogue = ExtResource("snail_dialogue_r")
