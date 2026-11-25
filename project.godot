@@ -129,3 +129,7 @@ play_3={
 [internationalization]
 
 locale/translations_pot_files=PackedStringArray("res://dialogue/snail.dialogue")
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
