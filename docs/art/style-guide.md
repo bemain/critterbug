@@ -27,7 +27,7 @@ a character is about **1 unit tall**. The world is scaled up around them; the ch
 | Mushroom | `Mushroom_Common` ×0.6 | 2 |
 | Boulder | `Pebble_*` ×1–1.5 | 1–1.5 (3–5 wide) |
 | Gravel | `Pebble_*` ×0.35 | 0.3 |
-| Stepping stone | `RockPath_*` ×0.7 | 0.6 |
+| Stepping stone | `RockPath_*` ×0.7, sunk 0.4 into the ground | 0.1 showing |
 | Fallen petal | `Petal_*` ×0.4 | 0.8 |
 | Cliff | `Rock_Medium_*` ×1 | 18 |
 | Giant tree (backdrop) | `CommonTree_*` ×1 | 55–60 |
