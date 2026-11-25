@@ -38,6 +38,20 @@ a character is about **1 unit tall**. The world is scaled up around them; the ch
 - New critters and props: design them against a 1-unit character, then check them in the world scene beside
   one.
 
+## Areas
+
+Each area should read as its own place from the band's camera, through composition rather than texture:
+
+- **The clearing** (`World.tscn`): bright, open ground walled by tall grass, with flower trees and boulders. A
+  lane of stepping stones through the grass leads south to the Hollow; keep that lane open, because the camera
+  sits in it as the band walks to the exit.
+- **The Hollow** (`Hollow.tscn`): a damp, mossy dip ringed by stone on the west, north and east, with a mushroom
+  grove and shelf fungus in the east, a fern and a puddle in the west, and clover moss on a darker floor. Its south
+  rim is low boulders, not cliffs or tall grass, so the camera south of the band can see over it.
+- In every area, solid props (rock, boulders, mushrooms, stems and trunks) get a simple collision shape as a child
+  of the prop's instance: a box at 90% of the art's bounds across and its full height, or an upright cylinder for a
+  stem. Grass, ferns, clover, petals, puddles and stepping stones have none.
+
 ## Palette
 
 ![Palette](palette.png)
